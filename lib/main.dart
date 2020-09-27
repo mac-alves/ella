@@ -1,4 +1,5 @@
-import 'package:ella/screens/home_screen.dart';
+import 'package:ella/screens/Home/home_screen.dart';
+import 'package:ella/screens/lists/home/lists_home_screen.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,16 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'EllA App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.white,
         textTheme:
-            GoogleFonts.poppinsTextTheme().apply(displayColor: kTextColor),
+            GoogleFonts.poppinsTextTheme().apply(displayColor: listsApp.textColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
+      home: ListsHomeScreen(),
     );
   }
 }
