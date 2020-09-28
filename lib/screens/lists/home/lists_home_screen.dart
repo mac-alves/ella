@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:ella/components/custom_nav_bar.dart';
-import 'package:ella/components/flex_app_bar.dart';
-import 'package:ella/components/item_list_home.dart';
+import 'package:ella/screens/lists/home/components/flex_app_bar.dart';
+import 'package:ella/screens/lists/home/components/item_list.dart';
 import 'package:ella/models/Lists.dart';
 import 'package:ella/screens/lists/create/lists_create_screen.dart';
+import 'package:ella/screens/lists/read/lists_read_screen.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class ListsHomeScreen extends StatelessWidget {
                     color: listsApp.iconColor,
                     size: 33,
                   ),
-                  tooltip: 'Add new list',
+                  tooltip: 'Add new List',
                   onPressed: (){
                     Navigator.push(
                       context, 
@@ -65,7 +66,8 @@ class ListsHomeScreen extends StatelessWidget {
                 (BuildContext context, int index) {
                   return buildItemList(
                     listsHome[index], 
-                    (listsHome.length == (index + 1))
+                    (listsHome.length == (index + 1)),
+                    context
                   );
                 },
                 childCount: listsHome.length 
@@ -78,12 +80,19 @@ class ListsHomeScreen extends StatelessWidget {
     );
   }
 
-  ItemListHome buildItemList(ListHome list, bool last) {
-    return ItemListHome(
+  ItemList buildItemList(ListHome list, bool last, BuildContext context) {
+    return ItemList(
       last: last,
       name: list.name,
       icon: list.icon,
-      press: list.press,
+      press: () {
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => ListsReadScreen()
+          ),
+        );
+      },
     );
   }
 }

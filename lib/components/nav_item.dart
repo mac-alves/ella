@@ -32,21 +32,22 @@ class NavItem extends StatelessWidget {
           boxShadow: [if (isActive) listsApp.shadow]
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
               size: 30,
               color: (isActive) ? color : color.withOpacity(0.3),
             ),
-            Spacer(),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: (isActive) ? color : color.withOpacity(0.3),
-              )
-            )
+            // Spacer(),
+            // Text(
+            //   title,
+            //   style: TextStyle(
+            //     fontSize: 11,
+            //     fontWeight: FontWeight.bold,
+            //     color: (isActive) ? color : color.withOpacity(0.3),
+            //   )
+            // )
           ],
         ),
       ),

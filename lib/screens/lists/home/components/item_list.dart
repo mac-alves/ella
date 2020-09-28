@@ -1,14 +1,14 @@
 import 'package:ella/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class ItemListHome extends StatelessWidget {
+class ItemList extends StatelessWidget {
 
   final bool last;
   final String name;
   final IconData icon;
   final GestureTapCallback press;
 
-  const ItemListHome({
+  const ItemList({
     Key key,
     @required this.icon, 
     @required this.name, 

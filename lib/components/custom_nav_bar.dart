@@ -49,7 +49,7 @@ class CustomNavBar extends StatelessWidget {
               ),
               NavItem(
                 icon: Icons.settings,
-                title: 'Lists',
+                title: 'Setting',
                 color: def.primaryColor,
                 press: () {},
               )

@@ -1,13 +1,20 @@
 import 'package:ella/components/input_text.dart';
-import 'package:ella/components/item_list_home.dart';
-import 'package:ella/models/Lists.dart';
+import 'package:ella/screens/lists/create/components/item_list.dart';
+import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({
     Key key,
   }) : super(key: key);
+
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  List<int> itens = [];
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +56,73 @@ class Body extends StatelessWidget {
                       placeholder: "Titulo da lista",
                       press: () {}
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 10
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Itens",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: listsApp.textColor
+                            )
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                itens.add(itens.length + 1);
+                              });
+                            },
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              width: 50,
+                              child: Icon(
+                                Icons.add,
+                                color: listsApp.iconColor,
+                                size: 30,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: itens.length * 55.0,
+                      padding: null,
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: itens.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            final item = itens[index];
+                            return Dismissible(
+                              key: Key(item.toString()),
+                              onDismissed: (direction) {
+                                setState(() {
+                                  itens.removeAt(index);
+                                });
+                              },
+                              child: ItemList(
+                                index: index,
+                                press: (){
+                                    setState(() {
+                                    itens.removeAt(index);
+                                  });
+                                },
+                              ),
+                            );
+                          }
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -57,15 +131,6 @@ class Body extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  ItemListHome buildItemList(ListHome list, bool last) {
-    return ItemListHome(
-      last: last,
-      name: list.name,
-      icon: list.icon,
-      press: list.press,
     );
   }
 }

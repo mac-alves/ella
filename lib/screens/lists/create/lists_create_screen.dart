@@ -1,9 +1,10 @@
 import 'package:ella/components/custom_nav_bar.dart';
 import 'package:ella/components/section_title.dart';
-import 'package:ella/screens/lists/create/components/body.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
+
+import 'components/body.dart';
 
 class ListsCreateScreen extends StatelessWidget {
   @override
@@ -47,6 +48,15 @@ class ListsCreateScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                 ),
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.save,
+                      color: listsApp.iconColor,
+                    ), 
+                    onPressed: () {},
+                  )
+                ],
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(

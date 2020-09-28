@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 class SectionTitle extends StatelessWidget {
 
   final String title;
+  final bool hasAction;
   final GestureTapCallback press;
 
   const SectionTitle({
     Key key, 
     @required this.title, 
     @required this.press,    
+    this.hasAction = false,
   }) : super(key: key);
 
   @override
@@ -25,16 +27,6 @@ class SectionTitle extends StatelessWidget {
             color: listsApp.textColor
           ),
         ),
-        Spacer(),
-        // GestureDetector(
-        //   onTap: press,
-        //   child: Text(
-        //     "See All",
-        //     style: TextStyle(
-        //       color: listsApp.textColor
-        //     )
-        //   ),
-        // ),
       ],
     );
   }
