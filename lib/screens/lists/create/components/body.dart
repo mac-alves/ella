@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:ella/components/input_text.dart';
+import 'package:ella/models/Lists.dart';
 import 'package:ella/screens/lists/create/components/item_list.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
@@ -14,7 +17,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List<int> itens = [];
+  Random random = new Random();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,11 @@ class _BodyState extends State<Body> {
                     InputText(
                       label: "Titulo",
                       placeholder: "Titulo da lista",
-                      press: () {}
+                      change: (value) {
+                        setState(() {
+                          listCreate.name = value;
+                        });
+                      }
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -75,7 +82,12 @@ class _BodyState extends State<Body> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                itens.add(itens.length + 1);
+                                listCreate.items.add(
+                                  new ItemListCreate(
+                                    id: random.nextInt(1000000),
+                                    name: null,
+                                  )
+                                );
                               });
                             },
                             child: Container(
@@ -93,28 +105,34 @@ class _BodyState extends State<Body> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      height: itens.length * 55.0,
+                      height: listCreate.items.length * 55.0,
                       padding: null,
                       child: MediaQuery.removePadding(
                         context: context,
                         removeTop: true,
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: itens.length,
+                          itemCount: listCreate.items.length,
                           itemBuilder: (BuildContext ctxt, int index) {
-                            final item = itens[index];
+                            final item = listCreate.items[index];
+
                             return Dismissible(
-                              key: Key(item.toString()),
+                              key: Key(item.id.toString()),
                               onDismissed: (direction) {
                                 setState(() {
-                                  itens.removeAt(index);
+                                  listCreate.items.remove(item);
                                 });
                               },
                               child: ItemList(
-                                index: index,
+                                value: listCreate.items[index].name,
+                                change: (value) {
+                                  setState(() {
+                                    listCreate.items[index].name = value;
+                                  });
+                                },
                                 press: (){
-                                    setState(() {
-                                    itens.removeAt(index);
+                                  setState(() {
+                                    listCreate.items.remove(item);
                                   });
                                 },
                               ),

@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                         InputText(
                           label: "Titulo",
                           placeholder: "Titulo da lista",
-                          press: () {}
+                          change: (value) {}
                         ),
                         VerticalSpacing(of: 5,),
                         DropDownSelect(),

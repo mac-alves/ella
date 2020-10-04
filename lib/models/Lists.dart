@@ -43,9 +43,34 @@ class ItemListRead {
 }
 
 
-ItemListRead item1 = ItemListRead(id: 1, name: 'Sabonet', checked: false);
-ItemListRead item2 = ItemListRead(id: 1, name: 'Escova de dentes', checked: false);
+ItemListRead itemR1 = ItemListRead(id: 1, name: 'Sabonet', checked: false);
+ItemListRead itemR2 = ItemListRead(id: 2, name: 'Escova de dentes', checked: false);
 
-List<ItemListRead> items = [item1, item2];
+List<ItemListRead> itemsR = [itemR1, itemR2];
 
-ListRead listRead = new ListRead(id: 1, name: 'Comprar', items: items);
+ListRead listRead = new ListRead(id: 1, name: 'Comprar', items: itemsR);
+
+
+class ListCreate {
+  final int id;
+  String name;
+  final List<ItemListCreate> items;
+
+  ListCreate({
+    @required this.id, 
+    @required this.name,
+    @required this.items,
+  });
+}
+
+class ItemListCreate {
+  final int id;
+  String name;
+
+  ItemListCreate({
+    @required this.id, 
+    @required this.name,
+  });
+}
+
+ListCreate listCreate = new ListCreate(id: 1, name: null, items: []);

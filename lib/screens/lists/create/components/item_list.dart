@@ -1,15 +1,37 @@
 import 'package:ella/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class ItemList extends StatelessWidget {
-  final int index;
+class ItemList extends StatefulWidget {
+  final void Function(String) change;
   final GestureTapCallback press;
+  final String value;
 
   const ItemList({
-    Key key,
-    @required this.index, 
-    @required this.press,
+    Key key, 
+    @required this.press, 
+    @required this.change,
+    @required this.value,
   }) : super(key: key);
+
+  @override
+  _ItemListState createState() => _ItemListState();
+}
+
+class _ItemListState extends State<ItemList> {
+  TextEditingController myController;
+
+  @override
+  void initState() {
+    super.initState();
+    myController = TextEditingController();
+    myController.text = widget.value;
+  }
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +60,8 @@ class ItemList extends StatelessWidget {
             children: [
               Flexible(
                 child: TextField(
-                  onChanged: (value) {},
+                  controller: myController,
+                  onChanged: widget.change,
                   decoration: InputDecoration(
                     hintText: 'Nome do item',
                     hintStyle: TextStyle(
@@ -61,7 +84,7 @@ class ItemList extends StatelessWidget {
                   Icons.delete,
                   color: listsApp.iconColor,
                 ), 
-                onPressed: press
+                onPressed: widget.press
               )
             ],
           ),

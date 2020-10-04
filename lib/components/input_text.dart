@@ -5,12 +5,12 @@ class InputText extends StatelessWidget {
 
   final String label;
   final String placeholder;
-  final GestureTapCallback press;
+  final void Function(String) change;
 
   const InputText({
     Key key, 
     @required this.label, 
-    @required this.press, 
+    @required this.change, 
     @required this.placeholder,
   }) : super(key: key);
 
@@ -42,7 +42,7 @@ class InputText extends StatelessWidget {
               borderRadius: BorderRadius.circular(10)
             ),
             child: TextField(
-              onChanged: (value) {},
+              onChanged: change,
               decoration: InputDecoration(
                 hintText: placeholder,
                 hintStyle: TextStyle(
