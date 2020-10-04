@@ -1,24 +1,28 @@
 import 'dart:math';
 
-import 'package:ella/components/custom_nav_bar.dart';
-import 'package:ella/screens/lists/home/components/flex_app_bar.dart';
-import 'package:ella/screens/lists/home/components/item_list.dart';
+import 'package:ella/widgets/custom_nav_bar.dart';
+import 'package:ella/routes/routes.dart';
+import 'package:ella/screens/lists/home/widgets/flex_app_bar.dart';
+import 'package:ella/screens/lists/home/widgets/item_list.dart';
 import 'package:ella/models/Lists.dart';
-import 'package:ella/screens/lists/create/lists_create_screen.dart';
-import 'package:ella/screens/lists/read/lists_read_screen.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
-class ListsHomeScreen extends StatelessWidget {
+class ListsHomeScreen extends StatefulWidget {
   const ListsHomeScreen({
     Key key,
   }) : super(key: key);
 
   @override
+  _ListsHomeScreenState createState() => _ListsHomeScreenState();
+}
+
+class _ListsHomeScreenState extends State<ListsHomeScreen> {
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
+    
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -35,7 +39,7 @@ class ListsHomeScreen extends StatelessWidget {
               expandedHeight: 200.0,
               flexibleSpace: LayoutBuilder(
                 builder: (context, bc) {
-                  double size = min(bc.constrainHeight(), 120);
+                  //double size = min(bc.constrainHeight(), 120);
                   return FlexibleSpaceBar(
                     background: FlexAppbar(),
                   );
@@ -50,12 +54,7 @@ class ListsHomeScreen extends StatelessWidget {
                   ),
                   tooltip: 'Add new List',
                   onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ListsCreateScreen()
-                      ),
-                    );
+                    Navigator.pushNamed(context, LISTS_CREATE);
                   },
                 ),
               ]
@@ -65,12 +64,12 @@ class ListsHomeScreen extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return buildItemList(
-                    listsHome[index], 
-                    (listsHome.length == (index + 1)),
+                    myLists[index], 
+                    (myLists.length == (index + 1)),
                     context
                   );
                 },
-                childCount: listsHome.length 
+                childCount: myLists.length 
               ),
             ),
           ],
@@ -80,17 +79,16 @@ class ListsHomeScreen extends StatelessWidget {
     );
   }
 
-  ItemList buildItemList(ListHome list, bool last, BuildContext context) {
+  ItemList buildItemList(MyList list, bool last, BuildContext context) {
     return ItemList(
       last: last,
       name: list.name,
-      icon: list.icon,
+      concluded: list.concluded,
       press: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context, 
-          MaterialPageRoute(
-            builder: (context) => ListsReadScreen()
-          ),
+          LISTS_READ,
+          arguments: list.id
         );
       },
     );

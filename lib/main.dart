@@ -1,4 +1,4 @@
-import 'package:ella/screens/Home/home_screen.dart';
+import 'package:ella/routes/routes.dart';
 import 'package:ella/screens/lists/home/lists_home_screen.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
             GoogleFonts.poppinsTextTheme().apply(displayColor: listsApp.textColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      initialRoute: LISTS_HOME,
+      routes: routes,
       home: ListsHomeScreen(),
     );
   }

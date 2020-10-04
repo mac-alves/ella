@@ -6,12 +6,14 @@ class InputText extends StatelessWidget {
   final String label;
   final String placeholder;
   final void Function(String) change;
+  final TextEditingController controller;
 
   const InputText({
     Key key, 
     @required this.label, 
     @required this.change, 
-    @required this.placeholder,
+    @required this.placeholder, 
+    @required this.controller,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class InputText extends StatelessWidget {
               borderRadius: BorderRadius.circular(10)
             ),
             child: TextField(
+              controller: controller,
               onChanged: change,
               decoration: InputDecoration(
                 hintText: placeholder,

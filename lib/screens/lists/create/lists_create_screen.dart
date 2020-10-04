@@ -1,16 +1,44 @@
-import 'package:ella/components/custom_nav_bar.dart';
-import 'package:ella/components/section_title.dart';
+import 'dart:math';
+
+import 'package:ella/widgets/custom_nav_bar.dart';
+import 'package:ella/widgets/section_title.dart';
+import 'package:ella/models/Lists.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
-import 'components/body.dart';
+import 'widgets/body.dart';
 
-class ListsCreateScreen extends StatelessWidget {
+class ListsCreateScreen extends StatefulWidget {
+  @override
+  _ListsCreateScreenState createState() => _ListsCreateScreenState();
+}
+
+class _ListsCreateScreenState extends State<ListsCreateScreen> {
+
+  MyList newMyList;
+
+  @override
+  void initState() {
+    super.initState();
+
+    newMyList = new MyList(
+      id: myLists.length,
+      name: null,
+      concluded: false, 
+      items: [],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    
+    final int id = ModalRoute.of(context).settings.arguments;
+
+    if (id != null) {
+      newMyList = myLists[id];
+    }
+        
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -54,13 +82,19 @@ class ListsCreateScreen extends StatelessWidget {
                       Icons.save,
                       color: listsApp.iconColor,
                     ), 
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        myLists.add(newMyList);
+                      });
+                    },
                   )
                 ],
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) => Body(),
+                  (context, index) => Body(
+                    newList: newMyList,
+                  ),
                   childCount: 1,
                 ),
               ),

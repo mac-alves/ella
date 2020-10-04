@@ -1,4 +1,4 @@
-import 'package:ella/components/section_title.dart';
+import 'package:ella/widgets/section_title.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';

@@ -1,15 +1,18 @@
 import 'dart:math';
 
-import 'package:ella/components/input_text.dart';
+import 'package:ella/widgets/input_text.dart';
 import 'package:ella/models/Lists.dart';
-import 'package:ella/screens/lists/create/components/item_list.dart';
+import 'package:ella/screens/lists/create/widgets/item_list.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
+  final MyList newList;
+
   const Body({
-    Key key,
+    Key key, 
+    @required this.newList,
   }) : super(key: key);
 
   @override
@@ -17,7 +20,18 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  TextEditingController myController;
   Random random = new Random();
+
+  @override
+  void initState() {
+    super.initState();
+    myController = TextEditingController();
+
+    if (widget.newList.name != null) {
+      myController.text = widget.newList.name;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +69,12 @@ class _BodyState extends State<Body> {
                 child: Column(
                   children: [
                     InputText(
+                      controller: myController,
                       label: "Titulo",
                       placeholder: "Titulo da lista",
                       change: (value) {
                         setState(() {
-                          listCreate.name = value;
+                          widget.newList.name = value;
                         });
                       }
                     ),
@@ -82,10 +97,11 @@ class _BodyState extends State<Body> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                listCreate.items.add(
-                                  new ItemListCreate(
+                                widget.newList.items.add(
+                                  new ItemMyList(
                                     id: random.nextInt(1000000),
                                     name: null,
+                                    checked: false
                                   )
                                 );
                               });
@@ -105,34 +121,34 @@ class _BodyState extends State<Body> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      height: listCreate.items.length * 55.0,
+                      height: widget.newList.items.length * 55.0,
                       padding: null,
                       child: MediaQuery.removePadding(
                         context: context,
                         removeTop: true,
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: listCreate.items.length,
+                          itemCount: widget.newList.items.length,
                           itemBuilder: (BuildContext ctxt, int index) {
-                            final item = listCreate.items[index];
+                            final item = widget.newList.items[index];
 
                             return Dismissible(
                               key: Key(item.id.toString()),
                               onDismissed: (direction) {
                                 setState(() {
-                                  listCreate.items.remove(item);
+                                  widget.newList.items.remove(item);
                                 });
                               },
                               child: ItemList(
-                                value: listCreate.items[index].name,
+                                value: widget.newList.items[index].name,
                                 change: (value) {
                                   setState(() {
-                                    listCreate.items[index].name = value;
+                                    widget.newList.items[index].name = value;
                                   });
                                 },
                                 press: (){
                                   setState(() {
-                                    listCreate.items.remove(item);
+                                    widget.newList.items.remove(item);
                                   });
                                 },
                               ),

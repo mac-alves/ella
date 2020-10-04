@@ -1,8 +1,8 @@
-import 'package:ella/components/custom_nav_bar.dart';
-import 'package:ella/components/section_title.dart';
+import 'package:ella/routes/routes.dart';
+import 'package:ella/widgets/custom_nav_bar.dart';
+import 'package:ella/widgets/section_title.dart';
 import 'package:ella/models/Lists.dart';
-import 'package:ella/screens/lists/create/lists_create_screen.dart';
-import 'package:ella/screens/lists/read/components/item_list.dart';
+import 'package:ella/screens/lists/read/widgets/item_list.dart';
 import 'package:ella/utils/constants.dart';
 import 'package:ella/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +17,12 @@ class ListsReadScreen extends StatefulWidget {
 }
 
 class _ListsReadScreenState extends State<ListsReadScreen> {
+
   @override
   Widget build(BuildContext context) {
+    final int id = ModalRoute.of(context).settings.arguments;
+    MyList listRead = myLists[id];
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -50,11 +54,10 @@ class _ListsReadScreenState extends State<ListsReadScreen> {
                       Spacer(),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushNamed(
                             context, 
-                            MaterialPageRoute(
-                              builder: (context) => ListsCreateScreen()
-                            ),
+                            LISTS_CREATE,
+                            arguments: listRead.id
                           );
                         },
                         child: Container(

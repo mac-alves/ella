@@ -5,12 +5,12 @@ class ItemList extends StatelessWidget {
 
   final bool last;
   final String name;
-  final IconData icon;
+  final bool concluded;
   final GestureTapCallback press;
 
   const ItemList({
     Key key,
-    @required this.icon, 
+    @required this.concluded, 
     @required this.name, 
     @required this.press, 
     @required this.last,
@@ -44,7 +44,7 @@ class ItemList extends StatelessWidget {
                 width: 40,
                 height: 56,
                 child: Icon(
-                  icon,
+                  concluded ? Icons.check_circle : Icons.data_usage,
                   color: listsApp.iconColor,
                   size: 30
                 ),
