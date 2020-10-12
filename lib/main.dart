@@ -1,30 +1,6 @@
-import 'package:ella/routes/routes.dart';
-import 'package:ella/screens/lists/home/lists_home_screen.dart';
-import 'package:ella/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'app/app_module.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EllA App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white,
-        textTheme:
-            GoogleFonts.poppinsTextTheme().apply(displayColor: listsApp.textColor),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: LISTS_HOME,
-      routes: routes,
-      home: ListsHomeScreen(),
-    );
-  }
-}
+void main() => runApp(ModularApp(module: AppModule()));
