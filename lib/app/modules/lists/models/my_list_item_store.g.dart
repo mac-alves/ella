@@ -7,7 +7,12 @@ part of 'my_list_item_store.dart';
 // **************************************************************************
 
 final $MyListItemStore = BindInject(
-  (i) => MyListItemStore(id: i<int>(), name: i<String>(), checked: i<bool>()),
+  (i) => MyListItemStore(
+      id: i<int>(),
+      idList: i<int>(),
+      name: i<String>(),
+      checked: i<bool>(),
+      items: i<List<MyListItemStore>>()),
   singleton: true,
   lazy: true,
 );
@@ -31,6 +36,21 @@ mixin _$MyListItemStore on _MyListItemStoreBase, Store {
   set id(int value) {
     _$idAtom.reportWrite(value, super.id, () {
       super.id = value;
+    });
+  }
+
+  final _$idListAtom = Atom(name: '_MyListItemStoreBase.idList');
+
+  @override
+  int get idList {
+    _$idListAtom.reportRead();
+    return super.idList;
+  }
+
+  @override
+  set idList(int value) {
+    _$idListAtom.reportWrite(value, super.idList, () {
+      super.idList = value;
     });
   }
 
@@ -101,9 +121,21 @@ mixin _$MyListItemStore on _MyListItemStoreBase, Store {
   }
 
   @override
+  dynamic setIdList(int value) {
+    final _$actionInfo = _$_MyListItemStoreBaseActionController.startAction(
+        name: '_MyListItemStoreBase.setIdList');
+    try {
+      return super.setIdList(value);
+    } finally {
+      _$_MyListItemStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},
+idList: ${idList},
 name: ${name},
 checked: ${checked}
     ''';

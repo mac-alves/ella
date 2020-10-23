@@ -23,7 +23,7 @@ class InputText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: 10
+        horizontal: listsApp.defaultPadding
       ),
       child: Column(
         children: [
@@ -44,7 +44,10 @@ class InputText extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               color: listsApp.primaryColor.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(10)
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: listsApp.primaryColor
+              )
             ),
             child: TextField(
               controller: controller,

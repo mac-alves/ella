@@ -7,7 +7,7 @@ part of 'read_controller.dart';
 // **************************************************************************
 
 final $ReadController = BindInject(
-  (i) => ReadController(i<ListsController>()),
+  (i) => ReadController(i<ListsController>(), i<ILocalStorage>()),
   singleton: true,
   lazy: true,
 );
@@ -19,29 +19,18 @@ final $ReadController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReadController on _ReadControllerBase, Store {
-  final _$_ReadControllerBaseActionController =
-      ActionController(name: '_ReadControllerBase');
+  final _$setCheckedAsyncAction = AsyncAction('_ReadControllerBase.setChecked');
 
   @override
-  void setChecked(MyListItemStore item, MyListStore list) {
-    final _$actionInfo = _$_ReadControllerBaseActionController.startAction(
-        name: '_ReadControllerBase.setChecked');
-    try {
-      return super.setChecked(item, list);
-    } finally {
-      _$_ReadControllerBaseActionController.endAction(_$actionInfo);
-    }
+  Future<dynamic> setChecked(MyListItemStore item, MyListStore list) {
+    return _$setCheckedAsyncAction.run(() => super.setChecked(item, list));
   }
 
+  final _$removeListAsyncAction = AsyncAction('_ReadControllerBase.removeList');
+
   @override
-  void removeList(MyListStore item) {
-    final _$actionInfo = _$_ReadControllerBaseActionController.startAction(
-        name: '_ReadControllerBase.removeList');
-    try {
-      return super.removeList(item);
-    } finally {
-      _$_ReadControllerBaseActionController.endAction(_$actionInfo);
-    }
+  Future<dynamic> removeList(MyListStore item) {
+    return _$removeListAsyncAction.run(() => super.removeList(item));
   }
 
   @override

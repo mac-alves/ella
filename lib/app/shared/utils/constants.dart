@@ -16,7 +16,8 @@ class ConstantsListsApp {
   final primaryColor = Color(0xFFFF9B42);
   final textColor = Color(0xFFFF9642);
   final iconColor = Color(0xFFFF9B42);
-  final defaultPadding = 20.0;
+  final backColor = Color(0xFFDD892F);
+  final defaultPadding = 15.0;
   final BoxShadow shadow = def.getShadow;
 }
 

@@ -38,65 +38,56 @@ class _ItemListState extends State<ItemList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 10,
-        right: 10,
-        top: 10
+        left: listsApp.defaultPadding,
+        right: listsApp.defaultPadding,
+        bottom: listsApp.defaultPadding
       ),
-      child: SizedBox(
-        height: 45,
-        child: Observer(
-          builder: (_){
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                // border: Border.all(
-                //   color: Colors.red[600],
-                //   width: 0.8
-                // ),
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 0),
-                    blurRadius: 4,
-                    color: Colors.black.withOpacity(0.16),
-                  ),
-                ],
+      child: Observer(
+        builder: (_){
+          return Container(
+            height: 45,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: listsApp.primaryColor,
+                width: 0.5
               ),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: TextField(
-                      controller: myController,
-                      onChanged: widget.change,
-                      decoration: InputDecoration(
-                        hintText: 'Nome do item',
-                        hintStyle: TextStyle(
-                          color: listsApp.textColor,
-                          fontSize: 14,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(
-                          left: 10,
-                        ),
-                      ),
-                      style: TextStyle(
+            ),
+            child: Row(
+              children: [
+                Flexible(
+                  child: TextField(
+                    controller: myController,
+                    onChanged: widget.change,
+                    decoration: InputDecoration(
+                      hintText: 'Nome do item',
+                      hintStyle: TextStyle(
+                        color: listsApp.textColor,
                         fontSize: 14,
                       ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(
+                        left: 10,
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 14,
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: listsApp.iconColor,
-                    ), 
-                    onPressed: widget.press
-                  )
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: listsApp.iconColor,
+                  ), 
+                  onPressed: widget.press
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

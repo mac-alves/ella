@@ -11,7 +11,7 @@ final $MyListStore = BindInject(
       id: i<int>(),
       name: i<String>(),
       concluded: i<bool>(),
-      items: i<ObservableList<MyListItemStore>>()),
+      items: i<List<MyListItemStore>>()),
   singleton: true,
   lazy: true,
 );

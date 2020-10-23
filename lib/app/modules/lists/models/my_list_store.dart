@@ -6,9 +6,46 @@ import 'my_list_item_store.dart';
 part 'my_list_store.g.dart';
 
 @Injectable()
-class MyListStore = _MyListStoreBase with _$MyListStore;
+class MyListStore extends _MyListStoreBase with _$MyListStore {
+
+  MyListStore({
+    int id,
+    String name,
+    bool concluded,
+    List<MyListItemStore> items: const []}
+  ) : super(id: id, name: name, concluded: concluded, items: items);
+
+  MyListStore fromJson(Map<String, dynamic> json) {
+    ObservableList<MyListItemStore> items = <MyListItemStore>[].asObservable();
+    
+    if (json['items'] != null) {
+      json['items'].forEach((v) {
+        items.add(new MyListItemStore().fromJson(v));
+      });
+    }
+
+    return MyListStore(
+      id: json['id'],
+      name: json['name'],
+      concluded: json['concluded'],
+      items: items
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['concluded'] = this.concluded;
+    if (this.items != null) {
+      data['items'] = this.items.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
 abstract class _MyListStoreBase with Store {
+
   @observable
   int id;
 
@@ -19,15 +56,15 @@ abstract class _MyListStoreBase with Store {
   bool concluded;
 
   @observable
-  ObservableList<MyListItemStore> items;
+  ObservableList<MyListItemStore> items = <MyListItemStore>[].asObservable();
 
   _MyListStoreBase({
     this.id,
     this.name,
     this.concluded = false,
-    ObservableList<MyListItemStore> items,
+    List<MyListItemStore> items
   }) {
-    this.items = items ?? ObservableList<MyListItemStore>();
+    this.items = items.asObservable() ?? <MyListItemStore>[].asObservable();
   }
 
   @action

@@ -1,3 +1,5 @@
+import 'package:ella/app/modules/lists/repositories/local_storage/hive/hive_repository.dart';
+import 'services/local_storage_hive_service.dart';
 import 'models/my_list_item_store.dart';
 import 'models/my_list_store.dart';
 import 'lists_routes.dart';
@@ -12,9 +14,11 @@ class ListsModule extends ChildModule {
   List<Bind> get binds => [
         $MyListItemStore,
         $MyListStore,
-        Bind((i) => ReadController(i.get())),
+        Bind((i) => ReadController(i.get(), i.get())),
         Bind((i) => CreateController(i.get())),
         Bind((i) => HomeController(i.get())),
+        Bind((i) => HiveRepository()),
+        Bind((i) => LocalStorageHiveService(i.get())),
         $ListsController,
       ];
 

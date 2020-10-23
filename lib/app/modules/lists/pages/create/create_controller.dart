@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ella/app/modules/lists/interfaces/local_storage.dart';
 import 'package:ella/app/modules/lists/lists_controller.dart';
 import 'package:ella/app/modules/lists/models/my_list_item_store.dart';
 import 'package:ella/app/modules/lists/models/my_list_store.dart';
@@ -13,36 +14,48 @@ class CreateController = _CreateControllerBase with _$CreateController;
 
 abstract class _CreateControllerBase with Store {
   
-  Random random = new Random();
+  final ILocalStorage _storage = Modular.get();
   final ListsController lists;
+  Random random = new Random();
 
+  @observable
   MyListStore newMyList;
 
   @observable
   bool isValidate = false;
 
+  @observable
+  int idNewList;
+
   _CreateControllerBase(this.lists) {
-    newMyList = new MyListStore(
-      id: random.nextInt(10000000), 
-      name: null,
-      concluded: false,
-    );
+    _init();
+  }
+
+  _init() async {
+    int id = await _storage.getNextKey();
+    setIdNewList(id);
   }
 
   @action
-  void setVali(bool value){
-    isValidate = value;
+  void setNewMyList(MyListStore value) => newMyList = value;
+
+  @action
+  void setIdNewList(int value) => idNewList = value;
+
+  @action
+  void setVali(bool value) => isValidate = value;
+
+  @action
+  Future addList(MyListStore list) async {
+    print(list.id);
+    lists.myLists.insert(0, list);
+    await _storage.put(list.id, list.toJson());
   }
 
   @action
-  void addList(MyListStore list) {
-    lists.myLists.add(list);
-  }
-
-  @action
-  void updateList(MyListStore list) {
-    // lists.myLists.add(list);
+  Future updateList(MyListStore list) async {
     list.setConcluded();
+    await _storage.put(list.id, list.toJson());
   }
 
   @action

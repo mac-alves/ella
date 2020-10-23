@@ -3,7 +3,6 @@ import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/read/widgets/item_list.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
-import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -22,110 +21,141 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
 
   @override
   Widget build(BuildContext context) {
-    // final int id = ModalRoute.of(context).settings.arguments;
-    // var list = controller.lists.myLists[id];
     MyListStore list = controller.lists.getList(widget.id);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: DecorationImage(
-          image: AssetImage("assets/images/back.png"),
-          fit: BoxFit.fill, 
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              backgroundColor: Colors.transparent,
-              expandedHeight: 100.0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  alignment: Alignment.bottomLeft,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: getPropScreenWidth(listsApp.defaultPadding),
-                    vertical: 10
-                  ),
-                  child: Row(
-                    children: [
-                      Observer(
-                        builder: (_){
-                          return Container(
-                            width: getPropScreenWidth(250),
-                            child: Text(
-                              list.name,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: listsApp.textColor
-                              ),
-                            ),
-                          );
-                        }
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context)
-                            .pushNamed('$LISTS_CREATE/${list.id}');
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.edit,
-                            color: listsApp.iconColor,
-                            size: 23,
-                          ),
-                        ),
-                      )
-                    ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor:  Color(0xFFFFDCA2),
+            expandedHeight: 60.0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  // color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/back-lists.jpg"),
+                    fit: BoxFit.fitWidth, 
+                    alignment: Alignment.topLeft
                   ),
                 ),
               ),
-              leading: IconButton(
+            ),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: listsApp.iconColor,
+              ), 
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            actions: [
+              IconButton(
                 icon: Icon(
-                  Icons.arrow_back,
+                  Icons.delete,
                   color: listsApp.iconColor,
                 ), 
                 onPressed: () {
-                  Navigator.pop(context);
+                  controller.removeList(list);
+                  Navigator.of(context).pushReplacementNamed('/');
                 },
               ),
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: listsApp.iconColor,
-                  ), 
-                  onPressed: () {
-                    controller.removeList(list);
-                    Navigator.of(context).pushReplacementNamed('/');
-                  },
-                )
-              ],
-            ),
-            Observer(
-              builder: (_) {
-                return SliverFixedExtentList(
-                  itemExtent: 60.0,
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final item = list.items[index];
-
-                      return ItemList(
-                        item: item,
-                        onPress: () {
-                          controller.setChecked(item, list);
-                        },
-                      );
-                    },
-                    childCount: list.items.length 
+              IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: listsApp.iconColor,
+                ), 
+                onPressed: () {
+                  Navigator.of(context).pushNamed('$LISTS_CREATE/${list.id}');
+                },
+              )
+            ],
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  color: Color(0xFFFFDCA2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: listsApp.defaultPadding,
+                            right: listsApp.defaultPadding,
+                            top: listsApp.defaultPadding,
+                            bottom: 10
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            child: Observer(
+                              builder: (_){
+                                return Text(
+                                  list.name,
+                                  style: TextStyle(
+                                    fontSize: getPropScreenWidth(18),
+                                    fontWeight: FontWeight.bold,
+                                    color: listsApp.textColor,
+                                  ),
+                                );
+                              }
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: listsApp.defaultPadding,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            height: 2,
+                            color: listsApp.primaryColor.withOpacity(0.2),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
-              }
+              },
+              childCount: 1,
             ),
-          ]
-        ),
+          ),
+          Observer(
+            builder: (_) {
+              return SliverFixedExtentList(
+                itemExtent: 60.0,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    final item = list.items[index];
+
+                    return ItemList(
+                      item: item,
+                      onPress: () {
+                        controller.setChecked(item, list);
+                      },
+                    );
+                  },
+                  childCount: list.items.length 
+                ),
+              );
+            }
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(
+              vertical: 10.0
+            ),
+          )
+        ]
       ),
     );
   }

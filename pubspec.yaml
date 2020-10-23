@@ -22,11 +22,13 @@ vars:
   clean: flutter clean
   get: flutter pub get
   runner: flutter pub run build_runner
+  package_runner: flutter packages pub run build_runner
 scripts: 
   mobx_build: $runner build
   # mobx_watch: $clean & $get & $runner watch
   mobx_watch: $runner watch --delete-conflicting-outputs
   mobx_build_clean: $clean & $get & $runner build --delete-conflicting-outputs
+  package_build: $package_runner build --delete-conflicting-outputs
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -36,6 +38,9 @@ dependencies:
   flutter_mobx: ^1.1.0+2
   mobx: ^1.2.1+2
   flutter_modular: ^2.0.1
+  path_provider: ^1.6.18
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
   flutter:
     sdk: flutter
 
@@ -56,6 +61,7 @@ dev_dependencies:
   modular_codegen: ^2.0.0+1
   mobx_codegen: ^1.1.0+2
   build_runner: ^1.10.1
+  hive_generator:
   flutter_test:
     sdk: flutter
 

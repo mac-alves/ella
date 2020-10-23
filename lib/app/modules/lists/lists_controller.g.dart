@@ -38,17 +38,6 @@ mixin _$ListsController on _ListsControllerBase, Store {
       ActionController(name: '_ListsControllerBase');
 
   @override
-  List<MyListItemStore> getItemsList(int index) {
-    final _$actionInfo = _$_ListsControllerBaseActionController.startAction(
-        name: '_ListsControllerBase.getItemsList');
-    try {
-      return super.getItemsList(index);
-    } finally {
-      _$_ListsControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   MyListStore getList(int id) {
     final _$actionInfo = _$_ListsControllerBaseActionController.startAction(
         name: '_ListsControllerBase.getList');

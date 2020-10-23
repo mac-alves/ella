@@ -22,11 +22,17 @@ class ItemList extends StatelessWidget {
           padding: EdgeInsets.only(
             left: listsApp.defaultPadding,
             right: listsApp.defaultPadding,
-            bottom: listsApp.defaultPadding / 2
+            top: listsApp.defaultPadding
           ),
           child: Container(
+            width: double.infinity,
+            height: 45,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+              color: item.checked ? Color(0xFFFFF1E2) : Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: listsApp.primaryColor.withOpacity(0.56)
+              ),
               boxShadow: [
                 BoxShadow(
                   offset: Offset(0, 2),
@@ -40,8 +46,6 @@ class ItemList extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               ),
-              color: (item.checked) ? 
-                Colors.white.withOpacity(0.8) : Colors.white,
               child: Row(
                 children: [
                   Padding(

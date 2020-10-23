@@ -26,7 +26,7 @@ double getPropScreenHeight(double inputHeight) {
 double getPropScreenWidth(double inputWidth) {
   double screenWidth = SizeConfig.screenWidth;
   // 414 is the layout width that designer use or you can say iPhone 11 Pro width
-  return (inputWidth / 414.0) * screenWidth;
+  return (inputWidth / 440.0) * screenWidth;
 }
 
 // For add free space vertically
