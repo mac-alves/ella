@@ -10,7 +10,7 @@ class FlexAppbar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         image: DecorationImage(
-          image: AssetImage("assets/images/back-lists.jpg"),
+          image: AssetImage("assets/images/back-lists.png"),
           fit: BoxFit.fill, 
         ),
       ),

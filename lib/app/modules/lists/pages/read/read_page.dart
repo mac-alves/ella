@@ -35,7 +35,7 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
                 decoration: BoxDecoration(
                   // color: Colors.white,
                   image: DecorationImage(
-                    image: AssetImage("assets/images/back-lists.jpg"),
+                    image: AssetImage("assets/images/back-lists.png"),
                     fit: BoxFit.fitWidth, 
                     alignment: Alignment.topLeft
                   ),

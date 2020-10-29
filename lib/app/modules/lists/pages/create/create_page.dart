@@ -60,7 +60,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                   decoration: BoxDecoration(
                     // color: Colors.white,
                     image: DecorationImage(
-                      image: AssetImage("assets/images/back-lists.jpg"),
+                      image: AssetImage("assets/images/back-lists.png"),
                       fit: BoxFit.fitWidth, 
                       alignment: Alignment.topLeft
                     ),
