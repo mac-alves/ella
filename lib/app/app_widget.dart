@@ -8,13 +8,14 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: Modular.navigatorKey,
-      title: 'EllA App',
+      title: 'EllA',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primaryColor: themeColors.primary,
         brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.white,
         textTheme:
-            GoogleFonts.poppinsTextTheme().apply(displayColor: listsApp.textColor),
+            GoogleFonts.poppinsTextTheme().apply(displayColor: themeColors.primary),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: Modular.initialRoute,
@@ -22,4 +23,3 @@ class AppWidget extends StatelessWidget {
     );
   }
 }
-  

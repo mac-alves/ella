@@ -1,5 +1,6 @@
 import 'package:ella/app/modules/lists/models/my_list_item_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -20,18 +21,18 @@ class ItemList extends StatelessWidget {
       builder: (_) {
         return Padding(
           padding: EdgeInsets.only(
-            left: listsApp.defaultPadding,
-            right: listsApp.defaultPadding,
-            top: listsApp.defaultPadding
+            left: SizeConfig.defaultPadding,
+            right: SizeConfig.defaultPadding,
+            top: SizeConfig.defaultPadding
           ),
           child: Container(
             width: double.infinity,
             height: 45,
             decoration: BoxDecoration(
-              color: item.checked ? Color(0xFFFFF1E2) : Colors.white,
+              color: item.checked ? themeColors.tertiary : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: listsApp.primaryColor.withOpacity(0.56)
+                color: themeColors.tertiary
               ),
               boxShadow: [
                 BoxShadow(
@@ -55,7 +56,7 @@ class ItemList extends StatelessWidget {
                     child: Icon(
                       item.checked ? Icons.check : Icons.crop_din,
                       color: (item.checked) ? 
-                        listsApp.iconColor.withOpacity(0.6) : listsApp.iconColor,
+                        themeColors.system.withOpacity(0.6) : themeColors.system,
                       size: 25,
                     ),
                   ),
@@ -65,7 +66,7 @@ class ItemList extends StatelessWidget {
                       decoration: (item.checked) ? TextDecoration.lineThrough : null,
                       fontSize: 15,
                       color: (item.checked) ? 
-                        listsApp.textColor.withOpacity(0.6) : listsApp.textColor
+                        themeColors.textPrimary.withOpacity(0.6) : themeColors.textPrimary
                     )
                   ),
                 ],

@@ -22,8 +22,7 @@ class HiveRepository extends Disposable {
   _init() async {
     var dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
-    print(dir.path);
-    
+        
     var openBoxLists = await Hive.openBox('db_lists');
     var openBoxIds = await Hive.openBox('box_ids');
 

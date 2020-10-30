@@ -1,6 +1,7 @@
 import 'package:ella/app/modules/lists/lists_routes.dart';
 import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/read/widgets/item_list.dart';
+import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -24,28 +25,15 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
     MyListStore list = controller.lists.getList(widget.id);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: themeColors.primary,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor:  Color(0xFFFFDCA2),
-            expandedHeight: 60.0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  // color: Colors.white,
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/back-lists.png"),
-                    fit: BoxFit.fitWidth, 
-                    alignment: Alignment.topLeft
-                  ),
-                ),
-              ),
-            ),
+            backgroundColor:  themeColors.secondary,
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: listsApp.iconColor,
+                color: themeColors.system,
               ), 
               onPressed: () {
                 Navigator.pop(context);
@@ -55,17 +43,28 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
               IconButton(
                 icon: Icon(
                   Icons.delete,
-                  color: listsApp.iconColor,
+                  color: themeColors.system,
                 ), 
                 onPressed: () {
-                  controller.removeList(list);
-                  Navigator.of(context).pushReplacementNamed('/');
+                  AlertDialogConfirm(
+                    context: context,
+                    title: 'Delete',
+                    description: 'Deseja deletar a lista ${list.name} ?',
+                    onPressNot: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    onPressYes: () {
+                      controller.removeList(list);
+                      Navigator.of(context, rootNavigator: true).pop();
+                      Navigator.of(context).pop();
+                    } 
+                  ).show();
                 },
               ),
               IconButton(
                 icon: Icon(
                   Icons.edit,
-                  color: listsApp.iconColor,
+                  color: themeColors.system,
                 ), 
                 onPressed: () {
                   Navigator.of(context).pushNamed('$LISTS_CREATE/${list.id}');
@@ -76,55 +75,43 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Container(
-                  color: Color(0xFFFFDCA2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: SizeConfig.defaultPadding,
+                        right: SizeConfig.defaultPadding,
+                        top: SizeConfig.defaultPadding,
+                        bottom: 10
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        child: Observer(
+                          builder: (_){
+                            return Text(
+                              list.name,
+                              style: TextStyle(
+                                fontSize: getPropScreenWidth(18),
+                                fontWeight: FontWeight.bold,
+                                color: themeColors.textSecondary,
+                              ),
+                            );
+                          }
+                        ),
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: listsApp.defaultPadding,
-                            right: listsApp.defaultPadding,
-                            top: listsApp.defaultPadding,
-                            bottom: 10
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            child: Observer(
-                              builder: (_){
-                                return Text(
-                                  list.name,
-                                  style: TextStyle(
-                                    fontSize: getPropScreenWidth(18),
-                                    fontWeight: FontWeight.bold,
-                                    color: listsApp.textColor,
-                                  ),
-                                );
-                              }
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: listsApp.defaultPadding,
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 2,
-                            color: listsApp.primaryColor.withOpacity(0.2),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.defaultPadding,
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        height: 2,
+                        color: themeColors.textSecondary.withOpacity(0.1),
+                      ),
+                    )
+                  ],
                 );
               },
               childCount: 1,

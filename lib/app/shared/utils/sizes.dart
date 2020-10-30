@@ -6,6 +6,7 @@ class SizeConfig {
   static double screenHeight;
   static double defaultSize;
   static Orientation orientation;
+  static double defaultPadding = 15.0;
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);

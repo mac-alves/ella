@@ -1,6 +1,7 @@
 import 'package:ella/app/modules/lists/lists_routes.dart';
 import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -20,18 +21,18 @@ class ItemList extends StatelessWidget {
         return Container(
           child: Padding(
             padding: EdgeInsets.only(
-              top: listsApp.defaultPadding,
-              left: listsApp.defaultPadding,
-              right: listsApp.defaultPadding,
+              top: SizeConfig.defaultPadding,
+              left: SizeConfig.defaultPadding,
+              right: SizeConfig.defaultPadding,
             ),
             child: Container(
               width: double.infinity,
               height: 56,
               decoration: BoxDecoration(
-                color: list.concluded ? Color(0xFFFFF1E2) : Colors.white,
+                color: list.concluded ? themeColors.tertiary : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: listsApp.primaryColor.withOpacity(0.56)
+                  color: themeColors.tertiary
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -52,7 +53,7 @@ class ItemList extends StatelessWidget {
                   children: [
                     Icon(
                       list.concluded ? Icons.check_circle : Icons.data_usage,
-                      color: listsApp.iconColor,
+                      color: themeColors.system,
                       size: 30,
                     ),
                     Expanded(
@@ -66,14 +67,14 @@ class ItemList extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
-                            color: listsApp.textColor
+                            color: themeColors.textPrimary
                           )
                         ),
                       ),
                     ),
                     Icon(
                       Icons.format_list_bulleted,
-                      color: listsApp.iconColor,
+                      color: themeColors.textSecondary,
                       size: 30,
                     ),
                   ],

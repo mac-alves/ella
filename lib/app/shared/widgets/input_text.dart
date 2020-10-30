@@ -1,4 +1,5 @@
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -23,7 +24,7 @@ class InputText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: listsApp.defaultPadding
+        horizontal: SizeConfig.defaultPadding
       ),
       child: Column(
         children: [
@@ -36,17 +37,17 @@ class InputText extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor
+                color: themeColors.textSecondary,
               ),
             ),
           ),
           Container(
             height: 56,
             decoration: BoxDecoration(
-              color: listsApp.primaryColor.withOpacity(0.10),
+              color: themeColors.tertiary,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: listsApp.primaryColor
+                color: themeColors.textSecondary
               )
             ),
             child: TextField(
@@ -55,17 +56,19 @@ class InputText extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: placeholder,
                 hintStyle: TextStyle(
-                  color: listsApp.textColor,
+                  color: themeColors.textSecondary,
                   fontSize: 14,
                 ),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 18
+                contentPadding: EdgeInsets.only(
+                  left: SizeConfig.defaultPadding,
+                  right: SizeConfig.defaultPadding,
+                  top: 3,
                 )
               ),
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 15,
+                color: themeColors.textPrimary,
               ),
             ),
           ),

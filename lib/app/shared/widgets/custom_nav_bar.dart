@@ -19,7 +19,7 @@ class CustomNavBar extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: getPropScreenWidth(listsApp.defaultPadding),
+            horizontal: getPropScreenWidth(SizeConfig.defaultPadding),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

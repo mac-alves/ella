@@ -49,28 +49,15 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
     SizeConfig().init(context);
 
     return Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: themeColors.primary,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              backgroundColor:  Color(0xFFFFDCA2),
-              expandedHeight: 60.0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  decoration: BoxDecoration(
-                    // color: Colors.white,
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/back-lists.png"),
-                      fit: BoxFit.fitWidth, 
-                      alignment: Alignment.topLeft
-                    ),
-                  ),
-                ),
-              ),
+              backgroundColor:  themeColors.secondary,
               leading: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: listsApp.iconColor,
+                  color: themeColors.system,
                 ), 
                 onPressed: () {
                   Navigator.pop(context);
@@ -80,7 +67,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                 IconButton(
                   icon: Icon(
                     Icons.save,
-                    color: listsApp.iconColor,
+                    color: themeColors.system,
                   ), 
                   onPressed: () {
                     controller.setVali(true);
@@ -104,55 +91,51 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Container(
-                    color: Color(0xFFFFDCA2),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: listsApp.defaultPadding,
-                              right: listsApp.defaultPadding,
-                              top: listsApp.defaultPadding,
-                              bottom: 10
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              child: Observer(
-                                builder: (_){
-                                  return Text(
-                                    "Nova Lista",
-                                    style: TextStyle(
-                                      fontSize: getPropScreenWidth(18),
-                                      fontWeight: FontWeight.bold,
-                                      color: listsApp.textColor,
-                                    ),
-                                  );
-                                }
-                              ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: SizeConfig.defaultPadding,
+                            right: SizeConfig.defaultPadding,
+                            top: SizeConfig.defaultPadding,
+                            bottom: 10
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            child: Observer(
+                              builder: (_){
+                                return Text(
+                                  "Nova Lista",
+                                  style: TextStyle(
+                                    fontSize: getPropScreenWidth(18),
+                                    fontWeight: FontWeight.bold,
+                                    color: themeColors.textSecondary,
+                                  ),
+                                );
+                              }
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: listsApp.defaultPadding,
-                              right: listsApp.defaultPadding,
-                              bottom: listsApp.defaultPadding
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              height: 2,
-                              color: listsApp.primaryColor.withOpacity(0.2),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: SizeConfig.defaultPadding,
+                            right: SizeConfig.defaultPadding,
+                            bottom: SizeConfig.defaultPadding
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            height: 2,
+                            color: themeColors.textSecondary.withOpacity(0.1),
+                          ),
+                        )
+                      ],
                     ),
                   );
                 },
@@ -176,8 +159,9 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
           child: Icon(
             Icons.add,
             size: 28,
+            color: themeColors.primary,
           ),
-          backgroundColor: listsApp.textColor,
+          backgroundColor: themeColors.system,
         ),
       );
   }

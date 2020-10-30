@@ -63,10 +63,10 @@ class _BodyState extends ModularState<Body, CreateController> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: listsApp.defaultPadding,
-                right: listsApp.defaultPadding,
-                top: listsApp.defaultPadding / 2,
-                bottom: listsApp.defaultPadding / 2,
+                left: SizeConfig.defaultPadding,
+                right: SizeConfig.defaultPadding,
+                top: SizeConfig.defaultPadding / 2,
+                bottom: SizeConfig.defaultPadding / 2,
               ),
               child: Row(
                 children: [
@@ -74,7 +74,7 @@ class _BodyState extends ModularState<Body, CreateController> {
                     "Itens",
                     style: TextStyle(
                       fontSize: 14,
-                      color: listsApp.textColor
+                      color: themeColors.textSecondary,
                     )
                   ),
                   Spacer(),

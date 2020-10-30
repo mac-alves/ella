@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:ella/app/modules/lists/lists_routes.dart';
 import 'package:ella/app/modules/lists/pages/home/widgets/flex_app_bar.dart';
 import 'package:ella/app/modules/lists/pages/home/widgets/item_list.dart';
+import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -21,16 +20,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
 
+  // altera a barra de navegação do systema, mas não pegou no meu
+  // SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.light
+  //   .copyWith(systemNavigationBarColor: themeColors.secondary);
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     
     return Scaffold(
+      backgroundColor: themeColors.primary,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor: listsApp.backColor,
-            expandedHeight: getPropScreenWidth(200),
+            backgroundColor: themeColors.primary,
+            expandedHeight: getPropScreenWidth(210),
             flexibleSpace: LayoutBuilder(
               builder: (context, bc) {
                 // double size = min(bc.constrainHeight(), 120);
@@ -43,62 +47,63 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               IconButton(
                 icon: Icon(
                   Icons.delete,
-                  color: listsApp.iconColor,
+                  color: themeColors.system,
                   size: 25,
                 ),
                 tooltip: 'Delete All Lists',
-                onPressed: () => controller.deleteAllLists(),
+                onPressed: () {
+                  AlertDialogConfirm(
+                    context: context,
+                    title: 'Delete',
+                    description: 'Deseja deletar todas as listas ?',
+                    onPressNot: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    onPressYes: () {
+                      controller.deleteAllLists();
+                      Navigator.of(context, rootNavigator: true).pop();
+                    } 
+                  ).show();
+                }
               )
             ]
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Container(
-                  color: listsApp.backColor,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: SizeConfig.defaultPadding,
+                        right: SizeConfig.defaultPadding,
+                        top: SizeConfig.defaultPadding / 2,
+                        bottom: 10
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: listsApp.defaultPadding,
-                            right: listsApp.defaultPadding,
-                            top: listsApp.defaultPadding,
-                            bottom: 10
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            child: Text(
-                              "Suas Listas",
-                              style: TextStyle(
-                                fontSize: getPropScreenWidth(18),
-                                fontWeight: FontWeight.bold,
-                                color: listsApp.textColor,
-                              ),
-                            ),
+                      child: Container(
+                        width: double.infinity,
+                        child: Text(
+                          "Suas Listas",
+                          style: TextStyle(
+                            fontSize: getPropScreenWidth(18),
+                            fontWeight: FontWeight.bold,
+                            color: themeColors.textSecondary,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: listsApp.defaultPadding,
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 2,
-                            color: listsApp.primaryColor.withOpacity(0.2),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.defaultPadding,
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        height: 2,
+                        color: themeColors.textSecondary.withOpacity(0.1),
+                      ),
+                    )
+                  ],
                 );
               },
               childCount: 1,
@@ -134,8 +139,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         child: Icon(
           Icons.add,
           size: 28,
+          color: themeColors.primary,
         ),
-        backgroundColor: listsApp.textColor,
+        backgroundColor: themeColors.system,
       ),
     );
   }

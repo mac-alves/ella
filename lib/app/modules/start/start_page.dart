@@ -1,5 +1,4 @@
 import 'package:ella/app/modules/lists/lists_module.dart';
-import 'package:ella/app/modules/lists/lists_routes.dart';
 import 'package:ella/app/modules/money/money_module.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
@@ -25,6 +24,7 @@ class _StartPageState extends ModularState<StartPage, StartController> {
 
     return Scaffold(
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: controller.pageController,
         children: [
           RouterOutlet(
@@ -36,82 +36,45 @@ class _StartPageState extends ModularState<StartPage, StartController> {
           Container(),
         ],
       ),
-      bottomNavigationBar: AnimatedBuilder(
-        animation: controller.pageController,
-        builder: (context, snapshot) {
-          // return BottomNavigationBar(
-          //   currentIndex: controller.pageController?.page?.round() ?? 0,
-          //   onTap: (index){
-          //     controller.pageController.jumpToPage(index);
-          //   },
-          //   items: [
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.home),
-          //       label: '',
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.settings),
-          //       label: 'Config',
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.person_outline),
-          //       label: 'perfil',
-          //     ),
-          //   ],
-          // );
-          return Container(
-            color: Colors.white,
-            child: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: getPropScreenWidth(listsApp.defaultPadding),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    NavItem(
-                      icon: Icons.format_list_bulleted, 
-                      title: 'Lists',
-                      color: listsApp.primaryColor,
-                      press: () {
-                        controller.pageController.jumpToPage(0);
-                      },
-                      isActive:
-                        controller.pageController?.page?.round() == 0 ||
-                        controller.pageController?.page?.round() == null
-                    ),
-                    NavItem(
-                      icon: Icons.attach_money,
-                      title: 'Money',
-                      color: moneyApp.primaryColor,
-                      press: () {
-                        controller.pageController.jumpToPage(1);
-                      },
-                      isActive:
-                        controller.pageController?.page?.round() == 1
-                    ),
-                    NavItem(
-                      icon: Icons.lock,
-                      title: 'Lists',
-                      color: passwordApp.primaryColor,
-                      press: () {
-                        controller.pageController.jumpToPage(2);
-                      },
-                      isActive:
-                        controller.pageController?.page?.round() == 2
-                    ),
-                    NavItem(
-                      icon: Icons.settings,
-                      title: 'Setting',
-                      color: def.primaryColor,
-                      press: () {},
-                    )
-                  ],
-                ),
+      bottomNavigationBar: Container(
+        height: getPropScreenWidth(55),
+        child: AnimatedBuilder(
+          animation: controller.pageController,
+          builder: (context, snapshot) {
+            return BottomNavigationBar(
+              backgroundColor: themeColors.secondary,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              iconSize: 30,
+              selectedFontSize: 0,
+              selectedIconTheme: IconThemeData(
+                color: themeColors.textPrimary,
               ),
-            ),
-          );
-        }
+              unselectedIconTheme: IconThemeData(
+                color: themeColors.textSecondary.withOpacity(0.5),
+              ),
+              currentIndex: controller.pageController?.page?.round() ?? 0,
+              onTap: (index){
+                controller.pageController.jumpToPage(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.format_list_bulleted),
+                  label: '',
+                  backgroundColor: Colors.black
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.attach_money),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.lock),
+                  label: '',
+                ),
+              ],
+            );
+          }
+        ),
       ),
     );
   }

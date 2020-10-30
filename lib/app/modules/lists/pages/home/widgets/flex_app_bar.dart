@@ -5,45 +5,27 @@ import 'package:flutter/material.dart';
 class FlexAppbar extends StatelessWidget { 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Stack(
+      overflow: Overflow.visible,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: DecorationImage(
-          image: AssetImage("assets/images/back-lists.png"),
-          fit: BoxFit.fill, 
+      children: [
+        Image.asset(
+          "assets/images/logo.png",
+          height: getPropScreenWidth(140),
+          fit: BoxFit.cover
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(height: 40),
-          Text(
-            "Lists",
+        Positioned(
+          bottom: 5,
+          child: Text(
+            "Seu sistema de controle\ne armazenamento de listas rapidas",
+            textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: getPropScreenWidth(55),
-              fontWeight: FontWeight.bold,
-              color: listsApp.textColor,
-              height: 0.5
+              fontSize: getPropScreenWidth(12),
+              color: themeColors.textSecondary,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: 4
-            ),
-            child: Text(
-              "Seu sistema de controle \ne armazenamento de listas rapidas",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: getPropScreenWidth(13),
-                color: Colors.white,
-                
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
