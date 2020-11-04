@@ -53,7 +53,7 @@ class ItemList extends StatelessWidget {
                   children: [
                     Icon(
                       list.concluded ? Icons.check_circle : Icons.data_usage,
-                      color: themeColors.system,
+                      color: themeColors.listsColor,
                       size: 30,
                     ),
                     Expanded(

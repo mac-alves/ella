@@ -1,4 +1,5 @@
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
 class ItemSelect {
@@ -11,27 +12,40 @@ class ItemSelect {
   });
 }
 
-ItemSelect fixos = new ItemSelect(id: '1', name: 'Fixo');
-ItemSelect previsto = new ItemSelect(id: '2', name: 'Previsto');
-ItemSelect variado = new ItemSelect(id: '3', name: 'Variado');
-
-List<ItemSelect> itens = [fixos, previsto, variado];
-
 class DropDownSelect extends StatefulWidget {
-  DropDownSelect({ Key key }) : super(key: key);
+  
+  final String label;
+  final String placeholder;
+  final List<ItemSelect> itens;
+  final void Function(String) change;
+  final String value;
+  final String msgError;
+  final bool error;
+
+  DropDownSelect({
+    Key key,
+    @required this.label,
+    @required this.placeholder,
+    @required this.itens,
+    @required this.change,
+    @required this.value,
+    @required this.msgError, 
+    @required this.error, 
+  }) : super(key: key);
 
   @override
   _DropDownSelectState createState() => _DropDownSelectState();
 }
 
 class _DropDownSelectState extends State<DropDownSelect> {
-  String valueSelected = itens[0].id;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10
+      padding: EdgeInsets.only(
+        top: SizeConfig.defaultPadding / 2,
+        left: SizeConfig.defaultPadding,
+        right: SizeConfig.defaultPadding,
       ),
       child: Column(
         children: [
@@ -41,59 +55,71 @@ class _DropDownSelectState extends State<DropDownSelect> {
             ),
             alignment: Alignment.centerLeft, 
             child: Text(
-              "Tipo",
+              widget.label,
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor
+                color: themeColors.textSecondary
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.only(
-              left: 15,
-              top: 5,
+              left: SizeConfig.defaultPadding,
+              top: 2,
               right: 10
             ),
             height: 56,
             decoration: BoxDecoration(
-              color: listsApp.primaryColor.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(10)
+              color: themeColors.tertiary,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: themeColors.textSecondary
+              )
             ),
             child: DropdownButton<String>(
               hint: Text(
-                "Selecione um tipo",
+                widget.placeholder,
                 style: TextStyle(
-                  color: listsApp.textColor,
+                  color: themeColors.textSecondary,
                   fontSize: 14
                 ),
               ),
               isExpanded: true,
-              value: valueSelected,
+              value: widget.value,
               icon: Icon(
                 Icons.keyboard_arrow_down,
-                color: listsApp.iconColor,
+                color: themeColors.textSecondary,
               ),
               iconSize: 34,
               elevation: 16,
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor,
+                color: themeColors.textSecondary,
               ),
               underline: Container(
                 height: 0,
               ),
-              onChanged: (String newValue) {
-                setState(() {
-                  valueSelected = newValue;
-                });
-              },
-              items: itens.map<DropdownMenuItem<String>>((ItemSelect item) {
-                  return DropdownMenuItem<String>(
-                    value: item.id,
-                    child: Text(item.name),
-                  );
-                }).toList(),
+              onChanged: widget.change,
+              items: widget.itens.map<DropdownMenuItem<String>>((ItemSelect item) {
+                return DropdownMenuItem<String>(
+                  value: item.id,
+                  child: Text(item.name),
+                );
+              }).toList(),
             )
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              left: 5,
+            ),
+            alignment: Alignment.centerLeft,
+            child: !widget.error ? null : Text(
+              widget.msgError,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red[600]
+              ),
+            ),
           ),
         ],
       ),

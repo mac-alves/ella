@@ -29,7 +29,7 @@ class NavItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [if (isActive) listsApp.shadow]
+          // boxShadow: [if (isActive) listsApp.shadow]
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,27 +1,41 @@
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class MoneyInput extends StatelessWidget {
+class MoneyInput extends StatefulWidget {
 
   final String label;
   final String placeholder;
-  final GestureTapCallback press;
+  final String msgError;
+  final void Function(String) change;
+  final bool error;
+  final bool enable;
 
   const MoneyInput({
     Key key, 
     @required this.label, 
-    @required this.press, 
+    @required this.change, 
     @required this.placeholder,
+    @required this.msgError,
+    @required this.error,
+    @required this.enable,
   }) : super(key: key);
 
+  @override
+  _MoneyInputState createState() => _MoneyInputState();
+}
+
+class _MoneyInputState extends State<MoneyInput> {
   @override
   Widget build(BuildContext context) {
     final controller = new MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10
+      padding: EdgeInsets.only(
+        top: SizeConfig.defaultPadding / 2,
+        left: SizeConfig.defaultPadding,
+        right: SizeConfig.defaultPadding,
       ),
       child: Column(
         children: [
@@ -31,28 +45,32 @@ class MoneyInput extends StatelessWidget {
             ),
             alignment: Alignment.centerLeft,
             child: Text(
-              label,
+              widget.label,
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor
+                color: themeColors.textSecondary
               ),
             ),
           ),
           Container(
             height: 56,
             decoration: BoxDecoration(
-              color: listsApp.primaryColor.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(10)
+              color: widget.enable ? themeColors.tertiary : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: themeColors.textSecondary
+              )
             ),
             child: TextField(
               controller: controller,
               keyboardType: TextInputType.number,
-              onChanged: (value) {},
+              onChanged: widget.change,
               textAlign: TextAlign.right,
+              enabled: widget.enable,
               decoration: InputDecoration(
-                hintText: placeholder,
+                hintText: widget.placeholder,
                 hintStyle: TextStyle(
-                  color: listsApp.textColor,
+                  color: themeColors.textSecondary,
                   fontSize: 14,
                 ),
                 border: InputBorder.none,
@@ -63,7 +81,20 @@ class MoneyInput extends StatelessWidget {
               ),
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor,
+                color: themeColors.textSecondary,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              left: 5,
+            ),
+            alignment: Alignment.centerLeft,
+            child: !widget.error ? null : Text(
+              widget.msgError,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red[600]
               ),
             ),
           ),

@@ -56,7 +56,7 @@ class ItemList extends StatelessWidget {
                     child: Icon(
                       item.checked ? Icons.check : Icons.crop_din,
                       color: (item.checked) ? 
-                        themeColors.system.withOpacity(0.6) : themeColors.system,
+                        themeColors.listsColor.withOpacity(0.6) : themeColors.listsColor,
                       size: 25,
                     ),
                   ),

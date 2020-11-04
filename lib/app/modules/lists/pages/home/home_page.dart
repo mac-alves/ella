@@ -4,6 +4,7 @@ import 'package:ella/app/modules/lists/pages/home/widgets/item_list.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -47,7 +48,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               IconButton(
                 icon: Icon(
                   Icons.delete,
-                  color: themeColors.system,
+                  color: themeColors.listsColor,
                   size: 25,
                 ),
                 tooltip: 'Delete All Lists',
@@ -71,43 +72,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: SizeConfig.defaultPadding,
-                        right: SizeConfig.defaultPadding,
-                        top: SizeConfig.defaultPadding / 2,
-                        bottom: 10
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        child: Text(
-                          "Suas Listas",
-                          style: TextStyle(
-                            fontSize: getPropScreenWidth(18),
-                            fontWeight: FontWeight.bold,
-                            color: themeColors.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.defaultPadding,
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 2,
-                        color: themeColors.textSecondary.withOpacity(0.1),
-                      ),
-                    )
-                  ],
+                return SectionTitle(
+                  title: 'Suas Listas',
                 );
               },
               childCount: 1,
-            ),
+            )
           ),
           Observer(
             builder: (_) {
@@ -141,7 +111,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           size: 28,
           color: themeColors.primary,
         ),
-        backgroundColor: themeColors.system,
+        backgroundColor: themeColors.listsColor,
       ),
     );
   }

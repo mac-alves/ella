@@ -2,8 +2,8 @@ import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/create/widgets/body.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'create_controller.dart';
@@ -57,7 +57,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
               leading: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: themeColors.system,
+                  color: themeColors.listsColor,
                 ), 
                 onPressed: () {
                   Navigator.pop(context);
@@ -67,7 +67,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                 IconButton(
                   icon: Icon(
                     Icons.save,
-                    color: themeColors.system,
+                    color: themeColors.listsColor,
                   ), 
                   onPressed: () {
                     controller.setVali(true);
@@ -90,57 +90,12 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: SizeConfig.defaultPadding,
-                            right: SizeConfig.defaultPadding,
-                            top: SizeConfig.defaultPadding,
-                            bottom: 10
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            child: Observer(
-                              builder: (_){
-                                return Text(
-                                  "Nova Lista",
-                                  style: TextStyle(
-                                    fontSize: getPropScreenWidth(18),
-                                    fontWeight: FontWeight.bold,
-                                    color: themeColors.textSecondary,
-                                  ),
-                                );
-                              }
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: SizeConfig.defaultPadding,
-                            right: SizeConfig.defaultPadding,
-                            bottom: SizeConfig.defaultPadding
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 2,
-                            color: themeColors.textSecondary.withOpacity(0.1),
-                          ),
-                        )
-                      ],
-                    ),
+                  return SectionTitle(
+                    title: 'Nova Lista',
                   );
                 },
                 childCount: 1,
-              ),
+              )
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -161,7 +116,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
             size: 28,
             color: themeColors.primary,
           ),
-          backgroundColor: themeColors.system,
+          backgroundColor: themeColors.listsColor,
         ),
       );
   }

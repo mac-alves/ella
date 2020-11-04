@@ -50,6 +50,7 @@ class _BodyState extends ModularState<Body, CreateController> {
         clipBehavior: Clip.none,
         child: Column(
           children: [
+            VerticalSpacing(of: SizeConfig.defaultPadding),
             Observer(
               builder: (_){
                 return InputText(

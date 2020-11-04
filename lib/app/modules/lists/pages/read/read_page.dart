@@ -3,7 +3,7 @@ import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/read/widgets/item_list.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
-import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -33,7 +33,7 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: themeColors.system,
+                color: themeColors.listsColor,
               ), 
               onPressed: () {
                 Navigator.pop(context);
@@ -43,12 +43,12 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
               IconButton(
                 icon: Icon(
                   Icons.delete,
-                  color: themeColors.system,
+                  color: themeColors.listsColor,
                 ), 
                 onPressed: () {
                   AlertDialogConfirm(
                     context: context,
-                    title: 'Delete',
+                    title: 'Atenção',
                     description: 'Deseja deletar a lista ${list.name} ?',
                     onPressNot: () {
                       Navigator.of(context, rootNavigator: true).pop();
@@ -64,7 +64,7 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
               IconButton(
                 icon: Icon(
                   Icons.edit,
-                  color: themeColors.system,
+                  color: themeColors.listsColor,
                 ), 
                 onPressed: () {
                   Navigator.of(context).pushNamed('$LISTS_CREATE/${list.id}');
@@ -72,50 +72,19 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
               )
             ],
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: SizeConfig.defaultPadding,
-                        right: SizeConfig.defaultPadding,
-                        top: SizeConfig.defaultPadding,
-                        bottom: 10
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        child: Observer(
-                          builder: (_){
-                            return Text(
-                              list.name,
-                              style: TextStyle(
-                                fontSize: getPropScreenWidth(18),
-                                fontWeight: FontWeight.bold,
-                                color: themeColors.textSecondary,
-                              ),
-                            );
-                          }
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.defaultPadding,
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 2,
-                        color: themeColors.textSecondary.withOpacity(0.1),
-                      ),
-                    )
-                  ],
-                );
-              },
-              childCount: 1,
-            ),
+          Observer(
+            builder: (_){
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return SectionTitle(
+                      title: list.name,
+                    );
+                  },
+                  childCount: 1,
+                )
+              );
+            }
           ),
           Observer(
             builder: (_) {

@@ -2,7 +2,6 @@ import 'package:ella/app/modules/lists/lists_module.dart';
 import 'package:ella/app/modules/money/money_module.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
-import 'package:ella/app/shared/widgets/nav_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'start_controller.dart';

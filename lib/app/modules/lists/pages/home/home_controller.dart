@@ -30,6 +30,6 @@ abstract class _HomeControllerBase with Store {
 
   Future deleteAllLists() async {
     lists.myLists.clear();
-    await _storage.deleteAll();
+    await _storage.deleteAll(); 
   }
 }

@@ -51,6 +51,7 @@ class InputText extends StatelessWidget {
               )
             ),
             child: TextField(
+              textCapitalization: TextCapitalization.sentences,
               controller: controller,
               onChanged: change,
               decoration: InputDecoration(

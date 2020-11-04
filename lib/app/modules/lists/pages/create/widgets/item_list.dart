@@ -83,7 +83,7 @@ class _ItemListState extends State<ItemList> {
                 IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: themeColors.system,
+                    color: themeColors.listsColor,
                   ), 
                   onPressed: widget.press
                 )

@@ -39,14 +39,14 @@ class _SecureInputState extends State<SecureInput> {
               widget.label,
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor
+                color: themeColors.textSecondary
               ),
             ),
           ),
           Container(
             height: 56,
             decoration: BoxDecoration(
-              color: listsApp.primaryColor.withOpacity(0.10),
+              color: themeColors.textSecondary.withOpacity(0.10),
               borderRadius: BorderRadius.circular(10)
             ),
             child: TextField(
@@ -56,7 +56,7 @@ class _SecureInputState extends State<SecureInput> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     !secure ? Icons.visibility : Icons.visibility_off,
-                    color: listsApp.iconColor,
+                    color: themeColors.textSecondary,
                   ), 
                   onPressed: () {
                     setState((){
@@ -66,7 +66,7 @@ class _SecureInputState extends State<SecureInput> {
                 ),
                 hintText: widget.placeholder,
                 hintStyle: TextStyle(
-                  color: listsApp.textColor,
+                  color: themeColors.textSecondary,
                   fontSize: 14,
                 ),
                 border: InputBorder.none,
@@ -77,7 +77,7 @@ class _SecureInputState extends State<SecureInput> {
               ),
               style: TextStyle(
                 fontSize: 14,
-                color: listsApp.textColor,
+                color: themeColors.textSecondary,
               ),
             ),
           ),

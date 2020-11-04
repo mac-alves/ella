@@ -27,7 +27,7 @@ class CustomNavBar extends StatelessWidget {
               NavItem(
                 icon: Icons.format_list_bulleted, 
                 title: 'Lists',
-                color: listsApp.primaryColor,
+                color: themeColors.listsColor,
                 press: () {
                   if ((route != null) && (route.settings.name != LISTS_HOME)) {
                     Navigator.pushNamed(context, LISTS_HOME);
@@ -39,19 +39,19 @@ class CustomNavBar extends StatelessWidget {
               NavItem(
                 icon: Icons.attach_money,
                 title: 'Money',
-                color: moneyApp.primaryColor,
+                color: themeColors.moneyColor,
                 press: () {},
               ),
               NavItem(
                 icon: Icons.lock,
                 title: 'Lists',
-                color: passwordApp.primaryColor,
+                color: themeColors.passwordColor,
                 press: () {},
               ),
               NavItem(
                 icon: Icons.settings,
                 title: 'Setting',
-                color: def.primaryColor,
+                color: themeColors.passwordColor,
                 press: () {},
               )
             ],
