@@ -7,7 +7,7 @@ part 'spent_store.g.dart';
 class SpentStore extends _SpentStoreBase with _$SpentStore { 
   SpentStore({
     String title,
-    double value,
+    String value,
     String date,
     bool selected,
   }) : super(title: title, value: value, date: date, selected: selected);
@@ -37,7 +37,7 @@ abstract class _SpentStoreBase with Store {
   String title;
 
   @observable
-  double value;
+  String value;
 
   @observable
   String date;
@@ -56,7 +56,7 @@ abstract class _SpentStoreBase with Store {
   setTitle(String value) => title = value;
 
   @action
-  setValue(double newValue) => value = newValue;
+  setValue(String newValue) => value = newValue;
 
   @action
   setDate(String value) => date = value;

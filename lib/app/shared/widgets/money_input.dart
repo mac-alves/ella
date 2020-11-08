@@ -11,6 +11,7 @@ class MoneyInput extends StatefulWidget {
   final void Function(String) change;
   final bool error;
   final bool enable;
+  final String value;
 
   const MoneyInput({
     Key key, 
@@ -20,6 +21,7 @@ class MoneyInput extends StatefulWidget {
     @required this.msgError,
     @required this.error,
     @required this.enable,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -27,10 +29,32 @@ class MoneyInput extends StatefulWidget {
 }
 
 class _MoneyInputState extends State<MoneyInput> {
+
+  MoneyMaskedTextController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = new MoneyMaskedTextController(
+      decimalSeparator: '.',
+      thousandSeparator: ',',
+      precision: 2
+    );
+
+    controller.text = widget.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    
+    if (controller.dispose != null){
+      controller.dispose();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = new MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
-
     return Padding(
       padding: EdgeInsets.only(
         top: SizeConfig.defaultPadding / 2,
@@ -64,7 +88,9 @@ class _MoneyInputState extends State<MoneyInput> {
             child: TextField(
               controller: controller,
               keyboardType: TextInputType.number,
-              onChanged: widget.change,
+              onChanged: (value) {
+                widget.change(controller.numberValue.toString());
+              },
               textAlign: TextAlign.right,
               enabled: widget.enable,
               decoration: InputDecoration(

@@ -16,9 +16,9 @@ class MoneyModule extends ChildModule {
         $ExpenseStore,
         $SpentStore,
         $EstimateStore,
-        Bind((i) => EstimateController()),
-        Bind((i) => SpentController()),
-        Bind((i) => HomeController()),
+        Bind((i) => EstimateController(i.get())),
+        Bind((i) => SpentController(i.get())),
+        Bind((i) => HomeController(i.get())),
         Bind((i) => ReadController(i.get())),
         $MoneyController,
       ];

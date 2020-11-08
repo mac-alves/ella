@@ -2,8 +2,9 @@ import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class CardEstimate extends StatelessWidget {
+class CardEstimate extends StatefulWidget {
 
   final EstimateStore estimate;
 
@@ -11,6 +12,38 @@ class CardEstimate extends StatelessWidget {
     Key key,
     @required this.estimate,
   }) : super(key: key);
+
+  @override
+  _CardEstimateState createState() => _CardEstimateState();
+}
+
+class _CardEstimateState extends State<CardEstimate> {
+
+  String strDateInitial = '';
+  String strDateFinal = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    List<int> dateInitial = widget.estimate.startDay
+      .split('/')
+      .map((e) => int.parse(e))
+      .toList();
+    
+    List<int> dateFinal = widget.estimate.endDay
+      .split('/')
+      .map((e) => int.parse(e))
+      .toList();
+
+    strDateInitial = DateFormat('dd/MM').format(
+      new DateTime(dateInitial[0], dateInitial[1], dateInitial[2])
+    );
+
+    strDateFinal = DateFormat('dd/MM').format(
+      new DateTime(dateFinal[0], dateFinal[1], dateFinal[2])
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +88,7 @@ class CardEstimate extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'R\$ ${estimate.finalBalance}',
+                'R\$ ${widget.estimate.finalBalance}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 45,
@@ -71,14 +104,14 @@ class CardEstimate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${estimate.month}',
+                  '${widget.estimate.month}',
                   style: TextStyle(
                     color: themeColors.textPrimary,
                     fontSize: 14,
                   )
                 ),
                 Text(
-                  '${estimate.startDay} - ${estimate.endDay}',
+                  '$strDateInitial - $strDateFinal',
                   style: TextStyle(
                     color: themeColors.textPrimary,
                     fontSize: 11,

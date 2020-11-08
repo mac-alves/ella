@@ -7,7 +7,7 @@ part of 'spent_controller.dart';
 // **************************************************************************
 
 final $SpentController = BindInject(
-  (i) => SpentController(),
+  (i) => SpentController(i<MoneyController>()),
   singleton: true,
   lazy: true,
 );

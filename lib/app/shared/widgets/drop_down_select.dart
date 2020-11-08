@@ -1,16 +1,7 @@
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/list_of_months.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
-
-class ItemSelect {
-  final String id;
-  final String name;
-
-  ItemSelect({
-    @required this.id, 
-    @required this.name
-  });
-}
 
 class DropDownSelect extends StatefulWidget {
   
@@ -103,7 +94,12 @@ class _DropDownSelectState extends State<DropDownSelect> {
               items: widget.itens.map<DropdownMenuItem<String>>((ItemSelect item) {
                 return DropdownMenuItem<String>(
                   value: item.id,
-                  child: Text(item.name),
+                  child: Text(
+                    item.name,
+                    style: TextStyle(
+                      color: themeColors.textPrimary
+                    ),
+                  ),
                 );
               }).toList(),
             )

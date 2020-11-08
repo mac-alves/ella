@@ -9,7 +9,7 @@ part of 'spent_store.dart';
 final $SpentStore = BindInject(
   (i) => SpentStore(
       title: i<String>(),
-      value: i<double>(),
+      value: i<String>(),
       date: i<String>(),
       selected: i<bool>()),
   singleton: true,
@@ -41,13 +41,13 @@ mixin _$SpentStore on _SpentStoreBase, Store {
   final _$valueAtom = Atom(name: '_SpentStoreBase.value');
 
   @override
-  double get value {
+  String get value {
     _$valueAtom.reportRead();
     return super.value;
   }
 
   @override
-  set value(double value) {
+  set value(String value) {
     _$valueAtom.reportWrite(value, super.value, () {
       super.value = value;
     });
@@ -98,7 +98,7 @@ mixin _$SpentStore on _SpentStoreBase, Store {
   }
 
   @override
-  dynamic setValue(double newValue) {
+  dynamic setValue(String newValue) {
     final _$actionInfo = _$_SpentStoreBaseActionController.startAction(
         name: '_SpentStoreBase.setValue');
     try {

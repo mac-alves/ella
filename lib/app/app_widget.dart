@@ -12,6 +12,7 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: themeColors.primary,
+        canvasColor: themeColors.secondary,
         brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.white,
         textTheme:

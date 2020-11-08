@@ -1,3 +1,4 @@
+import 'package:ella/app/shared/utils/list_of_months.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
 import 'package:ella/app/shared/widgets/form_fields/money_input.dart';
 import 'package:ella/app/shared/widgets/interval_date_picker.dart';
@@ -46,11 +47,7 @@ class _EstimateFieldsState extends State<EstimateFields> {
                     controller.newEstimate.setMonth(value);
                   },
                   value: controller.newEstimate.month,
-                  itens: [
-                    new ItemSelect(id: '1', name: 'Fixo'),
-                    new ItemSelect(id: '2', name: 'Previsto'),
-                    new ItemSelect(id: '3', name: 'Variado'),
-                  ],
+                  itens: months,
                 ),
                 IntervalDatePicker(
                   label: 'Intervalo de dias',
@@ -72,6 +69,7 @@ class _EstimateFieldsState extends State<EstimateFields> {
                     controller.newEstimate.setSalary(value);
                   },
                   msgError: 'Digite um valor valido',
+                  value: controller.newEstimate.salary
                 ),
                 MoneyInput(
                   label: 'Saldo na conta',
@@ -80,6 +78,7 @@ class _EstimateFieldsState extends State<EstimateFields> {
                     controller.newEstimate.setOpeningBalance(value);
                   },
                   msgError: 'Digite um valor valido',
+                  value: controller.newEstimate.openingBalance
                 ),
               ],
             );

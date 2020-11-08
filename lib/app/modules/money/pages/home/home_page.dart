@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ella/app/modules/money/models/estimate_store.dart';
+import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/money_routes.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
 import 'package:ella/app/shared/utils/constants.dart';
@@ -42,6 +42,18 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 onPressed: () {
                   // Navigator.of(context).pushNamed('$LISTS_CREATE/${list.id}');
                 },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: themeColors.moneyColor,
+                ), 
+                onPressed: () {
+                  controller.goScreen(
+                    context, 
+                    '$MONEY_CREATE_ESTIMATE/${controller.currentEstimate.id}'
+                  );
+                },
               )
             ],
           ),
@@ -52,22 +64,23 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   child: Observer(
                     builder: (_) {
                       return CarouselSlider(
+                        carouselController: controller.carouselController,
                         options: CarouselOptions(
                           height: 180,
                           aspectRatio: 2.0,
                           enlargeCenterPage: true,
                           enableInfiniteScroll: false,
                           // viewportFraction: 0.9,
-                          initialPage: controller.estimates.length - 1,
+                          initialPage: controller.initialPage,
                           onPageChanged: (index, _) {
                             controller.setCurrentEstimate(index);
-                          }
+                          },
                         ),
                         items: [...List.generate(
-                          controller.estimates.length, 
+                          controller.money.estimates.length, 
                           (index) {
                             return CardEstimate(
-                              estimate: controller.estimates[index]
+                              estimate: controller.money.estimates[index]
                             );
                           }
                         )],
@@ -96,24 +109,22 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ),
           Observer(
             builder: (_) {
-              EstimateStore estimate = controller.currentEstimate;
-
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    var expense = estimate.expenses[index];
+                    ExpenseStore expense = controller.currentEstimate.expenses[index];
                     return Spent(
                       expense: expense,
                     );
                   },
-                  childCount: estimate.expenses.length
+                  childCount: controller.currentEstimate.expenses.length
                 ),
               );
             }
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(
-              vertical: 10.0
+              vertical: 40.0
             ),
           )
         ]
@@ -154,7 +165,10 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               fontSize: 15.0
             ),
             onTap: () {
-              Navigator.pushNamed(context, MONEY_CREATE_ESTIMATE);
+              controller.goScreen(
+                context, 
+                MONEY_CREATE_ESTIMATE
+              );
             },
           ),
         ],

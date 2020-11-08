@@ -26,8 +26,13 @@ class _FixedExpensesState extends State<FixedExpenses> {
           title: 'Gastos Fixos',
         ),
         ...List.generate(controller.fixedExpenses.length, (i) {
+          SpentStore item = controller.fixedExpenses[i];
+          
           return FixedExpenseItem(
-            spent: controller.fixedExpenses[i],
+            spent: item,
+            change: (){
+              item.setSelected();
+            },
           );
         })
       ],
@@ -38,10 +43,12 @@ class _FixedExpensesState extends State<FixedExpenses> {
 class FixedExpenseItem extends StatelessWidget {
   
   final SpentStore spent;
+  final void Function() change;
 
   const FixedExpenseItem({
     Key key,
     @required this.spent,
+    @required this.change,
   }) : super(key: key);
 
   @override
@@ -74,9 +81,7 @@ class FixedExpenseItem extends StatelessWidget {
               ],
             ),
             child: FlatButton(
-              onPressed: (){
-                spent.setSelected();
-              },
+              onPressed: change,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
               ),

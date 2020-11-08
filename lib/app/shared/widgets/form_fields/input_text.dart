@@ -8,6 +8,7 @@ class InputText extends StatefulWidget {
   final void Function(String) change;
   final String placeholder;
   final String msgError;
+  final String value;
 
   const InputText({
     Key key, 
@@ -15,6 +16,7 @@ class InputText extends StatefulWidget {
     @required this.change, 
     @required this.placeholder,
     @required this.msgError,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -24,6 +26,24 @@ class InputText extends StatefulWidget {
 class _InputTextState extends State<InputText> {
 
   bool error = false;
+
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+    controller.text = widget.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    
+    if (controller.dispose != null){
+      controller.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

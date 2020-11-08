@@ -28,7 +28,7 @@ class _EstimatePageState
     super.initState();
     controller.setNewEstimate(
       new EstimateStore(
-        id: null,
+        id: 0,
         month: null,
         startDay: null,
         endDay: null,
@@ -38,14 +38,17 @@ class _EstimatePageState
       )
     );
 
-    // if (widget.id != null) {
-    //   controller.setNewEstimate(controller.lists.getList(widget.id));
-    // } else {
-    //   whenDispose = when(
-    //     (r) => controller.idNewList != null, 
-    //     () => controller.newMyList.setId(controller.idNewList)
-    //   );
-    // }
+    if (widget.id != null) {
+      EstimateStore estimate = controller
+        .prepareEstimateEdit(controller.money.getEstimate(widget.id));
+
+      controller.setNewEstimate(estimate);
+    } else {
+      // whenDispose = when(
+      //   (r) => controller.idNewList != null, 
+      //   () => controller.newMyList.setId(controller.idNewList)
+      // );
+    }
   }
   
   @override
@@ -62,75 +65,83 @@ class _EstimatePageState
 
     return Scaffold(
       backgroundColor: themeColors.primary,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor:  themeColors.secondary,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: themeColors.moneyColor,
-              ), 
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: [
-              IconButton(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor:  themeColors.secondary,
+              leading: IconButton(
                 icon: Icon(
-                  Icons.save,
+                  Icons.arrow_back,
                   color: themeColors.moneyColor,
                 ), 
                 onPressed: () {
-                  // controller.setVali(true);
-                  
-                  // if (!controller.listIsValid){
-                  //   return;
-                  // }
-
-                  // if (widget.id == null) {
-                  //   controller.addList(controller.newMyList);
-                  // } else {
-                  //   controller.updateList(controller.newMyList);
-                  // }
-
-                  // Navigator.of(context).pop();
-                  if (controller.validateEstimate()) {
-                    // If the form is valid, display a Snackbar.
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Processing Data')));
-                  }
+                  Navigator.pop(context);
                 },
-              )
-            ],
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => EstimateFields(),
-              childCount: 1,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => FixedExpenses(),
-              childCount: 1,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => Savings(
-                enableSaving: false,
-                changeEnableSaving: (value){},
               ),
-              childCount: 1,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.save,
+                    color: themeColors.moneyColor,
+                  ), 
+                  onPressed: () {
+                    if (controller.validateEstimate()) {
+                      String message = 'Orçamento criado com sucesso.';
+                      bool create = true;
+
+                      if (widget.id == null) {
+                        controller.createEstimate();
+                      } else {
+                        controller.updateEstimate();
+                        message = 'Orçamento atualizado com sucesso.';
+                        create = false;
+                      }
+
+                      Scaffold
+                        .of(context)
+                        .showSnackBar(
+                          SnackBar(
+                            content: Text('$message')
+                          )
+                        );
+                      Navigator.of(context).pop(create);
+                    }
+                  },
+                )
+              ],
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(
-              vertical: 10.0
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => EstimateFields(),
+                childCount: 1,
+              ),
             ),
-          )
-        ]
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => FixedExpenses(),
+                childCount: 1,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Savings(
+                  enableSaving: false,
+                  changeEnableSaving: (value){},
+                ),
+                childCount: 1,
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                vertical: 10.0
+              ),
+            )
+          ]
+        ),
       ),
     );
   }

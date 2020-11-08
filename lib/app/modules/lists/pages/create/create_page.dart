@@ -70,6 +70,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                     color: themeColors.listsColor,
                   ), 
                   onPressed: () {
+                    String message = 'Lista criada com sucesso.';
                     controller.setVali(true);
                     
                     if (!controller.listIsValid){
@@ -80,8 +81,16 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                       controller.addList(controller.newMyList);
                     } else {
                       controller.updateList(controller.newMyList);
+                      message = 'Lista atualizada com sucesso.';
                     }
 
+                    Scaffold
+                      .of(context)
+                      .showSnackBar(
+                        SnackBar(
+                          content: Text(message)
+                        )
+                      );
                     Navigator.of(context).pop();
                   },
                 )

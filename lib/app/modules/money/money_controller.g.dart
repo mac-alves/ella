@@ -19,18 +19,18 @@ final $MoneyController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MoneyController on _MoneyControllerBase, Store {
-  final _$valueAtom = Atom(name: '_MoneyControllerBase.value');
+  final _$estimatesAtom = Atom(name: '_MoneyControllerBase.estimates');
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
+  ObservableList<EstimateStore> get estimates {
+    _$estimatesAtom.reportRead();
+    return super.estimates;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
+  set estimates(ObservableList<EstimateStore> value) {
+    _$estimatesAtom.reportWrite(value, super.estimates, () {
+      super.estimates = value;
     });
   }
 
@@ -38,11 +38,11 @@ mixin _$MoneyController on _MoneyControllerBase, Store {
       ActionController(name: '_MoneyControllerBase');
 
   @override
-  void increment() {
+  EstimateStore getEstimate(int id) {
     final _$actionInfo = _$_MoneyControllerBaseActionController.startAction(
-        name: '_MoneyControllerBase.increment');
+        name: '_MoneyControllerBase.getEstimate');
     try {
-      return super.increment();
+      return super.getEstimate(id);
     } finally {
       _$_MoneyControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -51,7 +51,7 @@ mixin _$MoneyController on _MoneyControllerBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+estimates: ${estimates}
     ''';
   }
 }

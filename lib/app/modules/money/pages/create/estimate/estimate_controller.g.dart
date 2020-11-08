@@ -7,7 +7,7 @@ part of 'estimate_controller.dart';
 // **************************************************************************
 
 final $EstimateController = BindInject(
-  (i) => EstimateController(),
+  (i) => EstimateController(i<MoneyController>()),
   singleton: true,
   lazy: true,
 );
@@ -19,37 +19,18 @@ final $EstimateController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$EstimateController on _EstimateControllerBase, Store {
-  final _$selectedFixedExpensesAtom =
-      Atom(name: '_EstimateControllerBase.selectedFixedExpenses');
+  final _$savingsAtom = Atom(name: '_EstimateControllerBase.savings');
 
   @override
-  ExpenseStore get selectedFixedExpenses {
-    _$selectedFixedExpensesAtom.reportRead();
-    return super.selectedFixedExpenses;
+  SpentStore get savings {
+    _$savingsAtom.reportRead();
+    return super.savings;
   }
 
   @override
-  set selectedFixedExpenses(ExpenseStore value) {
-    _$selectedFixedExpensesAtom.reportWrite(value, super.selectedFixedExpenses,
-        () {
-      super.selectedFixedExpenses = value;
-    });
-  }
-
-  final _$selectedVariedExpensesAtom =
-      Atom(name: '_EstimateControllerBase.selectedVariedExpenses');
-
-  @override
-  ExpenseStore get selectedVariedExpenses {
-    _$selectedVariedExpensesAtom.reportRead();
-    return super.selectedVariedExpenses;
-  }
-
-  @override
-  set selectedVariedExpenses(ExpenseStore value) {
-    _$selectedVariedExpensesAtom
-        .reportWrite(value, super.selectedVariedExpenses, () {
-      super.selectedVariedExpenses = value;
+  set savings(SpentStore value) {
+    _$savingsAtom.reportWrite(value, super.savings, () {
+      super.savings = value;
     });
   }
 
@@ -114,18 +95,18 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
     });
   }
 
-  final _$enableSavingAtom = Atom(name: '_EstimateControllerBase.enableSaving');
+  final _$errorSavingsAtom = Atom(name: '_EstimateControllerBase.errorSavings');
 
   @override
-  bool get enableSaving {
-    _$enableSavingAtom.reportRead();
-    return super.enableSaving;
+  bool get errorSavings {
+    _$errorSavingsAtom.reportRead();
+    return super.errorSavings;
   }
 
   @override
-  set enableSaving(bool value) {
-    _$enableSavingAtom.reportWrite(value, super.enableSaving, () {
-      super.enableSaving = value;
+  set errorSavings(bool value) {
+    _$errorSavingsAtom.reportWrite(value, super.errorSavings, () {
+      super.errorSavings = value;
     });
   }
 
@@ -177,11 +158,44 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   }
 
   @override
-  void setEnableSaving(bool value) {
+  void setErrorSavings(bool value) {
     final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
-        name: '_EstimateControllerBase.setEnableSaving');
+        name: '_EstimateControllerBase.setErrorSavings');
     try {
-      return super.setEnableSaving(value);
+      return super.setErrorSavings(value);
+    } finally {
+      _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setEnableSavings() {
+    final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
+        name: '_EstimateControllerBase.setEnableSavings');
+    try {
+      return super.setEnableSavings();
+    } finally {
+      _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void createEstimate() {
+    final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
+        name: '_EstimateControllerBase.createEstimate');
+    try {
+      return super.createEstimate();
+    } finally {
+      _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateEstimate() {
+    final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
+        name: '_EstimateControllerBase.updateEstimate');
+    try {
+      return super.updateEstimate();
     } finally {
       _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -190,13 +204,12 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   @override
   String toString() {
     return '''
-selectedFixedExpenses: ${selectedFixedExpenses},
-selectedVariedExpenses: ${selectedVariedExpenses},
+savings: ${savings},
 newEstimate: ${newEstimate},
 errorMonth: ${errorMonth},
 errorStartDay: ${errorStartDay},
 errorEndDay: ${errorEndDay},
-enableSaving: ${enableSaving}
+errorSavings: ${errorSavings}
     ''';
   }
 }
