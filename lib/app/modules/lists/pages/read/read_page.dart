@@ -48,7 +48,7 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
                 onPressed: () {
                   AlertDialogConfirm(
                     context: context,
-                    title: 'Atenção',
+                    title: 'Atenção!',
                     description: 'Deseja deletar a lista ${list.name} ?',
                     onPressNot: () {
                       Navigator.of(context, rootNavigator: true).pop();
@@ -72,19 +72,15 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
               )
             ],
           ),
-          Observer(
-            builder: (_){
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SectionTitle(
-                      title: list.name,
-                    );
-                  },
-                  childCount: 1,
-                )
-              );
-            }
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return SectionTitle(
+                  title: list.name,
+                );
+              },
+              childCount: 1,
+            )
           ),
           Observer(
             builder: (_) {

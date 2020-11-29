@@ -18,30 +18,19 @@ abstract class _EstimateControllerBase with Store {
   
   final MoneyController money;
 
-  _EstimateControllerBase(this.money);
+  final formKeyExtimateFields = GlobalKey<FormState>();
+  final formKeyExpectedFields = GlobalKey<FormState>();
 
-  final formKey = GlobalKey<FormState>();
-  
-  List<SpentStore> fixedExpenses = [
-    new SpentStore(
-      title: 'Aluguel',
-      value: '400.00',
-      selected: false
-    ),
-    new SpentStore(
-      title: 'Cartão de crédito',
-      value: '264.00',
-      selected: false
-    ),
-  ];
+  List<SpentStore> fixedExpensesOfEstimate = [];
 
-  @observable
-  SpentStore savings = new SpentStore(
-    title: 'Poupança',
-    value: null,
-    selected: false,
-    date: DateFormat('yyyy/MM/dd').format(DateTime.now())
-  );
+  List<SpentStore> fixedGeneralExpenses = [];
+
+  List<SpentStore> expectedExpenses = [];
+
+  _EstimateControllerBase(this.money) {
+    fixedGeneralExpenses = getNewList(money.fixedExpenses);
+    expectedExpenses = getNewList(money.expectedExpenses);
+  }
 
   @observable
   EstimateStore newEstimate;
@@ -57,6 +46,9 @@ abstract class _EstimateControllerBase with Store {
 
   @observable
   bool errorSavings = false;
+
+  @observable
+  bool isEdit = false;
 
   @action
   void setNewEstimate(EstimateStore value) => newEstimate = value;
@@ -74,24 +66,33 @@ abstract class _EstimateControllerBase with Store {
   void setErrorSavings(bool value) => errorSavings = value;
 
   @action
-  void setEnableSavings() {
-    savings.setSelected();
-    setErrorSavings(false);
+  void setIsEdit(bool value) => isEdit = value;
+
+  List<SpentStore> getNewList(ObservableList<SpentStore> list) {
+    return list.map((e) => SpentStore().fromJson(e.toJson())).toList();
   }
 
   /// 
   /// Cria um novo orçamento
   /// 
   @action
-  void createEstimate(){
-    money.estimates.add(getFormatedEstimate());
+  void createEstimate() {
+    EstimateStore estimate = getFormatedEstimate();
+    
+    money.estimates.add(estimate);
+    money.idsEstimates.add(
+      new ItemSelect(
+        id: estimate.id.toString(), 
+        name: estimate.month
+      )
+    );
   }
 
   /// 
-  /// Cria um novo orçamento
+  /// Atualiza o orçamento
   /// 
   @action
-  void updateEstimate(){
+  void updateEstimate() {
     EstimateStore estimateEdited = getFormatedEstimate();
 
     for (var i = 0; i < money.estimates.length; i++) {
@@ -104,12 +105,12 @@ abstract class _EstimateControllerBase with Store {
   /// 
   /// Obtem o orçamento formatado para criação ou atualização
   ///
-  EstimateStore getFormatedEstimate(){
+  EstimateStore getFormatedEstimate() {
     EstimateStore estimate = EstimateStore().fromJson(newEstimate.toJson());
 
-    estimate.expenses = getExpenses().asObservable();
-    estimate.setFinalBalance(getFinalBalance(estimate.expenses).toString());
     estimate.setMonth(getMonth());
+    estimate.expenses = getExpenses().asObservable();
+    estimate.calculateFinalBalance();
 
     return estimate;
   }
@@ -118,36 +119,51 @@ abstract class _EstimateControllerBase with Store {
   /// Obtem os gastos para a criação do orçamento
   /// 
   List<ExpenseStore> getExpenses(){
-    bool hasSpend = false;
-    bool hasSavings = false;
+    bool hasFixeds = false;
+    bool hasExpecteds = false;
 
-    List<SpentStore> selectedSpend = fixedExpenses
+    List<SpentStore> selectedFixeds = fixedGeneralExpenses
       .where((element) => element.selected).toList();
 
-    if (selectedSpend.length > 0) {
-      hasSpend = true;
+    if (isEdit) {
+      selectedFixeds.addAll(fixedExpensesOfEstimate);
     }
 
-    if (savings.selected){
-      hasSavings = true;
+    if (selectedFixeds.length > 0) {
+      hasFixeds = true;
+    }
+
+    List<SpentStore> selectedExpecteds = expectedExpenses
+      .where((element) => element.selected).toList();
+
+    if (selectedExpecteds.length > 0){
+      selectedExpecteds = selectedExpecteds.map((spent) {
+        spent.date = new DateFormat('yyyy/MM/dd').format(DateTime.now());
+        return spent;
+      }).toList();
+      hasExpecteds = true;
     }
 
     return [
       new ExpenseStore(
         type: TypeExpense.FIXED,
-        lastValue: hasSpend 
-          ? double.parse(selectedSpend[selectedSpend.length - 1].value)
+        lastValue: hasFixeds 
+          ? double.parse(selectedFixeds[selectedFixeds.length - 1].value)
           : 0.0,
-        value: hasSpend 
-          ? selectedSpend.fold(0, (prev, item) => prev + double.parse(item.value))
+        value: hasFixeds 
+          ? selectedFixeds.fold(0, (prev, item) => prev + double.parse(item.value))
           : 0.0,
-        spents: hasSpend ? selectedSpend : []
+        spents: hasFixeds ? selectedFixeds : []
       ),
       new ExpenseStore(
         type: TypeExpense.EXPECTED,
-        lastValue: hasSavings ? double.parse(savings.value) : 0.0,
-        value: hasSavings ? double.parse(savings.value) : 0.0,
-        spents: hasSavings ? [savings] : []
+        lastValue: hasExpecteds 
+          ? double.parse(selectedExpecteds[selectedExpecteds.length - 1].value) 
+          : 0.0,
+        value: hasExpecteds 
+          ? selectedExpecteds.fold(0, (prev, item) => prev + double.parse(item.value)) 
+          : 0.0,
+        spents: hasExpecteds ? selectedExpecteds : []
       ),
       new ExpenseStore(
         type: TypeExpense.VARIED,
@@ -163,16 +179,6 @@ abstract class _EstimateControllerBase with Store {
   /// 
   String getTwoPrecision(String value){
     return double.parse(value).toStringAsFixed(2);
-  }
-
-  /// 
-  /// Obtem o valor final do orçamento criado
-  /// (valor em conta - somatorio dos gastos)
-  /// 
-  double getFinalBalance(List<ExpenseStore> listExpenses){
-    double opening = double.parse(newEstimate.openingBalance);
-    double sumOfExpenses = listExpenses.fold(0, (prev, item) => prev + item.value);
-    return double.parse((opening - sumOfExpenses).toStringAsFixed(2));
   }
 
   /// 
@@ -192,7 +198,7 @@ abstract class _EstimateControllerBase with Store {
     EstimateStore editEstimate = EstimateStore().fromJson(estimate.toJson());
 
     setFixedsSpentOfEstimate(editEstimate);
-    setSavingsOfEstimate(editEstimate);
+    setExpectedOfEstimate(editEstimate);
 
     editEstimate.setMonth(getIdByMonth(editEstimate.month.split('/')[0]));
     editEstimate.setSalary(getTwoPrecision(editEstimate.salary));
@@ -205,44 +211,74 @@ abstract class _EstimateControllerBase with Store {
   /// Seleciona os gastos fixo de um orçamento para edição
   /// 
   void setFixedsSpentOfEstimate(EstimateStore estimate){
-    ExpenseStore fixeds = estimate.expenses
-      .firstWhere((item) => item.type == TypeExpense.FIXED);
-
-    var spentsFixeds = fixeds.spents.map((item) => item.title).toList();
+    fixedGeneralExpenses = [];
+    fixedExpensesOfEstimate = estimate.expenses
+      .firstWhere((item) => item.type == TypeExpense.FIXED).spents;
     
-    for (var i = 0; i < fixedExpenses.length; i++) {
-      if (spentsFixeds.contains(fixedExpenses[i].title)) {
-        fixedExpenses[i].setSelected();
+    List<SpentStore> general = getNewList(money.fixedExpenses);
+    List<String> spentsFixeds = fixedExpensesOfEstimate
+      .map((item) => formateToCompare(item)).toList();
+
+    for (var i = 0; i < general.length; i++) {
+      bool contain = spentsFixeds.contains(formateToCompare(general[i]));
+
+      if (!contain) {
+        fixedGeneralExpenses.add(general[i]);
       }
     }
   }
 
+  String formateToCompare(SpentStore spent){
+    return '${spent.title}:${spent.value}';
+  }
+
   /// 
-  /// Atribui o valor da poupança do orçamento para edição
+  /// Atribui os gastos esperados do orçamento para edição
   /// 
-  void setSavingsOfEstimate(EstimateStore estimate){
-    ExpenseStore expecteds = estimate.expenses
-      .firstWhere((item) => item.type == TypeExpense.EXPECTED);
-    
-    SpentStore savingsEstimate = expecteds.spents
-        .firstWhere((item) => item.title == 'Poupança', orElse: () => null);
-      
-    if (savingsEstimate != null) {
-      savings.value = getTwoPrecision(savingsEstimate.value);
-      savings.selected = true;
-    }   
+  void setExpectedOfEstimate(EstimateStore estimate){
+    expectedExpenses = [];
+    List<SpentStore> general = getNewList(money.expectedExpenses);
+    List<SpentStore> expecteds = estimate.expenses
+      .firstWhere((item) => item.type == TypeExpense.EXPECTED).spents;
+
+    List<String> titleExpected = expecteds.map((item) => item.title).toList();
+
+    for (var i = 0; i < general.length; i++) {
+      bool contain = titleExpected.contains(general[i].title);
+
+      if (contain) {
+        SpentStore item = expecteds
+          .firstWhere((item) => item.title == general[i].title);
+
+        expectedExpenses.add(item);
+        expecteds.remove(item);
+      } else {
+        expectedExpenses.add(general[i]);
+      }
+    }
+
+    if (expecteds.length > 0) {
+      expectedExpenses.addAll(expecteds);
+    }
+  }
+
+  /// 
+  /// Deleta o orçamento
+  /// 
+  void deleteEstimate(){
+    money.estimates.removeWhere((item) => item.id == newEstimate.id);
   }
 
   bool validateEstimate(){
-    bool validFields = formKey.currentState.validate();
+    bool validFieldsEstimate = formKeyExtimateFields.currentState.validate();
+    bool validFieldsExpected = formKeyExpectedFields.currentState.validate();
     bool validMonth = validateMonth();
     bool validStartDay = validateStartDay();
     bool validEndDay = validateEndDay();
-    
-    if (validFields && validMonth && validStartDay && validEndDay) {
-      if (savings.selected) {
-        return validateSavings();
-      }
+
+    if (
+      validFieldsEstimate && validFieldsExpected && 
+      validMonth && validStartDay && validEndDay) {
 
       return true;
     }
@@ -277,16 +313,6 @@ abstract class _EstimateControllerBase with Store {
     }
 
     setErrorEndDay(false);
-    return true;
-  }
-
-  bool validateSavings(){
-    if (savings.value == null || savings.value.isEmpty) {
-      setErrorSavings(true);
-      return false;
-    }
-
-    setErrorSavings(false);
     return true;
   }
 }

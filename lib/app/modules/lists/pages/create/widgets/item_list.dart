@@ -1,7 +1,6 @@
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ItemList extends StatefulWidget {
   final void Function(String) change;
@@ -43,55 +42,51 @@ class _ItemListState extends State<ItemList> {
         right: SizeConfig.defaultPadding,
         bottom: SizeConfig.defaultPadding
       ),
-      child: Observer(
-        builder: (_){
-          return Container(
-            height: 45,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: themeColors.tertiary,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: themeColors.textSecondary,
-                width: 0.5
-              ),
-            ),
-            child: Row(
-              children: [
-                Flexible(
-                  child: TextField(
-                    controller: myController,
-                    onChanged: widget.change,
-                    decoration: InputDecoration(
-                      hintText: 'Nome do item',
-                      hintStyle: TextStyle(
-                        color: themeColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(
-                        left: 10,
-                        bottom: 5
-                      ),
-                    ),
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: themeColors.textPrimary
-                    ),
+      child: Container(
+        height: 45,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: themeColors.tertiary,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: themeColors.textSecondary,
+            width: 0.5
+          ),
+        ),
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                controller: myController,
+                onChanged: widget.change,
+                decoration: InputDecoration(
+                  hintText: 'Nome do item',
+                  hintStyle: TextStyle(
+                    color: themeColors.textSecondary,
+                    fontSize: 14,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(
+                    left: 10,
+                    bottom: 5
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: themeColors.listsColor,
-                  ), 
-                  onPressed: widget.press
-                )
-              ],
+                style: TextStyle(
+                  fontSize: 14,
+                  color: themeColors.textPrimary
+                ),
+              ),
             ),
-          );
-        },
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: themeColors.listsColor,
+              ), 
+              onPressed: widget.press
+            )
+          ],
+        ),
       ),
-    );
+);
   }
 }

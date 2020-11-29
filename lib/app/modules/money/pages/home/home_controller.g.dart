@@ -19,6 +19,21 @@ final $HomeController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
+  final _$estimatesAtom = Atom(name: '_HomeControllerBase.estimates');
+
+  @override
+  ObservableList<EstimateStore> get estimates {
+    _$estimatesAtom.reportRead();
+    return super.estimates;
+  }
+
+  @override
+  set estimates(ObservableList<EstimateStore> value) {
+    _$estimatesAtom.reportWrite(value, super.estimates, () {
+      super.estimates = value;
+    });
+  }
+
   final _$currentEstimateAtom =
       Atom(name: '_HomeControllerBase.currentEstimate');
 
@@ -65,8 +80,50 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$selectedMothFilterAtom =
+      Atom(name: '_HomeControllerBase.selectedMothFilter');
+
+  @override
+  String get selectedMothFilter {
+    _$selectedMothFilterAtom.reportRead();
+    return super.selectedMothFilter;
+  }
+
+  @override
+  set selectedMothFilter(String value) {
+    _$selectedMothFilterAtom.reportWrite(value, super.selectedMothFilter, () {
+      super.selectedMothFilter = value;
+    });
+  }
+
+  final _$isFilterAtom = Atom(name: '_HomeControllerBase.isFilter');
+
+  @override
+  bool get isFilter {
+    _$isFilterAtom.reportRead();
+    return super.isFilter;
+  }
+
+  @override
+  set isFilter(bool value) {
+    _$isFilterAtom.reportWrite(value, super.isFilter, () {
+      super.isFilter = value;
+    });
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
+
+  @override
+  void setEstimates(ObservableList<dynamic> value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setEstimates');
+    try {
+      return super.setEstimates(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setCurrentEstimate(int index) {
@@ -80,11 +137,11 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
-  void setInitialPage() {
+  void setInitialPage(int value) {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.setInitialPage');
     try {
-      return super.setInitialPage();
+      return super.setInitialPage(value);
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -102,11 +159,58 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void setSelectedMothFilter(String value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setSelectedMothFilter');
+    try {
+      return super.setSelectedMothFilter(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsFilter(bool value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setIsFilter');
+    try {
+      return super.setIsFilter(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilter() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setFilter');
+    try {
+      return super.setFilter();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearFilter() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.clearFilter');
+    try {
+      return super.clearFilter();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+estimates: ${estimates},
 currentEstimate: ${currentEstimate},
 index: ${index},
-initialPage: ${initialPage}
+initialPage: ${initialPage},
+selectedMothFilter: ${selectedMothFilter},
+isFilter: ${isFilter}
     ''';
   }
 }

@@ -120,4 +120,22 @@ abstract class _EstimateStoreBase with Store {
   
   @action
   setFinalBalance(String value) => finalBalance = value;
+
+  /// 
+  /// Calcula o valor final do orçamento
+  /// (valor em conta na criação do orçamento - somatorio dos gastos)
+  ///
+  @action
+  void calculateFinalBalance(){
+    double opening = (openingBalance != null) 
+      ? double.parse(openingBalance) 
+      : 0.0;
+
+    double sumOfExpenses = (expenses.length != 0)
+      ? expenses.fold(0, (prev, item) => prev + item.value)
+      : 0.0;
+
+    String value = (opening - sumOfExpenses).toStringAsFixed(2);
+    setFinalBalance(value);
+  }
 }

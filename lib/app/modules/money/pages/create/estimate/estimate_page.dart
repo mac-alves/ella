@@ -1,13 +1,15 @@
 import 'package:ella/app/modules/money/models/estimate_store.dart';
+import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'estimate_controller.dart';
 import 'widgets/estimate_fields.dart';
 import 'widgets/fixed_expenses.dart';
-import 'widgets/savings.dart';
+import 'widgets/expected_expenses.dart';
 
 class EstimatePage extends StatefulWidget {
   final int id;
@@ -26,6 +28,7 @@ class _EstimatePageState
   @override
   void initState() {
     super.initState();
+    
     controller.setNewEstimate(
       new EstimateStore(
         id: 0,
@@ -43,6 +46,7 @@ class _EstimatePageState
         .prepareEstimateEdit(controller.money.getEstimate(widget.id));
 
       controller.setNewEstimate(estimate);
+      controller.setIsEdit(true);
     } else {
       // whenDispose = when(
       //   (r) => controller.idNewList != null, 
@@ -83,6 +87,30 @@ class _EstimatePageState
                 },
               ),
               actions: [
+                Visibility(
+                  visible: controller.isEdit,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: themeColors.moneyColor,
+                    ), 
+                    onPressed: () {
+                      AlertDialogConfirm(
+                        context: context,
+                        title: 'Atenção!',
+                        description: 'Deseja deletar este orçamento ?',
+                        onPressNot: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        onPressYes: () {
+                          controller.deleteEstimate();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context).pop();
+                        } 
+                      ).show();
+                    },
+                  ),
+                ),
                 IconButton(
                   icon: Icon(
                     Icons.save,
@@ -100,18 +128,12 @@ class _EstimatePageState
                         message = 'Orçamento atualizado com sucesso.';
                         create = false;
                       }
-
-                      Scaffold
-                        .of(context)
-                        .showSnackBar(
-                          SnackBar(
-                            content: Text('$message')
-                          )
-                        );
+                      
+                      SnackMesage(context).show('$message');
                       Navigator.of(context).pop(create);
                     }
                   },
-                )
+                ),
               ],
             ),
             SliverList(
@@ -128,7 +150,7 @@ class _EstimatePageState
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => Savings(
+                (context, index) => ExpectedExpenses(
                   enableSaving: false,
                   changeEnableSaving: (value){},
                 ),

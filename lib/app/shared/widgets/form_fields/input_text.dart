@@ -78,6 +78,7 @@ class _InputTextState extends State<InputText> {
               )
             ),
             child: TextFormField(
+              controller: controller,
               textCapitalization: TextCapitalization.sentences,
               onChanged: widget.change,
               decoration: InputDecoration(

@@ -9,35 +9,16 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class Body extends StatefulWidget {
-  final MyListStore list;
 
-  const Body({
-    Key key, 
-    @required this.list,
-  }) : super(key: key);
+  const Body({ Key key }) : super(key: key);
 
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends ModularState<Body, CreateController> {
-  TextEditingController myController;
 
-  @override
-  void initState() {
-    super.initState();
-    myController = TextEditingController();
-
-    if (widget.list.name != null) {
-      myController.text = widget.list.name;
-    }
-  }
-
-  @override
-  void dispose() {
-    myController.dispose();
-    super.dispose();
-  }
+  CreateController controller = Modular.get<CreateController>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +35,19 @@ class _BodyState extends ModularState<Body, CreateController> {
             Observer(
               builder: (_){
                 return InputText(
-                  controller: myController,
-                  label: "Titulo",
-                  placeholder: "Titulo da lista",
-                  change: widget.list.setName,
-                  error: controller.validateNameList,
+                  label: 'Titulo',
+                  placeholder: 'Titulo da lista',
+                  change: controller.newMyList.setName,
+                  msgError: 'Campo obrigátorio',
+                  value: controller.newMyList.name,
+                  error: controller.erroName,
                 );
               }
             ),
             Padding(
-              padding: EdgeInsets.only(
-                left: SizeConfig.defaultPadding,
-                right: SizeConfig.defaultPadding,
-                top: SizeConfig.defaultPadding / 2,
-                bottom: SizeConfig.defaultPadding / 2,
+              padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.defaultPadding,
+                vertical: SizeConfig.defaultPadding / 2,
               ),
               child: Row(
                 children: [
@@ -82,8 +62,8 @@ class _BodyState extends ModularState<Body, CreateController> {
                   Observer(
                     builder: (_){
                       return Container(
-                        child: controller.validateAllItemsList() == null ? null : Text(
-                          controller.validateAllItemsList(),
+                        child: !controller.erroItems ? null : Text(
+                          controller.msgErroItems,
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.red[600]
@@ -103,19 +83,21 @@ class _BodyState extends ModularState<Body, CreateController> {
                   child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: widget.list.items != null ? widget.list.items.length : 0,
+                    itemCount: controller.newMyList.items != null 
+                      ? controller.newMyList.items.length 
+                      : 0,
                     itemBuilder: (BuildContext ctxt, int index) {
-                      final item = widget.list.items[index];
+                      final item = controller.newMyList.items[index];
 
                       return Dismissible(
                         key: Key(item.id.toString()),
                         onDismissed: (direction) =>
-                          controller.removeListItem(widget.list, item),
+                          controller.removeListItem(controller.newMyList, item),
                         child: ItemList(
                           value: item.name,
                           change: item.setName,
                           press: () => 
-                            controller.removeListItem(widget.list, item),
+                            controller.removeListItem(controller.newMyList, item),
                         ),
                       );
                     }

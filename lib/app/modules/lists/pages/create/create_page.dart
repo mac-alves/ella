@@ -2,6 +2,7 @@ import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/create/widgets/body.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -70,28 +71,20 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                     color: themeColors.listsColor,
                   ), 
                   onPressed: () {
-                    String message = 'Lista criada com sucesso.';
-                    controller.setVali(true);
-                    
-                    if (!controller.listIsValid){
-                      return;
-                    }
+                    if (controller.listIsValid()){
 
-                    if (widget.id == null) {
-                      controller.addList(controller.newMyList);
-                    } else {
-                      controller.updateList(controller.newMyList);
-                      message = 'Lista atualizada com sucesso.';
-                    }
+                      String message = 'Lista criada com sucesso.';
 
-                    Scaffold
-                      .of(context)
-                      .showSnackBar(
-                        SnackBar(
-                          content: Text(message)
-                        )
-                      );
-                    Navigator.of(context).pop();
+                      if (widget.id == null) {
+                        controller.addList(controller.newMyList);
+                      } else {
+                        controller.updateList(controller.newMyList);
+                        message = 'Lista atualizada com sucesso.';
+                      }
+
+                      SnackMesage(context).show('$message');
+                      Navigator.of(context).pop();
+                    }
                   },
                 )
               ],
@@ -108,9 +101,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => Body(
-                  list: controller.newMyList,
-                ),
+                (context, index) => Body(),
                 childCount: 1,
               ),
             ),

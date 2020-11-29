@@ -1,30 +1,59 @@
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
-class InputText extends StatelessWidget {
+class InputText extends StatefulWidget {
 
   final String label;
   final String placeholder;
+  final String msgError;
   final void Function(String) change;
-  final String Function() error;
-  final TextEditingController controller;
+  final bool error;
+  final bool enable;
+  final String value;
 
   const InputText({
     Key key, 
     @required this.label, 
     @required this.change, 
-    @required this.placeholder, 
-    @required this.controller, 
+    @required this.placeholder,
+    @required this.msgError,
     @required this.error,
+    this.enable = true,
+    this.value,
   }) : super(key: key);
+
+  @override
+  _InputTextState createState() => _InputTextState();
+}
+
+class _InputTextState extends State<InputText> {
+  
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+    controller.text = widget.value;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    
+    if (controller.dispose != null){
+      controller.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: SizeConfig.defaultPadding
+      padding: EdgeInsets.only(
+        top: SizeConfig.defaultPadding / 2,
+        left: SizeConfig.defaultPadding,
+        right: SizeConfig.defaultPadding,
       ),
       child: Column(
         children: [
@@ -34,7 +63,7 @@ class InputText extends StatelessWidget {
             ),
             alignment: Alignment.centerLeft,
             child: Text(
-              label,
+              widget.label,
               style: TextStyle(
                 fontSize: 14,
                 color: themeColors.textSecondary,
@@ -53,9 +82,9 @@ class InputText extends StatelessWidget {
             child: TextField(
               textCapitalization: TextCapitalization.sentences,
               controller: controller,
-              onChanged: change,
+              onChanged: widget.change,
               decoration: InputDecoration(
-                hintText: placeholder,
+                hintText: widget.placeholder,
                 hintStyle: TextStyle(
                   color: themeColors.textSecondary,
                   fontSize: 14,
@@ -73,23 +102,18 @@ class InputText extends StatelessWidget {
               ),
             ),
           ),
-          Observer(
-            builder: (_){
-              return  Container(
-                padding: EdgeInsets.only(
-                  left: 5,
-                ),
-                alignment: Alignment.centerLeft,
-                child: error() == null ? null : Text(
-                  error(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.red[600]
-                  ),
-                ),
-                // child: null,
-              );
-            }
+          Container(
+            padding: EdgeInsets.only(
+              left: 5,
+            ),
+            alignment: Alignment.centerLeft,
+            child: !widget.error ? null : Text(
+              widget.msgError,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red[600]
+              ),
+            ),
           ),
         ],
       ),

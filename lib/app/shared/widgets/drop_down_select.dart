@@ -12,6 +12,7 @@ class DropDownSelect extends StatefulWidget {
   final String value;
   final String msgError;
   final bool error;
+  final bool disable;
 
   DropDownSelect({
     Key key,
@@ -21,7 +22,8 @@ class DropDownSelect extends StatefulWidget {
     @required this.change,
     @required this.value,
     @required this.msgError, 
-    @required this.error, 
+    this.error = false,
+    this.disable = false, 
   }) : super(key: key);
 
   @override
@@ -53,56 +55,61 @@ class _DropDownSelectState extends State<DropDownSelect> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(
-              left: SizeConfig.defaultPadding,
-              top: 2,
-              right: 10
-            ),
-            height: 56,
-            decoration: BoxDecoration(
-              color: themeColors.tertiary,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: themeColors.textSecondary
+          AbsorbPointer(
+            absorbing: widget.disable,
+            child: Container(
+              padding: EdgeInsets.only(
+                left: SizeConfig.defaultPadding,
+                top: 2,
+                right: 10
+              ),
+              height: 56,
+              decoration: BoxDecoration(
+                color: widget.disable 
+                    ? Colors.transparent
+                    : themeColors.tertiary,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: themeColors.textSecondary
+                )
+              ),
+              child: DropdownButton<String>(
+                hint: Text(
+                  widget.placeholder,
+                  style: TextStyle(
+                    color: themeColors.textSecondary,
+                    fontSize: 14
+                  ),
+                ),
+                isExpanded: true,
+                value: widget.value,
+                icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: themeColors.textSecondary,
+                ),
+                iconSize: 34,
+                elevation: 16,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: themeColors.textSecondary,
+                ),
+                underline: Container(
+                  height: 0,
+                ),
+                onChanged: widget.change,
+                items: widget.itens.map<DropdownMenuItem<String>>((ItemSelect item) {
+                  return DropdownMenuItem<String>(
+                    value: item.id,
+                    child: Text(
+                      item.name,
+                      style: TextStyle(
+                        color: themeColors.textPrimary
+                      ),
+                    ),
+                  );
+                }).toList(),
               )
             ),
-            child: DropdownButton<String>(
-              hint: Text(
-                widget.placeholder,
-                style: TextStyle(
-                  color: themeColors.textSecondary,
-                  fontSize: 14
-                ),
-              ),
-              isExpanded: true,
-              value: widget.value,
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: themeColors.textSecondary,
-              ),
-              iconSize: 34,
-              elevation: 16,
-              style: TextStyle(
-                fontSize: 14,
-                color: themeColors.textSecondary,
-              ),
-              underline: Container(
-                height: 0,
-              ),
-              onChanged: widget.change,
-              items: widget.itens.map<DropdownMenuItem<String>>((ItemSelect item) {
-                return DropdownMenuItem<String>(
-                  value: item.id,
-                  child: Text(
-                    item.name,
-                    style: TextStyle(
-                      color: themeColors.textPrimary
-                    ),
-                  ),
-                );
-              }).toList(),
-            )
           ),
           Container(
             padding: EdgeInsets.only(

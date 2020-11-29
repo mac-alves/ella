@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
+import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_routes.dart';
+import 'package:ella/app/modules/money/pages/home/widgets/filter_dialog.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/widgets/drop_down_select.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -11,6 +14,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'home_controller.dart';
 import 'widgets/card_estimate.dart';
+import 'widgets/menu_popup.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -33,29 +37,92 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor:  themeColors.primary,
+            leading: Observer(
+              builder: (_) {
+                return Visibility(
+                  visible: controller.isFilter,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.not_interested,
+                      color: themeColors.moneyColor,
+                    ), 
+                    onPressed: () => controller.clearFilter(),
+                  ),
+                );
+              }
+            ),
             actions: [
-              IconButton(
+              PopupMenuButton<String>(
+                captureInheritedThemes: true,
+                color: themeColors.secondary,
                 icon: Icon(
-                  Icons.filter_alt,
+                  Icons.more_vert,
                   color: themeColors.moneyColor,
-                ), 
-                onPressed: () {
-                  // Navigator.of(context).pushNamed('$LISTS_CREATE/${list.id}');
+                ),
+                onSelected: (String item){
+                  if (menuItemsToEnum[item] == MenuPopup.FILTRO) {
+                    AlertDialogConfirm(
+                      context: context,
+                      content: [
+                        Observer(
+                          builder: (_) {
+                            return DropDownSelect(
+                              label: 'Mês referente',
+                              placeholder: 'Selecione um mês',
+                              msgError: 'Mês não selecionado',
+                              change: controller.setSelectedMothFilter,
+                              value: controller.selectedMothFilter,
+                              itens: controller.money.idsEstimates,
+                            );
+                          }
+                        ),
+                      ],
+                      onPressCancel: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      onPressFilter: () {
+                        print('object');
+                        controller.setFilter();
+                        Navigator.of(context, rootNavigator: true).pop();
+                      } 
+                    ).show();
+                  }
+
+                  if (menuItemsToEnum[item] == MenuPopup.EDITAR) {
+                    controller.goScreen(
+                      context, 
+                      '$MONEY_CREATE_ESTIMATE/${controller.currentEstimate.id}'
+                    );
+                  }
+
+                  if (menuItemsToEnum[item] == MenuPopup.FIXOS) {
+                    controller.goScreen(context, '$MONEY_READ/fixed');
+                  }
+
+                  if (menuItemsToEnum[item] == MenuPopup.PREVISTOS) {
+                    controller.goScreen(context, '$MONEY_READ/expected');
+                  }
                 },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  color: themeColors.moneyColor,
-                ), 
-                onPressed: () {
-                  controller.goScreen(
-                    context, 
-                    '$MONEY_CREATE_ESTIMATE/${controller.currentEstimate.id}'
-                  );
-                },
+                itemBuilder: (BuildContext context) {
+                  return enumToMenuItem.values.toList().map((String choice){
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(
+                        choice,
+                        style: TextStyle(
+                          color: themeColors.textPrimary
+                        )
+                      ),
+                    );
+                  }).toList();
+                }
               )
             ],
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(
+              vertical: 5.0
+            ),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -77,10 +144,10 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                           },
                         ),
                         items: [...List.generate(
-                          controller.money.estimates.length, 
+                          controller.estimates.length, 
                           (index) {
                             return CardEstimate(
-                              estimate: controller.money.estimates[index]
+                              estimate: controller.estimates[index]
                             );
                           }
                         )],
@@ -115,6 +182,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     ExpenseStore expense = controller.currentEstimate.expenses[index];
                     return Spent(
                       expense: expense,
+                      onPress: (){
+                        controller.goScreen(
+                          context,
+                          '$MONEY_READ/${controller.currentEstimate.id}/${getIndexFromType(expense.type)}'
+                        );
+                      },
                     );
                   },
                   childCount: controller.currentEstimate.expenses.length
@@ -124,7 +197,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(
-              vertical: 40.0
+              vertical: 60.0
             ),
           )
         ]
@@ -153,7 +226,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             labelStyle: TextStyle(
               fontSize: 15.0
             ),
-            onTap: () => print('FIRST CHILD')
+            onTap: () {
+              controller.goScreen(
+                context, 
+                '$MONEY_CREATE_SPENT/${controller.currentEstimate.id}'
+              );
+            }
           ),
           SpeedDialChild(
             child: Icon(

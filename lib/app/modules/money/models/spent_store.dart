@@ -6,14 +6,16 @@ part 'spent_store.g.dart';
 @Injectable()
 class SpentStore extends _SpentStoreBase with _$SpentStore { 
   SpentStore({
+    String id,
     String title,
     String value,
     String date,
     bool selected,
-  }) : super(title: title, value: value, date: date, selected: selected);
+  }) : super(id: id, title: title, value: value, date: date, selected: selected);
 
   SpentStore fromJson(Map<String, dynamic> json) {
     return new SpentStore(
+      id: json['id'],
       title: json['title'],
       value: json['value'],
       date: json['date'],
@@ -23,6 +25,7 @@ class SpentStore extends _SpentStoreBase with _$SpentStore {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['title'] = this.title;
     data['value'] = this.value;
     data['date'] = this.date;
@@ -33,6 +36,9 @@ class SpentStore extends _SpentStoreBase with _$SpentStore {
 
 abstract class _SpentStoreBase with Store {
   
+  @observable
+  String id;
+
   @observable
   String title;
 
@@ -46,11 +52,15 @@ abstract class _SpentStoreBase with Store {
   bool selected = false;
 
   _SpentStoreBase({
+    this.id,
     this.title,
     this.value,
     this.date,
     this.selected,
   });
+
+  @action
+  setId(String value) => id = value;
 
   @action
   setTitle(String value) => title = value;
@@ -62,5 +72,5 @@ abstract class _SpentStoreBase with Store {
   setDate(String value) => date = value;
 
   @action
-  setSelected() => selected = !selected;
+  setSelected(bool value) => selected = value;
 }

@@ -104,7 +104,9 @@ class _DatePickerState extends State<DatePicker> {
                       : DateFormat('dd/MM/yyyy').format(_dateTime),
                     style: TextStyle(
                       fontSize: 14,
-                      color: themeColors.textSecondary
+                      color: _dateTime == null 
+                        ? themeColors.textSecondary
+                        : themeColors.textPrimary
                     )
                   ),
                   Spacer(),

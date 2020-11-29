@@ -19,14 +19,6 @@ final $CreateController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CreateController on _CreateControllerBase, Store {
-  Computed<bool> _$listIsValidComputed;
-
-  @override
-  bool get listIsValid =>
-      (_$listIsValidComputed ??= Computed<bool>(() => super.listIsValid,
-              name: '_CreateControllerBase.listIsValid'))
-          .value;
-
   final _$newMyListAtom = Atom(name: '_CreateControllerBase.newMyList');
 
   @override
@@ -42,21 +34,6 @@ mixin _$CreateController on _CreateControllerBase, Store {
     });
   }
 
-  final _$isValidateAtom = Atom(name: '_CreateControllerBase.isValidate');
-
-  @override
-  bool get isValidate {
-    _$isValidateAtom.reportRead();
-    return super.isValidate;
-  }
-
-  @override
-  set isValidate(bool value) {
-    _$isValidateAtom.reportWrite(value, super.isValidate, () {
-      super.isValidate = value;
-    });
-  }
-
   final _$idNewListAtom = Atom(name: '_CreateControllerBase.idNewList');
 
   @override
@@ -69,6 +46,51 @@ mixin _$CreateController on _CreateControllerBase, Store {
   set idNewList(int value) {
     _$idNewListAtom.reportWrite(value, super.idNewList, () {
       super.idNewList = value;
+    });
+  }
+
+  final _$erroNameAtom = Atom(name: '_CreateControllerBase.erroName');
+
+  @override
+  bool get erroName {
+    _$erroNameAtom.reportRead();
+    return super.erroName;
+  }
+
+  @override
+  set erroName(bool value) {
+    _$erroNameAtom.reportWrite(value, super.erroName, () {
+      super.erroName = value;
+    });
+  }
+
+  final _$erroItemsAtom = Atom(name: '_CreateControllerBase.erroItems');
+
+  @override
+  bool get erroItems {
+    _$erroItemsAtom.reportRead();
+    return super.erroItems;
+  }
+
+  @override
+  set erroItems(bool value) {
+    _$erroItemsAtom.reportWrite(value, super.erroItems, () {
+      super.erroItems = value;
+    });
+  }
+
+  final _$msgErroItemsAtom = Atom(name: '_CreateControllerBase.msgErroItems');
+
+  @override
+  String get msgErroItems {
+    _$msgErroItemsAtom.reportRead();
+    return super.msgErroItems;
+  }
+
+  @override
+  set msgErroItems(String value) {
+    _$msgErroItemsAtom.reportWrite(value, super.msgErroItems, () {
+      super.msgErroItems = value;
     });
   }
 
@@ -113,11 +135,33 @@ mixin _$CreateController on _CreateControllerBase, Store {
   }
 
   @override
-  void setVali(bool value) {
+  void setErroName(bool value) {
     final _$actionInfo = _$_CreateControllerBaseActionController.startAction(
-        name: '_CreateControllerBase.setVali');
+        name: '_CreateControllerBase.setErroName');
     try {
-      return super.setVali(value);
+      return super.setErroName(value);
+    } finally {
+      _$_CreateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setErroItems(bool value) {
+    final _$actionInfo = _$_CreateControllerBaseActionController.startAction(
+        name: '_CreateControllerBase.setErroItems');
+    try {
+      return super.setErroItems(value);
+    } finally {
+      _$_CreateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMsgErroItems(String value) {
+    final _$actionInfo = _$_CreateControllerBaseActionController.startAction(
+        name: '_CreateControllerBase.setMsgErroItems');
+    try {
+      return super.setMsgErroItems(value);
     } finally {
       _$_CreateControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -149,9 +193,10 @@ mixin _$CreateController on _CreateControllerBase, Store {
   String toString() {
     return '''
 newMyList: ${newMyList},
-isValidate: ${isValidate},
 idNewList: ${idNewList},
-listIsValid: ${listIsValid}
+erroName: ${erroName},
+erroItems: ${erroItems},
+msgErroItems: ${msgErroItems}
     ''';
   }
 }

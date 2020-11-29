@@ -1,4 +1,5 @@
 import 'package:ella/app/shared/utils/list_of_months.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
 import 'package:ella/app/shared/widgets/form_fields/money_input.dart';
 import 'package:ella/app/shared/widgets/interval_date_picker.dart';
@@ -30,13 +31,14 @@ class _EstimateFieldsState extends State<EstimateFields> {
         FocusScope.of(context).requestFocus(new FocusNode());
       },
       child: Form(
-        key: controller.formKey,
+        key: controller.formKeyExtimateFields,
         child: Observer(
           builder: (_){
             return Column(
               children: [
+                VerticalSpacing(of:5),
                 SectionTitle(
-                  title: 'Novo Orçamento',
+                  title: controller.isEdit ? 'Editar Orçamento' : 'Novo Orçamento',
                 ),
                 DropDownSelect(
                   label: 'Mês referente',

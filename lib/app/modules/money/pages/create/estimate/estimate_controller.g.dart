@@ -19,21 +19,6 @@ final $EstimateController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$EstimateController on _EstimateControllerBase, Store {
-  final _$savingsAtom = Atom(name: '_EstimateControllerBase.savings');
-
-  @override
-  SpentStore get savings {
-    _$savingsAtom.reportRead();
-    return super.savings;
-  }
-
-  @override
-  set savings(SpentStore value) {
-    _$savingsAtom.reportWrite(value, super.savings, () {
-      super.savings = value;
-    });
-  }
-
   final _$newEstimateAtom = Atom(name: '_EstimateControllerBase.newEstimate');
 
   @override
@@ -110,6 +95,21 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
     });
   }
 
+  final _$isEditAtom = Atom(name: '_EstimateControllerBase.isEdit');
+
+  @override
+  bool get isEdit {
+    _$isEditAtom.reportRead();
+    return super.isEdit;
+  }
+
+  @override
+  set isEdit(bool value) {
+    _$isEditAtom.reportWrite(value, super.isEdit, () {
+      super.isEdit = value;
+    });
+  }
+
   final _$_EstimateControllerBaseActionController =
       ActionController(name: '_EstimateControllerBase');
 
@@ -169,11 +169,11 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   }
 
   @override
-  void setEnableSavings() {
+  void setIsEdit(bool value) {
     final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
-        name: '_EstimateControllerBase.setEnableSavings');
+        name: '_EstimateControllerBase.setIsEdit');
     try {
-      return super.setEnableSavings();
+      return super.setIsEdit(value);
     } finally {
       _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -204,12 +204,12 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   @override
   String toString() {
     return '''
-savings: ${savings},
 newEstimate: ${newEstimate},
 errorMonth: ${errorMonth},
 errorStartDay: ${errorStartDay},
 errorEndDay: ${errorEndDay},
-errorSavings: ${errorSavings}
+errorSavings: ${errorSavings},
+isEdit: ${isEdit}
     ''';
   }
 }

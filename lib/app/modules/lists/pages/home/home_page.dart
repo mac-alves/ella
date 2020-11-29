@@ -55,7 +55,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 onPressed: () {
                   AlertDialogConfirm(
                     context: context,
-                    title: 'Delete',
+                    title: 'Atenção!',
                     description: 'Deseja deletar todas as listas ?',
                     onPressNot: () {
                       Navigator.of(context, rootNavigator: true).pop();

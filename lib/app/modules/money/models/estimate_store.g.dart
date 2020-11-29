@@ -217,6 +217,17 @@ mixin _$EstimateStore on _EstimateStoreBase, Store {
   }
 
   @override
+  void calculateFinalBalance() {
+    final _$actionInfo = _$_EstimateStoreBaseActionController.startAction(
+        name: '_EstimateStoreBase.calculateFinalBalance');
+    try {
+      return super.calculateFinalBalance();
+    } finally {
+      _$_EstimateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},

@@ -20,7 +20,7 @@ class MoneyInput extends StatefulWidget {
     @required this.placeholder,
     @required this.msgError,
     @required this.error,
-    @required this.enable,
+    this.enable = true,
     this.value,
   }) : super(key: key);
 
@@ -107,7 +107,7 @@ class _MoneyInputState extends State<MoneyInput> {
               ),
               style: TextStyle(
                 fontSize: 14,
-                color: themeColors.textSecondary,
+                color: themeColors.textPrimary,
               ),
             ),
           ),
@@ -116,12 +116,14 @@ class _MoneyInputState extends State<MoneyInput> {
               left: 5,
             ),
             alignment: Alignment.centerLeft,
-            child: !widget.error ? null : Text(
-              widget.msgError,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.red[600]
-              ),
+            child: !widget.enable 
+              ? null 
+              : !widget.error ? null : Text(
+                widget.msgError,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.red[600]
+                ),
             ),
           ),
         ],

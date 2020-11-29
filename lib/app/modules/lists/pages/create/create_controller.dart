@@ -22,10 +22,16 @@ abstract class _CreateControllerBase with Store {
   MyListStore newMyList;
 
   @observable
-  bool isValidate = false;
+  int idNewList;
 
   @observable
-  int idNewList;
+  bool erroName = false;
+
+  @observable
+  bool erroItems = false;
+
+  @observable
+  String msgErroItems = 'Adicione um item.';
 
   _CreateControllerBase(this.lists) {
     _init();
@@ -43,7 +49,13 @@ abstract class _CreateControllerBase with Store {
   void setIdNewList(int value) => idNewList = value;
 
   @action
-  void setVali(bool value) => isValidate = value;
+  void setErroName(bool value) => erroName = value;
+
+  @action
+  void setErroItems(bool value) => erroItems = value;
+
+  @action
+  void setMsgErroItems(String value) => msgErroItems = value;
 
   @action
   Future addList(MyListStore list) async {
@@ -74,40 +86,44 @@ abstract class _CreateControllerBase with Store {
     list.items.removeWhere((element) => element.id == item.id);
   }
 
-  @computed
-  bool get listIsValid {
-    return validateNameList() == null && 
-           validateAllItemsList() == null;
-  }
+  bool listIsValid() {
+    bool validName = validateNameList();
+    bool validItems = validateAllItemsList();
 
-  String validateNameList(){
-    if (!isValidate){
-      return null;
+    if (validName && validItems) {
+      return true;
     }
 
+    return false;
+  }
+
+  bool validateNameList(){
     if (newMyList.name == null || newMyList.name.isEmpty) {
-      return 'Campo obrigátorio';
+      setErroName(true);
+      return false;
     }
-
-    return null;
+    
+    setErroName(false);
+    return true;
   }
 
-  String validateAllItemsList(){
-    if (!isValidate){
-      return null;
-    }
-
+  bool validateAllItemsList(){
     var valid = newMyList
       .items.every((item) => item.name != null && item.name.isNotEmpty);
 
     if (!valid) {
-      return 'Há item sem nome.';
+      setMsgErroItems('Há item sem nome.');
+      setErroItems(true);
+      return false;
     }
     
     if (newMyList.items.length == 0) {
-      return 'Adicione um item.';
+      setMsgErroItems('Adicione um item.');
+      setErroItems(true);
+      return false;
     }
 
-    return null;
+    setErroItems(false);
+    return true;
   }
 }

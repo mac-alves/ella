@@ -1,6 +1,5 @@
 import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
-import 'package:ella/app/modules/money/money_routes.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +8,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 class Spent extends StatelessWidget {
 
   final ExpenseStore expense;
+  final Function onPress;
 
   const Spent({
     Key key, 
     @required this.expense,
+    @required this.onPress,
   }) : super(key: key);
 
   @override
@@ -44,9 +45,7 @@ class Spent extends StatelessWidget {
                 ],
               ),
               child: FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('$MONEY_READ');
-                },
+                onPressed: onPress,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
                 ),

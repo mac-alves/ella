@@ -8,6 +8,7 @@ part of 'spent_store.dart';
 
 final $SpentStore = BindInject(
   (i) => SpentStore(
+      id: i<String>(),
       title: i<String>(),
       value: i<String>(),
       date: i<String>(),
@@ -23,6 +24,21 @@ final $SpentStore = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SpentStore on _SpentStoreBase, Store {
+  final _$idAtom = Atom(name: '_SpentStoreBase.id');
+
+  @override
+  String get id {
+    _$idAtom.reportRead();
+    return super.id;
+  }
+
+  @override
+  set id(String value) {
+    _$idAtom.reportWrite(value, super.id, () {
+      super.id = value;
+    });
+  }
+
   final _$titleAtom = Atom(name: '_SpentStoreBase.title');
 
   @override
@@ -87,6 +103,17 @@ mixin _$SpentStore on _SpentStoreBase, Store {
       ActionController(name: '_SpentStoreBase');
 
   @override
+  dynamic setId(String value) {
+    final _$actionInfo = _$_SpentStoreBaseActionController.startAction(
+        name: '_SpentStoreBase.setId');
+    try {
+      return super.setId(value);
+    } finally {
+      _$_SpentStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setTitle(String value) {
     final _$actionInfo = _$_SpentStoreBaseActionController.startAction(
         name: '_SpentStoreBase.setTitle');
@@ -120,11 +147,11 @@ mixin _$SpentStore on _SpentStoreBase, Store {
   }
 
   @override
-  dynamic setSelected() {
+  dynamic setSelected(bool value) {
     final _$actionInfo = _$_SpentStoreBaseActionController.startAction(
         name: '_SpentStoreBase.setSelected');
     try {
-      return super.setSelected();
+      return super.setSelected(value);
     } finally {
       _$_SpentStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -133,6 +160,7 @@ mixin _$SpentStore on _SpentStoreBase, Store {
   @override
   String toString() {
     return '''
+id: ${id},
 title: ${title},
 value: ${value},
 date: ${date},

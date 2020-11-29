@@ -9,6 +9,7 @@ class MoneyInput extends StatefulWidget {
   final String placeholder;
   final String msgError;
   final String value;
+  final bool enable;
   final void Function(String) change;
 
   const MoneyInput({
@@ -17,6 +18,7 @@ class MoneyInput extends StatefulWidget {
     @required this.change, 
     @required this.placeholder,
     @required this.msgError,
+    this.enable = true,
     this.value,
   }) : super(key: key);
 
@@ -77,7 +79,7 @@ class _MoneyInputState extends State<MoneyInput> {
           Container(
             height: 56,
             decoration: BoxDecoration(
-              color: themeColors.tertiary,
+              color: widget.enable ? themeColors.tertiary : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: themeColors.textSecondary
@@ -90,6 +92,7 @@ class _MoneyInputState extends State<MoneyInput> {
                 widget.change(controller.numberValue.toString());
               },
               textAlign: TextAlign.right,
+              enabled: widget.enable,
               decoration: InputDecoration(
                 hintText: widget.placeholder,
                 hintStyle: TextStyle(
@@ -97,25 +100,30 @@ class _MoneyInputState extends State<MoneyInput> {
                   fontSize: 14,
                 ),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 18
+                contentPadding: EdgeInsets.only(
+                  left: SizeConfig.defaultPadding,
+                  right: SizeConfig.defaultPadding,
+                  top: 3,
                 )
               ),
               style: TextStyle(
-                fontSize: 14,
-                color: themeColors.textSecondary,
+                fontSize: 15,
+                color: themeColors.textPrimary,
               ),
               validator: (value) {
+                if (!widget.enable) {
+                  return null;
+                }
+
                 setState(() {
-                  if (value== '0.00') {
+                  if (value == '0.00') {
                     error = true;
                   } else {
                     error = false;
                   }
                 });
 
-                return value.isEmpty ? '' : null;
+                return (value == '0.00') ? '' : null;
               },
             ),
           ),
@@ -124,12 +132,14 @@ class _MoneyInputState extends State<MoneyInput> {
               left: 5,
             ),
             alignment: Alignment.centerLeft,
-            child: !error ? null : Text(
-              widget.msgError,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.red[600]
-              ),
+            child: !widget.enable 
+              ? null 
+              : !error ? null : Text(
+                widget.msgError,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.red[600]
+                ),
             ),
           ),
         ],

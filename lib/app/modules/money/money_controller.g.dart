@@ -34,6 +34,37 @@ mixin _$MoneyController on _MoneyControllerBase, Store {
     });
   }
 
+  final _$fixedExpensesAtom = Atom(name: '_MoneyControllerBase.fixedExpenses');
+
+  @override
+  ObservableList<SpentStore> get fixedExpenses {
+    _$fixedExpensesAtom.reportRead();
+    return super.fixedExpenses;
+  }
+
+  @override
+  set fixedExpenses(ObservableList<SpentStore> value) {
+    _$fixedExpensesAtom.reportWrite(value, super.fixedExpenses, () {
+      super.fixedExpenses = value;
+    });
+  }
+
+  final _$expectedExpensesAtom =
+      Atom(name: '_MoneyControllerBase.expectedExpenses');
+
+  @override
+  ObservableList<SpentStore> get expectedExpenses {
+    _$expectedExpensesAtom.reportRead();
+    return super.expectedExpenses;
+  }
+
+  @override
+  set expectedExpenses(ObservableList<SpentStore> value) {
+    _$expectedExpensesAtom.reportWrite(value, super.expectedExpenses, () {
+      super.expectedExpenses = value;
+    });
+  }
+
   final _$_MoneyControllerBaseActionController =
       ActionController(name: '_MoneyControllerBase');
 
@@ -51,7 +82,9 @@ mixin _$MoneyController on _MoneyControllerBase, Store {
   @override
   String toString() {
     return '''
-estimates: ${estimates}
+estimates: ${estimates},
+fixedExpenses: ${fixedExpenses},
+expectedExpenses: ${expectedExpenses}
     ''';
   }
 }
