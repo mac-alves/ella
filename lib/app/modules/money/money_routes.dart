@@ -51,6 +51,19 @@ var routes = [
   ),
 
   /// 
+  /// Criação de gastos sem orçamento
+  /// 
+  /// :id -> id do orçamento
+  /// 
+  ModularRouter(
+    "$MONEY_CREATE_SPENT/:id/notEstimate",
+    child: (_, args) => SpentPage(
+      idEstimate: int.parse(args.params['id']),
+      notEstimate: true,
+    )
+  ),
+
+  /// 
   /// Alteração de gastos fixos gerais
   /// 
   /// :idSpent -> id do gasto

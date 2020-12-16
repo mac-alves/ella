@@ -19,6 +19,21 @@ final $ReadController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReadController on _ReadControllerBase, Store {
+  final _$currentStateAtom = Atom(name: '_ReadControllerBase.currentState');
+
+  @override
+  States get currentState {
+    _$currentStateAtom.reportRead();
+    return super.currentState;
+  }
+
+  @override
+  set currentState(States value) {
+    _$currentStateAtom.reportWrite(value, super.currentState, () {
+      super.currentState = value;
+    });
+  }
+
   final _$spentsAtom = Atom(name: '_ReadControllerBase.spents');
 
   @override
@@ -84,6 +99,17 @@ mixin _$ReadController on _ReadControllerBase, Store {
       ActionController(name: '_ReadControllerBase');
 
   @override
+  void setCurrentState(States value) {
+    final _$actionInfo = _$_ReadControllerBaseActionController.startAction(
+        name: '_ReadControllerBase.setCurrentState');
+    try {
+      return super.setCurrentState(value);
+    } finally {
+      _$_ReadControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setIsDelete(bool value) {
     final _$actionInfo = _$_ReadControllerBaseActionController.startAction(
         name: '_ReadControllerBase.setIsDelete');
@@ -142,6 +168,7 @@ mixin _$ReadController on _ReadControllerBase, Store {
   @override
   String toString() {
     return '''
+currentState: ${currentState},
 spents: ${spents},
 title: ${title},
 isDelete: ${isDelete},

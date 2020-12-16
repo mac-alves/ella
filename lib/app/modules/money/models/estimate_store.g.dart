@@ -151,6 +151,17 @@ mixin _$EstimateStore on _EstimateStoreBase, Store {
       ActionController(name: '_EstimateStoreBase');
 
   @override
+  dynamic setId(int value) {
+    final _$actionInfo = _$_EstimateStoreBaseActionController.startAction(
+        name: '_EstimateStoreBase.setId');
+    try {
+      return super.setId(value);
+    } finally {
+      _$_EstimateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setMonth(String value) {
     final _$actionInfo = _$_EstimateStoreBaseActionController.startAction(
         name: '_EstimateStoreBase.setMonth');

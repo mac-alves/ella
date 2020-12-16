@@ -12,12 +12,14 @@ class Spent extends StatefulWidget {
   final SpentStore item;
   final Function(String) onPress;
   final bool isExpectedGeneral;
+  final bool isFixedEstimate;
   
   const Spent({
     Key key, 
     @required this.item, 
     @required this.onPress,
     this.isExpectedGeneral = false,
+    this.isFixedEstimate = true,
   }) : super(key: key);
 
   @override
@@ -27,8 +29,6 @@ class Spent extends StatefulWidget {
 class _SpentState extends State<Spent> {
 
   ReadController controller = Modular.get<ReadController>();
-
-  bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _SpentState extends State<Spent> {
             width: double.infinity,
             height: 45,
             decoration: BoxDecoration(
-              color: isSelected ? Colors.transparent : themeColors.tertiary,
+              color: widget.item.selected ? Colors.transparent : themeColors.tertiary,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: themeColors.tertiary
@@ -60,18 +60,12 @@ class _SpentState extends State<Spent> {
             child: FlatButton(
               onLongPress: () {
                 controller.selectToDelete(widget.item.id);
-
-                setState(() {
-                  isSelected = true;
-                });
+                widget.item.setSelected(true);
               },
               onPressed: (){
-                if (isSelected) {
+                if (widget.item.selected) {
                   controller.removeToDelete(widget.item.id);
-
-                  setState(() {
-                    isSelected = false;
-                  });
+                  widget.item.setSelected(false);
                 }
               },
               shape: RoundedRectangleBorder(
@@ -99,30 +93,33 @@ class _SpentState extends State<Spent> {
                           )
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 3),
-                        width: 30,
-                        child: PopupMenuButton<String>(
-                          captureInheritedThemes: true,
-                          color: themeColors.secondary,
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: themeColors.moneyColor,
+                      Visibility(
+                        visible: !widget.isFixedEstimate,
+                        child: Container(
+                          padding: EdgeInsets.only(left: 3),
+                          width: 30,
+                          child: PopupMenuButton<String>(
+                            captureInheritedThemes: true,
+                            color: themeColors.secondary,
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: themeColors.moneyColor,
+                            ),
+                            onSelected: widget.onPress,
+                            itemBuilder: (BuildContext context) {
+                              return ['editar'].map((String choice){
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(
+                                    choice,
+                                    style: TextStyle(
+                                      color: themeColors.textPrimary
+                                    )
+                                  ),
+                                );
+                              }).toList();
+                            }
                           ),
-                          onSelected: widget.onPress,
-                          itemBuilder: (BuildContext context) {
-                            return ['editar'].map((String choice){
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(
-                                  choice,
-                                  style: TextStyle(
-                                    color: themeColors.textPrimary
-                                  )
-                                ),
-                              );
-                            }).toList();
-                          }
                         ),
                       )
                     ],

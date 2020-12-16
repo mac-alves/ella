@@ -1,9 +1,10 @@
+import 'package:ella/app/modules/money/interfaces/local_storage.dart';
 import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/spent_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_controller.dart';
-import 'package:ella/app/shared/utils/list_of_months.dart';
+import 'package:ella/app/shared/utils/item_select.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -16,8 +17,13 @@ abstract class _SpentControllerBase with Store {
   
   final MoneyController money;
 
+  final ILocalStorage _storage = Modular.get();
+
   @observable
   SpentStore newSpent;
+
+  @observable
+  int idNewSpent;
 
   @observable
   String type;
@@ -25,6 +31,9 @@ abstract class _SpentControllerBase with Store {
   @observable
   String idEstimate;
 
+  @observable
+  bool notEstimate = false;
+  
   @observable
   bool errorType = false;
 
@@ -61,7 +70,14 @@ abstract class _SpentControllerBase with Store {
   @observable
   String msgErroName = 'Nome inválido';
 
-  _SpentControllerBase(this.money);
+  _SpentControllerBase(this.money){
+    _init();
+  }
+
+  _init() async {
+    int id = await _storage.getNextIdExpense();
+    setIdNewSpent(id);
+  }
 
   List<ItemSelect> types = [
     new ItemSelect(id: getIndexFromType(TypeExpense.FIXED), name: 'Fixo'),
@@ -69,11 +85,22 @@ abstract class _SpentControllerBase with Store {
     new ItemSelect(id: getIndexFromType(TypeExpense.VARIED), name: 'Variado'),
   ];
 
+  List<ItemSelect> typesNotEstimate = [
+    new ItemSelect(id: getIndexFromType(TypeExpense.FIXED), name: 'Fixo'),
+    new ItemSelect(id: getIndexFromType(TypeExpense.EXPECTED), name: 'Previsto'),
+  ];
+
   @action
   void setNewSpent(SpentStore value) => newSpent = value;
 
   @action
+  void setIdNewSpent(int value) => idNewSpent = value;
+
+  @action
   void setIdEstimate(String value) => idEstimate = value;
+
+  @action
+  void setNotEstimate(bool value) => notEstimate = value;
 
   @action
   void setErrorType(bool value) => errorType = value;
@@ -112,6 +139,11 @@ abstract class _SpentControllerBase with Store {
     setEnableDate(type != TypeExpense.FIXED.index.toString());
     setIsSpentExpected(type == TypeExpense.EXPECTED.index.toString());
     setEnableIdEstimate(type != TypeExpense.FIXED.index.toString());
+
+    if (notEstimate && type == TypeExpense.EXPECTED.index.toString()) {
+      setEnableExpectedGeneral(true);
+      setIsSpentExpected(false);
+    }
   }
 
   @action
@@ -136,26 +168,45 @@ abstract class _SpentControllerBase with Store {
     }
   }
 
+  /// 
+  /// Cria um gasto fixo
+  /// 
   void createSpentFixed(){
+    // adiciona na memoria
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
     spent.setSelected(false);
     money.fixedExpenses.insert(0, spent);
+
+    // adiciona no db
+    _storage.putFixedExpense(int.parse(spent.id), spent.toJson());
   }
 
+  /// 
+  /// Cria um gasto esperado geral
+  /// 
   void createSpentExpectedGeneral(){
+    // adiciona na memoria
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
     spent.setSelected(false);
     money.expectedExpenses.insert(0, spent);
+
+    // adiciona no banco
+    _storage.putExpectedExpense(int.parse(spent.id), spent.toJson());
   }
 
+  /// 
+  /// Cria um gasto variado ou esperado do orçamento
+  /// 
   void createSpentVariedOrExpected(){
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
-    
+    EstimateStore estimateEdited;
+
     money.estimates = money.estimates.map((estimate) {
 
       if (estimate.id == int.parse(idEstimate)){
         estimate.expenses = estimate.expenses.map((expense) {
           if (expense.type == getTypeFromIndex(type)){
+            spent.setSelected(false);
             expense.spents.insert(0, spent);
 
             expense.setLastValue(double.parse(spent.value));
@@ -167,15 +218,25 @@ abstract class _SpentControllerBase with Store {
           return expense;
         }).toList().asObservable();
 
-        estimate.calculateFinalBalance(); 
+        estimate.calculateFinalBalance();
+
+        estimateEdited = EstimateStore().fromJson(estimate.toJson());
       }
 
       return estimate;
     }).toList().asObservable(); 
+
+    // adiciona o gasto no banco
+    _storage.putEstimate(
+      estimateEdited.id, 
+      estimateEdited.toJson(),
+      insertSpent: true,
+      keySpent: int.parse(spent.id)
+    );
   }
 
   /// 
-  /// Atualiza o orçamento
+  /// Atualiza os gastos
   /// 
   @action
   void updateEstimate(String typeExpense, String idSpent){
@@ -188,6 +249,9 @@ abstract class _SpentControllerBase with Store {
     }
   }
 
+  /// 
+  /// Atualiza o gasto fixo
+  /// 
   void updateSpentFixed(){
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
     spent.setSelected(false);
@@ -197,8 +261,14 @@ abstract class _SpentControllerBase with Store {
         money.fixedExpenses[i] = spent;
       }
     }
+
+    // adiciona no banco
+    _storage.putFixedExpense(int.parse(spent.id), spent.toJson());
   }
 
+  /// 
+  /// Atualiza os esperado
+  /// 
   void updateSpentExpected(){
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
     spent.setSelected(false);
@@ -208,11 +278,18 @@ abstract class _SpentControllerBase with Store {
         money.expectedExpenses[i] = spent;
       }
     }
+
+    // adiciona no banco
+    _storage.putExpectedExpense(int.parse(spent.id), spent.toJson());
   }
 
+  /// 
+  /// Atualiza o gasto vinculado ao orçameto
+  /// 
   void updateSpentExpectedOrVaried(String typeExpense, String idSpent){
     SpentStore spent = SpentStore().fromJson(newSpent.toJson());
-    
+    EstimateStore estimateEdited;
+
     money.estimates = money.estimates.map((estimate) {
 
       if (estimate.id == int.parse(idEstimate)){
@@ -236,11 +313,20 @@ abstract class _SpentControllerBase with Store {
           return expense;
         }).toList().asObservable();
 
-        estimate.calculateFinalBalance(); 
+        estimate.calculateFinalBalance();
+        estimateEdited = EstimateStore().fromJson(estimate.toJson());
       }
 
       return estimate;
     }).toList().asObservable();
+
+    // atualiza o gasto no banco
+    _storage.putEstimate(
+      estimateEdited.id, 
+      estimateEdited.toJson(),
+      insertSpent: true,
+      keySpent: int.parse(spent.id)
+    );
   }
 
   SpentStore prepareSpentToEdit({ 

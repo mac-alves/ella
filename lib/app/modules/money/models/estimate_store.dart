@@ -104,6 +104,9 @@ abstract class _EstimateStoreBase with Store {
   }
 
   @action
+  setId(int value) => id = value;
+
+  @action
   setMonth(String value) => month = value;
 
   @action

@@ -138,8 +138,17 @@ class _DatePickerItemState extends State<DatePickerItem> {
                 showDatePicker(
                   context: context,
                   initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-                  firstDate: DateTime(2001),
-                  lastDate: DateTime(2021)
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2099),
+                  locale: const Locale('pt', 'BR'),
+                  builder: (BuildContext context, Widget child) {
+                    return Theme(
+                      data: ThemeData.light().copyWith(
+                        colorScheme: ColorScheme.light(primary: themeColors.tertiary),
+                      ),
+                      child: child,
+                    );
+                  },
                 ).then((date) {
                   if (date != null) {
                     setState(() {

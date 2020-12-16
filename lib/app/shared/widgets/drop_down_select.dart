@@ -1,5 +1,5 @@
 import 'package:ella/app/shared/utils/constants.dart';
-import 'package:ella/app/shared/utils/list_of_months.dart';
+import 'package:ella/app/shared/utils/item_select.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +101,7 @@ class _DropDownSelectState extends State<DropDownSelect> {
                   return DropdownMenuItem<String>(
                     value: item.id,
                     child: Text(
-                      item.name,
+                      item.name != null ? item.name : 'Item sem nome',
                       style: TextStyle(
                         color: themeColors.textPrimary
                       ),

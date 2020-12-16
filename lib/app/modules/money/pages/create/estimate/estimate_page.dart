@@ -28,7 +28,7 @@ class _EstimatePageState
   @override
   void initState() {
     super.initState();
-    
+
     controller.setNewEstimate(
       new EstimateStore(
         id: 0,
@@ -42,16 +42,18 @@ class _EstimatePageState
     );
 
     if (widget.id != null) {
+      controller.setIsEdit(true);
+
       EstimateStore estimate = controller
         .prepareEstimateEdit(controller.money.getEstimate(widget.id));
 
       controller.setNewEstimate(estimate);
-      controller.setIsEdit(true);
     } else {
-      // whenDispose = when(
-      //   (r) => controller.idNewList != null, 
-      //   () => controller.newMyList.setId(controller.idNewList)
-      // );
+      controller.setExpenses();
+      whenDispose = when(
+        (r) => controller.idNewEstimate != null, 
+        () => controller.newEstimate.setId(controller.idNewEstimate)
+      );
     }
   }
   
@@ -105,7 +107,7 @@ class _EstimatePageState
                         onPressYes: () {
                           controller.deleteEstimate();
                           Navigator.of(context, rootNavigator: true).pop();
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(false);
                         } 
                       ).show();
                     },

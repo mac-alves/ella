@@ -8,12 +8,14 @@ class SectionTitle extends StatelessWidget {
   final String title;
   final bool hasAction;
   final Widget action;
+  final bool divider;
 
   const SectionTitle({
     Key key, 
     @required this.title,
     this.hasAction = false, 
     this.action,
+    this.divider = true, 
   }) : super(key: key);
 
   @override
@@ -49,14 +51,17 @@ class SectionTitle extends StatelessWidget {
             hasAction ? action : Container(),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: SizeConfig.defaultPadding,
-          ),
-          child: Container(
-            width: double.infinity,
-            height: 2,
-            color: themeColors.textSecondary.withOpacity(0.1),
+        Visibility(
+          visible: divider,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeConfig.defaultPadding,
+            ),
+            child: Container(
+              width: double.infinity,
+              height: 2,
+              color: themeColors.textSecondary.withOpacity(0.1),
+            ),
           ),
         )
       ],

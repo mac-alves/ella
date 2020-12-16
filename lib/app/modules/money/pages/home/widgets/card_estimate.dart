@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 class CardEstimate extends StatefulWidget {
 
   final EstimateStore estimate;
+  final bool notFound;
 
   const CardEstimate({
     Key key,
     @required this.estimate,
+    this.notFound = true,
   }) : super(key: key);
 
   @override
@@ -22,27 +24,43 @@ class _CardEstimateState extends State<CardEstimate> {
   String strDateInitial = '';
   String strDateFinal = '';
 
+  setThePeriod(){
+    if (!widget.notFound) {
+      List<int> dateInitial = widget.estimate.startDay
+        .split('/')
+        .map((e) => int.parse(e))
+        .toList();
+      
+      List<int> dateFinal = widget.estimate.endDay
+        .split('/')
+        .map((e) => int.parse(e))
+        .toList();
+
+      strDateInitial = DateFormat('dd/MM').format(
+        new DateTime(dateInitial[0], dateInitial[1], dateInitial[2])
+      );
+
+      strDateFinal = DateFormat('dd/MM').format(
+        new DateTime(dateFinal[0], dateFinal[1], dateFinal[2])
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    setThePeriod();
+  }
 
-    List<int> dateInitial = widget.estimate.startDay
-      .split('/')
-      .map((e) => int.parse(e))
-      .toList();
-    
-    List<int> dateFinal = widget.estimate.endDay
-      .split('/')
-      .map((e) => int.parse(e))
-      .toList();
+  @override
+  void didUpdateWidget(covariant CardEstimate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    bool startDateUpd = widget.estimate.startDay != oldWidget.estimate.startDay;
+    bool endDateUpd = widget.estimate.endDay != oldWidget.estimate.endDay;
 
-    strDateInitial = DateFormat('dd/MM').format(
-      new DateTime(dateInitial[0], dateInitial[1], dateInitial[2])
-    );
-
-    strDateFinal = DateFormat('dd/MM').format(
-      new DateTime(dateFinal[0], dateFinal[1], dateFinal[2])
-    );
+    if (startDateUpd || endDateUpd) {
+      setThePeriod();
+    }
   }
 
   @override
@@ -111,7 +129,9 @@ class _CardEstimateState extends State<CardEstimate> {
                   )
                 ),
                 Text(
-                  '$strDateInitial - $strDateFinal',
+                  widget.notFound 
+                    ? 'Não há orçamento(s)'
+                    : '$strDateInitial - $strDateFinal',
                   style: TextStyle(
                     color: themeColors.textPrimary,
                     fontSize: 11,

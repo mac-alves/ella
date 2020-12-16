@@ -1,8 +1,10 @@
+import 'package:ella/app/modules/money/interfaces/local_storage.dart';
 import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/spent_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_controller.dart';
+import 'package:ella/app/shared/utils/enum_states.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -14,9 +16,35 @@ class ReadController = _ReadControllerBase with _$ReadController;
 
 abstract class _ReadControllerBase with Store {
   
+  final ILocalStorage _storage = Modular.get();
+
   final MoneyController money;
 
-  _ReadControllerBase(this.money);
+  _ReadControllerBase(this.money) {
+    _setExpenses();
+  }
+
+  _setExpenses() async {
+    var localFixedExpenses = await _storage.getAllFixedExpenses();
+    var localExpectedExpenses = await _storage.getAllExpectedExpenses();
+
+    if (localFixedExpenses == null) {
+      money.fixedExpenses = <SpentStore>[].asObservable();
+    } else {
+      money.fixedExpenses = localFixedExpenses.asObservable();
+    }
+
+    if (localExpectedExpenses == null) {
+      money.expectedExpenses = <SpentStore>[].asObservable();
+    } else {
+      money.expectedExpenses = localExpectedExpenses.asObservable();
+    }
+
+    setCurrentState(States.SUCESS);
+  }
+
+  @observable
+  States currentState = States.LOADING;
 
   @observable
   ObservableList<SpentStore> spents = <SpentStore>[].asObservable();
@@ -29,6 +57,9 @@ abstract class _ReadControllerBase with Store {
 
   @observable
   ObservableList<String> listSpentToDelete = <String>[].asObservable();
+
+  @action
+  void setCurrentState(States value) => currentState = value;
 
   @action
   void setIsDelete(bool value) => isDelete = value;
@@ -96,7 +127,57 @@ abstract class _ReadControllerBase with Store {
     }
   }
 
-  deleteSpentSelecteds(int idEstimate, String type){
+  /// 
+  /// Deleta os gastos
+  /// 
+  deleteSpentSelecteds(
+    int idEstimate, String type, bool isFixedGeneral, bool isExpectedGeneral){
+
+    if (isFixedGeneral) {
+      deleteFixedExpense();
+    } else if (isExpectedGeneral) {
+      deleteExpectedExpense();
+    } else {
+      deleteSpentToEstimate(idEstimate, type);
+    }
+
+    listSpentToDelete = <String>[].asObservable();
+    setIsDelete(false);
+    setSpents(idEstimate, type,  isFixedGeneral, isExpectedGeneral);
+  }
+
+  /// 
+  /// Deleta os gastos fixos gerais
+  /// 
+  deleteFixedExpense(){
+    // delete memory
+    money.fixedExpenses = money.fixedExpenses
+      .where((item) => !listSpentToDelete.contains(item.id))
+      .toList().asObservable();
+
+    // delete db
+    _storage.deleteFixedExpense(listSpentToDelete.join(','));
+  }
+
+  /// 
+  /// Deleta os gastos esperados gerais
+  /// 
+  deleteExpectedExpense(){
+    // delete memory
+    money.expectedExpenses = money.expectedExpenses
+      .where((item) => !listSpentToDelete.contains(item.id))
+      .toList().asObservable();
+
+    // delete db
+    _storage.deleteExpectedExpense(listSpentToDelete.join(','));
+  }
+
+  /// 
+  /// Deleta os gastos de um orçamento vinculado
+  /// 
+  deleteSpentToEstimate(int idEstimate, String type){
+    EstimateStore estimateEdited;
+
     money.estimates = money.estimates.map((estimate) {
 
       if (estimate.id == idEstimate){
@@ -121,14 +202,15 @@ abstract class _ReadControllerBase with Store {
         }).toList().asObservable();
 
         estimate.calculateFinalBalance(); 
+
+        estimateEdited = EstimateStore().fromJson(estimate.toJson());
       }
 
       return estimate;
     }).toList().asObservable();
 
-    listSpentToDelete = <String>[].asObservable();
-    setIsDelete(false);
-    setSpents(idEstimate, type, false, false);
+    // deleta o gasto  no banco
+    _storage.putEstimate(estimateEdited.id, estimateEdited.toJson());
   }
 
   void goScreenEdit(

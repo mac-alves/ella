@@ -24,7 +24,7 @@ class ExpenseStore extends _ExpenseStoreBase with _$ExpenseStore {
     }
 
     return ExpenseStore(
-      type: json['type'],
+      type: getTypeFromString(json['type']),
       value: json['value'],
       lastValue: json['lastValue'],
       spents: spents
@@ -33,7 +33,8 @@ class ExpenseStore extends _ExpenseStoreBase with _$ExpenseStore {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
+
+    data['type'] = this.type.toString();
     data['value'] = this.value;
     data['lastValue'] = this.lastValue;
     if (this.spents != null) {

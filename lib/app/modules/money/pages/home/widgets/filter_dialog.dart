@@ -1,14 +1,14 @@
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class AlertDialogConfirm {
+class FilterDialog {
   
   BuildContext context;
   List<Widget> content;
   Function onPressCancel;
   Function onPressFilter;
 
-  AlertDialogConfirm({
+  FilterDialog({
     @required this.context,
     @required this.onPressCancel,
     @required this.onPressFilter,
@@ -32,7 +32,11 @@ class AlertDialogConfirm {
     AlertDialog alert = AlertDialog(
       title: Text("Filtrar orçamentos"),
       contentPadding: EdgeInsets.symmetric(
-        horizontal: 10
+        horizontal: 0
+      ),
+      titlePadding: EdgeInsets.all(12),
+      actionsPadding: EdgeInsets.symmetric(
+        horizontal: 9
       ),
       content: Container(
         height: 90,

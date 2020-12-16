@@ -1,4 +1,3 @@
-import 'package:ella/app/modules/lists/models/my_list_store.dart';
 import 'package:ella/app/modules/lists/pages/create/create_controller.dart';
 import 'package:ella/app/modules/lists/pages/create/widgets/item_list.dart';
 import 'package:ella/app/shared/widgets/input_text.dart';

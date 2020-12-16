@@ -34,6 +34,21 @@ mixin _$SpentController on _SpentControllerBase, Store {
     });
   }
 
+  final _$idNewSpentAtom = Atom(name: '_SpentControllerBase.idNewSpent');
+
+  @override
+  int get idNewSpent {
+    _$idNewSpentAtom.reportRead();
+    return super.idNewSpent;
+  }
+
+  @override
+  set idNewSpent(int value) {
+    _$idNewSpentAtom.reportWrite(value, super.idNewSpent, () {
+      super.idNewSpent = value;
+    });
+  }
+
   final _$typeAtom = Atom(name: '_SpentControllerBase.type');
 
   @override
@@ -61,6 +76,21 @@ mixin _$SpentController on _SpentControllerBase, Store {
   set idEstimate(String value) {
     _$idEstimateAtom.reportWrite(value, super.idEstimate, () {
       super.idEstimate = value;
+    });
+  }
+
+  final _$notEstimateAtom = Atom(name: '_SpentControllerBase.notEstimate');
+
+  @override
+  bool get notEstimate {
+    _$notEstimateAtom.reportRead();
+    return super.notEstimate;
+  }
+
+  @override
+  set notEstimate(bool value) {
+    _$notEstimateAtom.reportWrite(value, super.notEstimate, () {
+      super.notEstimate = value;
     });
   }
 
@@ -263,11 +293,33 @@ mixin _$SpentController on _SpentControllerBase, Store {
   }
 
   @override
+  void setIdNewSpent(int value) {
+    final _$actionInfo = _$_SpentControllerBaseActionController.startAction(
+        name: '_SpentControllerBase.setIdNewSpent');
+    try {
+      return super.setIdNewSpent(value);
+    } finally {
+      _$_SpentControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setIdEstimate(String value) {
     final _$actionInfo = _$_SpentControllerBaseActionController.startAction(
         name: '_SpentControllerBase.setIdEstimate');
     try {
       return super.setIdEstimate(value);
+    } finally {
+      _$_SpentControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNotEstimate(bool value) {
+    final _$actionInfo = _$_SpentControllerBaseActionController.startAction(
+        name: '_SpentControllerBase.setNotEstimate');
+    try {
+      return super.setNotEstimate(value);
     } finally {
       _$_SpentControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -442,8 +494,10 @@ mixin _$SpentController on _SpentControllerBase, Store {
   String toString() {
     return '''
 newSpent: ${newSpent},
+idNewSpent: ${idNewSpent},
 type: ${type},
 idEstimate: ${idEstimate},
+notEstimate: ${notEstimate},
 errorType: ${errorType},
 errorEstimate: ${errorEstimate},
 erroName: ${erroName},

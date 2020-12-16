@@ -6,6 +6,7 @@ import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
+import 'package:mobx/mobx.dart';
 import 'spent_controller.dart';
 import 'widgets/spent_fields.dart';
 
@@ -16,6 +17,7 @@ class SpentPage extends StatefulWidget {
   final String typeExpense;
   final String isFixedGeneral;
   final String isExpectedGeneral;
+  final bool notEstimate;
   
   const SpentPage({
     Key key, 
@@ -24,6 +26,7 @@ class SpentPage extends StatefulWidget {
     this.typeExpense,
     this.isFixedGeneral,
     this.isExpectedGeneral,
+    this.notEstimate = false,
   }) : super(key: key);
 
   @override
@@ -32,6 +35,8 @@ class SpentPage extends StatefulWidget {
 
 class _SpentPageState extends ModularState<SpentPage, SpentController> {
   //use 'controller' variable to access controller
+
+  ReactionDisposer whenDispose;
 
   bool parseBool(String value){
     if (value != null) {
@@ -45,11 +50,16 @@ class _SpentPageState extends ModularState<SpentPage, SpentController> {
   void initState() {
     super.initState();
     // print(widget.idEstimate.toString());
+    if (widget.notEstimate) {
+      controller.setEnableExpectedGeneral(true);
+      controller.setNotEstimate(widget.notEstimate);
+    }
+
     controller.setIdEstimate(widget.idEstimate.toString());
 
     controller.setNewSpent(
       new SpentStore(
-        id: '5',
+        id: '0',
         title: null,
         value: null,
         selected: true,
@@ -84,10 +94,18 @@ class _SpentPageState extends ModularState<SpentPage, SpentController> {
       );
       controller.setNewSpent(spent);
     } else {
-      // whenDispose = when(
-      //   (r) => controller.idNewList != null, 
-      //   () => controller.newMyList.setId(controller.idNewList)
-      // );
+      whenDispose = when(
+        (r) => controller.idNewSpent != null, 
+        () => controller.newSpent.setId(controller.idNewSpent.toString())
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (whenDispose != null) {
+      whenDispose();
     }
   }
 

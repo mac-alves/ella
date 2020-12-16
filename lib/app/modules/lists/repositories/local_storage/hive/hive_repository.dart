@@ -11,7 +11,6 @@ part 'hive_repository.g.dart';
 @Injectable()
 class HiveRepository extends Disposable {
   
-  static String keyBoxIds;
   Completer<Box> _boxLists = Completer<Box>();
   Completer<Box> _boxIds = Completer<Box>();
 

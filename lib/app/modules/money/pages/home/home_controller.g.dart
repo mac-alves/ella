@@ -111,6 +111,39 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$isNotEstimateAtom = Atom(name: '_HomeControllerBase.isNotEstimate');
+
+  @override
+  bool get isNotEstimate {
+    _$isNotEstimateAtom.reportRead();
+    return super.isNotEstimate;
+  }
+
+  @override
+  set isNotEstimate(bool value) {
+    _$isNotEstimateAtom.reportWrite(value, super.isNotEstimate, () {
+      super.isNotEstimate = value;
+    });
+  }
+
+  final _$deleteCurrentEstimateAsyncAction =
+      AsyncAction('_HomeControllerBase.deleteCurrentEstimate');
+
+  @override
+  Future<dynamic> deleteCurrentEstimate() {
+    return _$deleteCurrentEstimateAsyncAction
+        .run(() => super.deleteCurrentEstimate());
+  }
+
+  final _$updateCurrentEstimateAsyncAction =
+      AsyncAction('_HomeControllerBase.updateCurrentEstimate');
+
+  @override
+  Future<dynamic> updateCurrentEstimate() {
+    return _$updateCurrentEstimateAsyncAction
+        .run(() => super.updateCurrentEstimate());
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
 
@@ -181,6 +214,17 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void setIsNotEstimate(bool value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setIsNotEstimate');
+    try {
+      return super.setIsNotEstimate(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setFilter() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.setFilter');
@@ -210,7 +254,8 @@ currentEstimate: ${currentEstimate},
 index: ${index},
 initialPage: ${initialPage},
 selectedMothFilter: ${selectedMothFilter},
-isFilter: ${isFilter}
+isFilter: ${isFilter},
+isNotEstimate: ${isNotEstimate}
     ''';
   }
 }

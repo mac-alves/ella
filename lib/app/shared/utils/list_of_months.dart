@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-
-class ItemSelect {
-  final String id;
-  final String name;
-
-  ItemSelect({
-    @required this.id, 
-    @required this.name
-  });
-}
+import 'item_select.dart';
 
 List<ItemSelect> months = [
   new ItemSelect(id: '1', name: 'Janeiro'),

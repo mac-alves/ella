@@ -1,5 +1,6 @@
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,6 +22,12 @@ class AppWidget extends StatelessWidget {
       ),
       initialRoute: Modular.initialRoute,
       onGenerateRoute: Modular.generateRoute,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('pt', 'BR'),
+      ],
     );
   }
 }

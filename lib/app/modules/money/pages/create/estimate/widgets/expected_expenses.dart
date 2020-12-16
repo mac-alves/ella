@@ -1,5 +1,6 @@
 import 'package:ella/app/modules/money/models/spent_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/enum_states.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/form_fields/money_input.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
@@ -34,13 +35,48 @@ class _ExpectedExpensesState extends State<ExpectedExpenses> {
       key: controller.formKeyExpectedFields,
       child: Column(
         children: [
-          ...List.generate(controller.expectedExpenses.length, (i) {
-            SpentStore item = controller.expectedExpenses[i];
-            
-            return ExpectedField(
-              spent: item,
-            );
-          })
+          VerticalSpacing(of:10),
+          SectionTitle(
+            title: 'Gastos Previstos',
+          ),
+          Observer(
+            builder: (_) {
+
+              if (controller.currentStateExpense == States.LOADING) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.defaultPadding,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            themeColors.moneyColor
+                          ),
+                        )
+                      ), 
+                    ]
+                  ),
+                );
+              }
+
+              return Column(
+                children: [
+                  ...List.generate(controller.expectedExpenses.length, (i) {
+                    SpentStore item = controller.expectedExpenses[i];
+                    
+                    return ExpectedField(
+                      spent: item,
+                    );
+                  })
+                ],
+              );
+            }
+          ),
         ],
       ),
     );
@@ -65,6 +101,7 @@ class ExpectedField extends StatelessWidget {
             VerticalSpacing(of:10),
             SectionTitle(
               title: spent.title,
+              divider: false,
               hasAction: true,
               action: Switch(
                 value: spent.selected,
@@ -77,7 +114,6 @@ class ExpectedField extends StatelessWidget {
               ),
             ),
             MoneyInput(
-              label: 'Valor do gasto esperado',
               placeholder: 'Saldo depositado',
               change: (value) => spent.setValue(value),
               msgError: 'Digite um valor valido',

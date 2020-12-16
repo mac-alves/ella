@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_routes.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/filter_dialog.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
+import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
@@ -61,7 +63,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 ),
                 onSelected: (String item){
                   if (menuItemsToEnum[item] == MenuPopup.FILTRO) {
-                    AlertDialogConfirm(
+                    FilterDialog(
                       context: context,
                       content: [
                         Observer(
@@ -81,7 +83,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                         Navigator.of(context, rootNavigator: true).pop();
                       },
                       onPressFilter: () {
-                        print('object');
                         controller.setFilter();
                         Navigator.of(context, rootNavigator: true).pop();
                       } 
@@ -95,6 +96,22 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     );
                   }
 
+                  if (menuItemsToEnum[item] == MenuPopup.DELETE) {
+                    AlertDialogConfirm(
+                      context: context,
+                      title: 'Atenção!',
+                      description: 
+                        'Deseja mesmo deletar o orçamento "${controller.currentEstimate.month}"',
+                      onPressNot: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      onPressYes: () async {
+                        await controller.deleteCurrentEstimate();
+                        Navigator.of(context, rootNavigator: true).pop();
+                      } 
+                    ).show();
+                  }
+
                   if (menuItemsToEnum[item] == MenuPopup.FIXOS) {
                     controller.goScreen(context, '$MONEY_READ/fixed');
                   }
@@ -104,7 +121,11 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                   }
                 },
                 itemBuilder: (BuildContext context) {
-                  return enumToMenuItem.values.toList().map((String choice){
+                  Map<MenuPopup, String> itens = controller.isNotEstimate 
+                    ? enumToMenuItemNotFound
+                    : enumToMenuItem;
+
+                  return itens.values.toList().map((String choice){
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(
@@ -147,7 +168,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                           controller.estimates.length, 
                           (index) {
                             return CardEstimate(
-                              estimate: controller.estimates[index]
+                              estimate: controller.estimates[index],
+                              notFound: controller.isNotEstimate
                             );
                           }
                         )],
@@ -179,18 +201,29 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    ExpenseStore expense = controller.currentEstimate.expenses[index];
+                    EstimateStore currentEstimate = controller.currentEstimate;
+                    
+                    if (currentEstimate == null) {
+                      return Container();
+                    }
+
+                    ExpenseStore expense = currentEstimate.expenses[index];
+
                     return Spent(
                       expense: expense,
                       onPress: (){
-                        controller.goScreen(
-                          context,
-                          '$MONEY_READ/${controller.currentEstimate.id}/${getIndexFromType(expense.type)}'
-                        );
+                        if (!controller.isNotEstimate) {
+                          controller.goScreen(
+                            context,
+                            '$MONEY_READ/${currentEstimate.id}/${getIndexFromType(expense.type)}'
+                          );
+                        }
                       },
                     );
                   },
-                  childCount: controller.currentEstimate.expenses.length
+                  childCount: controller.currentEstimate != null 
+                    ? controller.currentEstimate.expenses.length
+                    : 0
                 ),
               );
             }
@@ -227,10 +260,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               fontSize: 15.0
             ),
             onTap: () {
-              controller.goScreen(
-                context, 
-                '$MONEY_CREATE_SPENT/${controller.currentEstimate.id}'
-              );
+              String path = '$MONEY_CREATE_SPENT/${controller.currentEstimate.id}';
+              
+              if (controller.isNotEstimate) {
+                path = '$MONEY_CREATE_SPENT/${controller.currentEstimate.id}/notEstimate';
+              }
+
+              controller.goScreen(context, path);
             }
           ),
           SpeedDialChild(

@@ -1,12 +1,15 @@
 import 'package:ella/app/modules/money/models/spent_store.dart';
+import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_routes.dart';
 import 'package:ella/app/modules/money/pages/read/widgets/spent.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/enum_states.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'read_controller.dart';
 
 class ReadPage extends StatefulWidget {
@@ -31,6 +34,8 @@ class ReadPage extends StatefulWidget {
 class _ReadPageState extends ModularState<ReadPage, ReadController> {
   //use 'controller' variable to access controller
 
+  ReactionDisposer whenDispose;
+
   bool parseBool(String value){
     if (value != null) {
       return value.toLowerCase() == 'true';
@@ -42,12 +47,24 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
   @override
   void initState() {
     super.initState();
-    controller.setSpents(
-      widget.idEstimate,
-      widget.typeExpensse,
-      parseBool(widget.isFixedGeneral),
-      parseBool(widget.isExpectedGeneral)
+
+    whenDispose = when(
+      (r) => controller.currentState == States.SUCESS, 
+      () => controller.setSpents(
+        widget.idEstimate,
+        widget.typeExpensse,
+        parseBool(widget.isFixedGeneral),
+        parseBool(widget.isExpectedGeneral)
+      )
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (whenDispose != null) {
+      whenDispose();
+    }
   }
 
   @override
@@ -58,8 +75,21 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
         slivers: <Widget>[
           Observer(
             builder: (_){
+              String qtItems = controller.listSpentToDelete.length == 0 
+                ? ''
+                : '${controller.listSpentToDelete.length}';
+                
               return SliverAppBar(
                 backgroundColor:  themeColors.secondary,
+                title: Text(
+                  (qtItems != '') 
+                    ? 'Selecionados: $qtItems'
+                    : '',
+                  style: TextStyle(
+                    color: themeColors.textPrimary,
+                    fontSize: 17
+                  ),
+                ),
                 leading: IconButton(
                   icon: Icon(
                     Icons.arrow_back,
@@ -86,7 +116,9 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
                         onPressYes: () {
                           controller.deleteSpentSelecteds(
                             widget.idEstimate,
-                            widget.typeExpensse
+                            widget.typeExpensse,
+                            parseBool(widget.isFixedGeneral),
+                            parseBool(widget.isExpectedGeneral)
                           );
                           Navigator.of(context, rootNavigator: true).pop();
                         } 
@@ -103,7 +135,9 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
                 return Observer(
                   builder: (_){
                     return SectionTitle(
-                      title: controller.title,
+                      title: controller.title == null 
+                      ? '' 
+                      : controller.title,
                     );
                   }
                 );
@@ -113,6 +147,32 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
           ),
           Observer(
             builder: (_) {
+
+              if (controller.currentState == States.LOADING) {
+                return SliverFixedExtentList(
+                  itemExtent: 100.0,
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                themeColors.moneyColor
+                              ),
+                            )
+                          ), 
+                        ]
+                      );
+                    },
+                    childCount: 1
+                  ),
+                );
+              }
+
               return SliverFixedExtentList(
                 itemExtent: 60.0,
                 delegate: SliverChildBuilderDelegate(
@@ -122,6 +182,8 @@ class _ReadPageState extends ModularState<ReadPage, ReadController> {
                     return Spent(
                       item: item,
                       isExpectedGeneral: parseBool(widget.isExpectedGeneral),
+                      isFixedEstimate: 
+                        widget.typeExpensse.toString() == getIndexFromType(TypeExpense.FIXED),
                       onPress: (String value) {
                         String id = widget.idEstimate.toString();
                         String type = widget.typeExpensse.toString();

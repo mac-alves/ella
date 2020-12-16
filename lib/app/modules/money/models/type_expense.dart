@@ -17,3 +17,12 @@ TypeExpense getTypeFromIndex(String index){
 String getIndexFromType(TypeExpense type){
   return type.index.toString();
 }
+
+TypeExpense getTypeFromString(String typeAsString) {
+  for (TypeExpense element in TypeExpense.values) {
+     if (element.toString() == typeAsString) {
+        return element;
+     }
+  }
+  return null;
+}

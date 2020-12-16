@@ -40,7 +40,9 @@ class _SpentFieldsState extends State<SpentFields> {
                 error: controller.errorType,
                 change: (value) => controller.setType(value),
                 value: controller.type,
-                itens: controller.types,
+                itens: controller.notEstimate 
+                  ? controller.typesNotEstimate 
+                  : controller.types,
                 disable: controller.isEdit,
               ),
               Visibility(

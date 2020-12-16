@@ -19,6 +19,72 @@ final $EstimateController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$EstimateController on _EstimateControllerBase, Store {
+  final _$fixedExpensesOfEstimateAtom =
+      Atom(name: '_EstimateControllerBase.fixedExpensesOfEstimate');
+
+  @override
+  ObservableList<SpentStore> get fixedExpensesOfEstimate {
+    _$fixedExpensesOfEstimateAtom.reportRead();
+    return super.fixedExpensesOfEstimate;
+  }
+
+  @override
+  set fixedExpensesOfEstimate(ObservableList<SpentStore> value) {
+    _$fixedExpensesOfEstimateAtom
+        .reportWrite(value, super.fixedExpensesOfEstimate, () {
+      super.fixedExpensesOfEstimate = value;
+    });
+  }
+
+  final _$fixedGeneralExpensesAtom =
+      Atom(name: '_EstimateControllerBase.fixedGeneralExpenses');
+
+  @override
+  ObservableList<SpentStore> get fixedGeneralExpenses {
+    _$fixedGeneralExpensesAtom.reportRead();
+    return super.fixedGeneralExpenses;
+  }
+
+  @override
+  set fixedGeneralExpenses(ObservableList<SpentStore> value) {
+    _$fixedGeneralExpensesAtom.reportWrite(value, super.fixedGeneralExpenses,
+        () {
+      super.fixedGeneralExpenses = value;
+    });
+  }
+
+  final _$expectedExpensesAtom =
+      Atom(name: '_EstimateControllerBase.expectedExpenses');
+
+  @override
+  ObservableList<SpentStore> get expectedExpenses {
+    _$expectedExpensesAtom.reportRead();
+    return super.expectedExpenses;
+  }
+
+  @override
+  set expectedExpenses(ObservableList<SpentStore> value) {
+    _$expectedExpensesAtom.reportWrite(value, super.expectedExpenses, () {
+      super.expectedExpenses = value;
+    });
+  }
+
+  final _$currentStateExpenseAtom =
+      Atom(name: '_EstimateControllerBase.currentStateExpense');
+
+  @override
+  States get currentStateExpense {
+    _$currentStateExpenseAtom.reportRead();
+    return super.currentStateExpense;
+  }
+
+  @override
+  set currentStateExpense(States value) {
+    _$currentStateExpenseAtom.reportWrite(value, super.currentStateExpense, () {
+      super.currentStateExpense = value;
+    });
+  }
+
   final _$newEstimateAtom = Atom(name: '_EstimateControllerBase.newEstimate');
 
   @override
@@ -31,6 +97,22 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   set newEstimate(EstimateStore value) {
     _$newEstimateAtom.reportWrite(value, super.newEstimate, () {
       super.newEstimate = value;
+    });
+  }
+
+  final _$idNewEstimateAtom =
+      Atom(name: '_EstimateControllerBase.idNewEstimate');
+
+  @override
+  int get idNewEstimate {
+    _$idNewEstimateAtom.reportRead();
+    return super.idNewEstimate;
+  }
+
+  @override
+  set idNewEstimate(int value) {
+    _$idNewEstimateAtom.reportWrite(value, super.idNewEstimate, () {
+      super.idNewEstimate = value;
     });
   }
 
@@ -114,11 +196,33 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
       ActionController(name: '_EstimateControllerBase');
 
   @override
+  void setCurrentStateExpense(States value) {
+    final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
+        name: '_EstimateControllerBase.setCurrentStateExpense');
+    try {
+      return super.setCurrentStateExpense(value);
+    } finally {
+      _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setNewEstimate(EstimateStore value) {
     final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
         name: '_EstimateControllerBase.setNewEstimate');
     try {
       return super.setNewEstimate(value);
+    } finally {
+      _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIdNewEstimate(int value) {
+    final _$actionInfo = _$_EstimateControllerBaseActionController.startAction(
+        name: '_EstimateControllerBase.setIdNewEstimate');
+    try {
+      return super.setIdNewEstimate(value);
     } finally {
       _$_EstimateControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -204,7 +308,12 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
   @override
   String toString() {
     return '''
+fixedExpensesOfEstimate: ${fixedExpensesOfEstimate},
+fixedGeneralExpenses: ${fixedGeneralExpenses},
+expectedExpenses: ${expectedExpenses},
+currentStateExpense: ${currentStateExpense},
 newEstimate: ${newEstimate},
+idNewEstimate: ${idNewEstimate},
 errorMonth: ${errorMonth},
 errorStartDay: ${errorStartDay},
 errorEndDay: ${errorEndDay},

@@ -14,7 +14,7 @@ class MoneyInput extends StatefulWidget {
 
   const MoneyInput({
     Key key, 
-    @required this.label, 
+    this.label, 
     @required this.change, 
     @required this.placeholder,
     @required this.msgError,
@@ -63,16 +63,21 @@ class _MoneyInputState extends State<MoneyInput> {
       ),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 3
-            ),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.label,
-              style: TextStyle(
-                fontSize: 14,
-                color: themeColors.textSecondary
+          Visibility(
+            visible: widget.label != null, 
+            child: Container(
+              padding: EdgeInsets.only( 
+                bottom: 3
+              ),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.label != null
+                  ? widget.label
+                  : '',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: themeColors.textSecondary
+                ),
               ),
             ),
           ),

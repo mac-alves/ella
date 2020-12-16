@@ -1,5 +1,6 @@
 import 'package:ella/app/modules/money/models/spent_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/enum_states.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -21,55 +22,96 @@ class _FixedExpensesState extends State<FixedExpenses> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Visibility(
-          visible: 
-            controller.isEdit && 
-            controller.fixedExpensesOfEstimate.length > 0,
-          child: Column(
-            children: [
-              VerticalSpacing(of:10),
-              SectionTitle(
-                title: 'Gastos Fixos Deste Orçamento',
+        Observer(
+          builder: (_) {
+            return Visibility(
+              visible: 
+                controller.isEdit && 
+                controller.fixedExpensesOfEstimate.length > 0,
+              child: Column(
+                children: [
+                  VerticalSpacing(of:10),
+                  SectionTitle(
+                    title: 'Gastos Fixos Deste Orçamento',
+                  ),
+                  ...List.generate(controller.fixedExpensesOfEstimate.length, (i) {
+                    SpentStore item = controller.fixedExpensesOfEstimate[i];
+                    
+                    return FixedExpenseItem(
+                      spent: item,
+                      notEnable: true,
+                    );
+                  })
+                ],
               ),
-              ...List.generate(controller.fixedExpensesOfEstimate.length, (i) {
-                SpentStore item = controller.fixedExpensesOfEstimate[i];
-                
-                return FixedExpenseItem(
-                  spent: item,
-                  notEnable: true,
-                );
-              })
-            ],
-          ),
+            );
+          }
         ),
         VerticalSpacing(of:10),
         SectionTitle(
           title: 'Gastos Fixos',
         ),
-        Visibility(
-          visible: controller.fixedGeneralExpenses.length == 0,
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: SizeConfig.defaultPadding
-            ),
-            child: Text(
-              'Não há gastos fixos gerais para selecinar.',
-              style: TextStyle(
-                color: themeColors.textSecondary
+        Observer(
+          builder: (_) {
+            return Visibility(
+              visible: 
+                controller.fixedGeneralExpenses.length == 0 &&
+                controller.currentStateExpense == States.SUCESS,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.defaultPadding
+                ),
+                child: Text(
+                  'Não há gastos fixos gerais para selecinar.',
+                  style: TextStyle(
+                    color: themeColors.textSecondary
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }
         ),
-        ...List.generate(controller.fixedGeneralExpenses.length, (i) {
-          SpentStore item = controller.fixedGeneralExpenses[i];
-          
-          return FixedExpenseItem(
-            spent: item,
-            change: () {
-              item.setSelected(!item.selected);
-            },
-          );
-        })
+        Observer(
+          builder: (_) {
+
+            if (controller.currentStateExpense == States.LOADING) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.defaultPadding,
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          themeColors.moneyColor
+                        ),
+                      )
+                    ), 
+                  ]
+                ),
+              );
+            }
+
+            return Column(
+              children: [
+                ...List.generate(controller.fixedGeneralExpenses.length, (i) {
+                  SpentStore item = controller.fixedGeneralExpenses[i];
+                  
+                  return FixedExpenseItem(
+                    spent: item,
+                    change: () {
+                      item.setSelected(!item.selected);
+                    },
+                  );
+                })
+              ]
+            );
+          }
+        ),
       ],
     );
   }

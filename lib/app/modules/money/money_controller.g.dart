@@ -19,6 +19,21 @@ final $MoneyController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$MoneyController on _MoneyControllerBase, Store {
+  final _$idsEstimatesAtom = Atom(name: '_MoneyControllerBase.idsEstimates');
+
+  @override
+  ObservableList<ItemSelect> get idsEstimates {
+    _$idsEstimatesAtom.reportRead();
+    return super.idsEstimates;
+  }
+
+  @override
+  set idsEstimates(ObservableList<ItemSelect> value) {
+    _$idsEstimatesAtom.reportWrite(value, super.idsEstimates, () {
+      super.idsEstimates = value;
+    });
+  }
+
   final _$estimatesAtom = Atom(name: '_MoneyControllerBase.estimates');
 
   @override
@@ -82,6 +97,7 @@ mixin _$MoneyController on _MoneyControllerBase, Store {
   @override
   String toString() {
     return '''
+idsEstimates: ${idsEstimates},
 estimates: ${estimates},
 fixedExpenses: ${fixedExpenses},
 expectedExpenses: ${expectedExpenses}
