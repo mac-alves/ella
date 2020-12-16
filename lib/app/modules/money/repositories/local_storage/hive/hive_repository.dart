@@ -93,6 +93,16 @@ class HiveRepository extends Disposable {
     return [];
   }
 
+  Future<String> getAllEstimatesToJson() async {
+    List<EstimateStore> estimates = await getAllEstimates();
+
+    Map<String, List<String>> json = {
+      'orcamentos': estimates.map((est) => jsonEncode(est.toJson())).toList()
+    };
+
+    return jsonEncode(json);
+  }
+
   Future putEstimate(
     int key, 
     Map<String, dynamic> value, 

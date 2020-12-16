@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_controller.dart';
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:ella/app/modules/money/interfaces/local_storage.dart';
 import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
@@ -7,6 +10,7 @@ import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_controller.dart';
 import 'package:ella/app/shared/utils/item_select.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -213,5 +217,35 @@ abstract class _HomeControllerBase with Store {
 
     await _setLocalEstimates();
     await _setLocalIdsEstimates();
+  }
+
+  ///
+  /// Obtem o diretorio de Downloads do sistema
+  ///
+  Future<String> get _localDownloadPath async {
+    Directory downloadsDirectory;
+
+    try {
+      downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
+    } on PlatformException {
+      print('Could not get the downloads directory');
+    }
+
+    return downloadsDirectory.path;
+  }
+
+  Future<bool> downloadData() async {
+    try {
+      String dir = await _localDownloadPath;
+      File file = new File('$dir/orcamentos.json');
+
+      String data = await _storage.getDataToLocalFile();
+      await file.writeAsString(data);
+
+      return true;
+    } catch (e) {
+      print({'error': e});
+      return false;
+    }
   }
 }

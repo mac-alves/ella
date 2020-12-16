@@ -43,6 +43,8 @@ dependencies:
   hive_flutter: ^0.3.1
   carousel_slider: ^2.3.1
   flutter_speed_dial: ^1.2.5
+  downloads_path_provider: ^0.1.0
+  permission_handler: ^5.0.1+1
   flutter:
     sdk: flutter
   flutter_localizations: # Add this line

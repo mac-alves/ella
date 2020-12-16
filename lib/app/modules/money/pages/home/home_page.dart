@@ -8,6 +8,7 @@ import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'home_controller.dart';
 import 'widgets/card_estimate.dart';
 import 'widgets/menu_popup.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -54,6 +56,35 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               }
             ),
             actions: [
+              Observer(
+                builder: (_) {
+                  return Visibility(
+                    visible: !controller.isNotEstimate,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.download_sharp,
+                        color: themeColors.moneyColor,
+                      ), 
+                      onPressed: () async {
+                        final permission = await Permission.storage.request();
+
+                        if (permission.isGranted){
+                          bool sucess = await controller.downloadData();
+                          String msg = 'Arquivo salvo em Downloads.';
+
+                          if (!sucess){
+                            msg = 'Erro ao salvar dados em arquivo local!';
+                          }
+
+                          SnackMesage(context).show('$msg');
+                        } else {
+                          print('permission deined');
+                        }
+                      },
+                    ),
+                  );
+                }
+              ),
               PopupMenuButton<String>(
                 captureInheritedThemes: true,
                 color: themeColors.secondary,

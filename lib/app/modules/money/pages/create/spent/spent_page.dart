@@ -165,6 +165,11 @@ class _SpentPageState extends ModularState<SpentPage, SpentController> {
               childCount: 1,
             ),
           ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(
+              vertical: 15.0
+            ),
+          ),
         ]
       ),
     );
