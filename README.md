@@ -21,9 +21,7 @@ $ flutter install
 
 # modulos
 - verifiar se cria um modulo novo ou se incrementa em algum a opção de:
-    - criar orçamento reciclavel
-        (orçamento de compra: collocar o nome, valor e mostrar o resutado de quanto ta dando)
-
-
+    - criar modulo compras
+        (orçamento de compra: collocar o nome, valor e quantidade e mostrar o resutado de quanto ta dando)
 # app listas
     - fazer opção de itens opcionais

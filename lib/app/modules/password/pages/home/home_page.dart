@@ -1,14 +1,13 @@
-import 'package:ella/app/modules/lists/lists_routes.dart';
-import 'package:ella/app/modules/lists/pages/home/widgets/flex_app_bar.dart';
-import 'package:ella/app/modules/lists/pages/home/widgets/item_list.dart';
-import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
+import 'package:ella/app/modules/password/pages/home/widget/flex_app_bar.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../password_routes.dart';
 import 'home_controller.dart';
+import 'widget/password_item.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -21,10 +20,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
 
-  // altera a barra de navegação do systema, mas não pegou no meu
-  // SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.light
-  //   .copyWith(systemNavigationBarColor: themeColors.secondary);
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -34,8 +29,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            leading: Container(),
             backgroundColor: themeColors.primary,
-            expandedHeight: getPropScreenWidth(230),
+            expandedHeight: getPropScreenWidth(220),
             flexibleSpace: LayoutBuilder(
               builder: (context, bc) {
                 // double size = min(bc.constrainHeight(), 120);
@@ -47,24 +43,25 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.delete,
-                  color: themeColors.listsColor,
+                  Icons.logout,
+                  color: themeColors.passwordColor,
                   size: 25,
                 ),
-                tooltip: 'Delete All Lists',
+                tooltip: 'Sair',
                 onPressed: () {
-                  AlertDialogConfirm(
-                    context: context,
-                    title: 'Atenção!',
-                    description: 'Deseja deletar todas as listas ?',
-                    onPressNot: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                    onPressYes: () {
-                      controller.deleteAllLists();
-                      Navigator.of(context, rootNavigator: true).pop();
-                    } 
-                  ).show();
+                  Navigator.of(context).pop(false);
+                  // AlertDialogConfirm(
+                  //   context: context,
+                  //   title: 'Atenção!',
+                  //   description: 'Deseja deletar todas as listas ?',
+                  //   onPressNot: () {
+                  //     Navigator.of(context, rootNavigator: true).pop();
+                  //   },
+                  //   onPressYes: () {
+                  //     controller.deleteAllLists();
+                  //     Navigator.of(context, rootNavigator: true).pop();
+                  //   } 
+                  // ).show();
                 }
               )
             ]
@@ -73,7 +70,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return SectionTitle(
-                  title: 'Suas Listas',
+                  title: 'Suas Senhas',
                 );
               },
               childCount: 1,
@@ -84,34 +81,31 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    var list = controller.lists.myLists[index];
 
-                    return ItemList(
-                      list: list,
-                    );
+                    return PasswordItem();
                   },
-                  childCount: controller.lists.myLists.length
+                  childCount: 3
                 ),
               );
             }
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(
-              vertical: 40.0
+              vertical: 47.0
             ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, LISTS_CREATE);
+          Navigator.pushNamed(context, PASSWORD_CREATE);
         },
         child: Icon(
           Icons.add,
           size: 28,
           color: themeColors.primary,
         ),
-        backgroundColor: themeColors.listsColor,
+        backgroundColor: themeColors.passwordColor,
       ),
     );
   }

@@ -7,15 +7,20 @@ class FlexAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       overflow: Overflow.visible,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       children: [
-        Image.asset(
-          "assets/images/logo.png",
-          height: getPropScreenWidth(140),
-          fit: BoxFit.cover
+        Padding(
+          padding: EdgeInsets.only(
+            top: AppBar().preferredSize.height + 5
+          ),
+          child: Image.asset(
+            "assets/images/logo-lists.png",
+            height: getPropScreenWidth(140),
+            fit: BoxFit.cover
+          ),
         ),
         Positioned(
-          bottom: 5,
+          bottom: 10,
           child: Text(
             "Seu sistema de controle\ne armazenamento de listas rapidas",
             textAlign: TextAlign.center,

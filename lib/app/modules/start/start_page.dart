@@ -1,5 +1,6 @@
 import 'package:ella/app/modules/lists/lists_module.dart';
 import 'package:ella/app/modules/money/money_module.dart';
+import 'package:ella/app/modules/password/password_module.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class _StartPageState extends ModularState<StartPage, StartController> {
           RouterOutlet(
             module: MoneyModule(),
           ),
-          Container(),
+          RouterOutlet(
+            module: PasswordModule(),
+          ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -65,10 +68,12 @@ class _StartPageState extends ModularState<StartPage, StartController> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.attach_money),
                   label: '',
+                  backgroundColor: Colors.black
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.lock),
                   label: '',
+                  backgroundColor: Colors.black
                 ),
               ],
             );
