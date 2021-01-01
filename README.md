@@ -11,8 +11,7 @@ $ flutter install
 
 
 # falta
-- não deixar baixar quando não tiver orçamentos cadastrados
-- colcoar um pading em baixo na tela de gastos
+
 
 # melhorias
 - na opção de deletar na home fazer um select para selecinar qual deseja deletar

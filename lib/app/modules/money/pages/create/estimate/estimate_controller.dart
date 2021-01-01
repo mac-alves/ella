@@ -273,7 +273,7 @@ abstract class _EstimateControllerBase with Store {
           ? double.parse(selectedFixeds[selectedFixeds.length - 1].value)
           : 0.0,
         value: hasFixeds 
-          ? selectedFixeds.fold(0, (prev, item) => prev + double.parse(item.value))
+          ? getValueExpense(selectedFixeds)
           : 0.0,
         spents: hasFixeds ? selectedFixeds : []
       ),
@@ -283,7 +283,7 @@ abstract class _EstimateControllerBase with Store {
           ? double.parse(selectedExpecteds[selectedExpecteds.length - 1].value) 
           : 0.0,
         value: hasExpecteds 
-          ? selectedExpecteds.fold(0, (prev, item) => prev + double.parse(item.value)) 
+          ? getValueExpense(selectedExpecteds)
           : 0.0,
         spents: hasExpecteds ? selectedExpecteds : []
       ),
@@ -294,6 +294,15 @@ abstract class _EstimateControllerBase with Store {
         spents: []
       ),
     ];
+  }
+
+  /// 
+  /// Obtem o valor do tipo de gasto total com duas casas decimais
+  ///
+  double getValueExpense(List<SpentStore> selecteds){
+    return double.parse(getTwoPrecision(
+      selecteds.fold(0, (prev, item) => prev + double.parse(item.value)).toString()
+    ));
   }
 
   /// 
