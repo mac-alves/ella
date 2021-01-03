@@ -1,3 +1,4 @@
+import 'package:ella/app/modules/password/interfaces/local_storage.dart';
 import 'package:ella/app/modules/password/models/password_store.dart';
 import 'package:ella/app/modules/password/password_controller.dart';
 import 'package:mobx/mobx.dart';
@@ -10,9 +11,17 @@ class CreateController = _CreateControllerBase with _$CreateController;
 
 abstract class _CreateControllerBase with Store {
   
+  final ILocalStorage _storage = Modular.get();
   final PasswordController password;
 
-  _CreateControllerBase(this.password);
+  _CreateControllerBase(this.password){
+    _init();
+  }
+
+  _init() async {
+    int id = await _storage.getNextKey();
+    setIdNewPassword(id);
+  }
 
   @observable
   PasswordStore newPassword;
@@ -59,14 +68,19 @@ abstract class _CreateControllerBase with Store {
   @action
   Future createPassword(PasswordStore pass) async {
     PasswordStore newPass = PasswordStore().fromJson(pass.toJson());
+    newPass.setSelected(false);
+    newPass.setVisible(false);
+
     password.passwords.insert(0, newPass);
-    // await _storage.put(newPass.id, newPass.toJson());
+    await _storage.putPassword(newPass.id, newPass.toJson());
   }
 
   @action
   Future updatePassword(PasswordStore pass) async {
     PasswordStore newPass = PasswordStore().fromJson(pass.toJson());
-
+    newPass.setSelected(false);
+    newPass.setVisible(false);
+    
     for (var i = 0; i < password.passwords.length; i++) {
       if (password.passwords[i].id == newPass.id) {
         password.passwords[i] = newPass;
@@ -74,7 +88,7 @@ abstract class _CreateControllerBase with Store {
     }
 
     // adiciona no banco
-    // _storage.putFixedExpense(int.parse(newPass.id), newPass.toJson());
+    _storage.putPassword(newPass.id, newPass.toJson());
   }
 
   bool validateNewPassword(){

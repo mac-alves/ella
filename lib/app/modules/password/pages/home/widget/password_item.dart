@@ -53,7 +53,8 @@ class _PasswordItemState extends State<PasswordItem> {
           child: Row(
             children: [
               Container(
-                width: getPropScreenWidth(65),
+                alignment: Alignment.center,
+                width: getPropScreenWidth(75),
                 height: 76,
                 child: Observer(
                   builder: (_){
@@ -67,7 +68,9 @@ class _PasswordItemState extends State<PasswordItem> {
                         borderRadius: BorderRadius.circular(10)
                       ),
                       child: Icon(
-                        !widget.password.visible ? Icons.visibility_off : Icons.visibility,
+                        widget.password.visible 
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                         color: Colors.white,
                         size: 33,
                       ),
@@ -124,7 +127,7 @@ class _PasswordItemState extends State<PasswordItem> {
                                       child: SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Text(
-                                          !widget.password.visible 
+                                          widget.password.visible 
                                             ? widget.password.password
                                             : '**********',
                                           style: TextStyle(

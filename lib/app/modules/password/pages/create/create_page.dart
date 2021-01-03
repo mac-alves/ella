@@ -31,7 +31,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
     super.initState();
     controller.setNewPassword(
       new PasswordStore(
-        id: null, title: null, password: null, selected: false
+        id: null, title: null, password: null, selected: false, visible: false
       )
     );
 
@@ -113,9 +113,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                           InputText(
                             label: 'Nome',
                             placeholder: 'Nome do gasto',
-                            change: (value){
-                              controller.newPassword.setTitle(value);
-                            },
+                            change: controller.newPassword.setTitle,
                             msgError: controller.msgErroTitle,
                             value: controller.newPassword.title,
                             error: controller.erroTitle,
@@ -123,9 +121,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                           SecureInput(
                             label: 'Senha',
                             placeholder: 'Digite a senha',
-                            change: (value){
-                              controller.newPassword.setPassword(value);
-                            },
+                            change: controller.newPassword.setPassword,
                             msgError: controller.msgErroPassword,
                             value: controller.newPassword.password,
                             error: controller.erroPassword,

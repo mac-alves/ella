@@ -51,6 +51,15 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$deletePasswordsSelectedsAsyncAction =
+      AsyncAction('_HomeControllerBase.deletePasswordsSelecteds');
+
+  @override
+  Future<dynamic> deletePasswordsSelecteds() {
+    return _$deletePasswordsSelectedsAsyncAction
+        .run(() => super.deletePasswordsSelecteds());
+  }
+
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
 
@@ -82,17 +91,6 @@ mixin _$HomeController on _HomeControllerBase, Store {
         name: '_HomeControllerBase.removeToDelete');
     try {
       return super.removeToDelete(idPass);
-    } finally {
-      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic deletePasswordsSelecteds() {
-    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
-        name: '_HomeControllerBase.deletePasswordsSelecteds');
-    try {
-      return super.deletePasswordsSelecteds();
     } finally {
       _$_HomeControllerBaseActionController.endAction(_$actionInfo);
     }

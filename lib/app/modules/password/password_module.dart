@@ -1,3 +1,5 @@
+import 'services/local_storage_hive_service.dart';
+import 'repositories/local_storage/hive/hive_repository.dart';
 import 'models/password_store.dart';
 import 'package:ella/app/modules/password/password_routes.dart';
 
@@ -14,6 +16,8 @@ class PasswordModule extends ChildModule {
         $LoginController,
         Bind((i) => HomeController(i.get())),
         Bind((i) => CreateController(i.get())),
+        Bind((i) => HiveRepository()),
+        Bind((i) => LocalStorageHiveService(i.get())),
         $PasswordController,
       ];
 

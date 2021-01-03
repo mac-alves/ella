@@ -11,7 +11,12 @@ $ flutter install
 
 
 # falta
+- app password
+    - ajeitar o espaçamento do botão de visualização, do
 
+    - criar sistema de autenticação com a api do gerenciador do app money na vercel
+        pagina login ja criada, criar a register
+    - verificar a viabilidade de adicionar o campo de username para as senhas
 
 # melhorias
 - na opção de deletar na home fazer um select para selecinar qual deseja deletar

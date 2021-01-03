@@ -35,7 +35,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverAppBar(
                 leading: Container(),
                 backgroundColor: themeColors.primary,
-                expandedHeight: getPropScreenWidth(220),
+                expandedHeight: getPropScreenWidth(225),
                 flexibleSpace: LayoutBuilder(
                   builder: (context, bc) {
                     // double size = min(bc.constrainHeight(), 120);
@@ -68,17 +68,17 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       },
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.logout,
-                      color: themeColors.passwordColor,
-                      size: 25,
-                    ),
-                    tooltip: 'Sair',
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    }
-                  )
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.logout,
+                  //     color: themeColors.passwordColor,
+                  //     size: 25,
+                  //   ),
+                  //   tooltip: 'Sair',
+                  //   onPressed: () {
+                  //     Navigator.of(context).pop(false);
+                  //   }
+                  // )
                 ]
               );
             }

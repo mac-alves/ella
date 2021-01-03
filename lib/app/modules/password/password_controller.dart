@@ -11,29 +11,7 @@ class PasswordController = _PasswordControllerBase with _$PasswordController;
 abstract class _PasswordControllerBase with Store {
   
   @observable
-  ObservableList<PasswordStore> passwords = <PasswordStore>[
-    new PasswordStore(
-      id: 23,
-      title: 'Netflix',
-      password: '45vgweregi84i8vnrasdasds_sadasdasdsaasdgsdasdswwdasd',
-      selected: false,
-      visible: false,
-    ),
-    new PasswordStore(
-      id: 33,
-      title: 'Amazon Prime',
-      password: '45vgweregi84i8vnr',
-      selected: false,
-      visible: false,
-    ),
-    new PasswordStore(
-      id: 43,
-      title: 'Serasa',
-      password: '45vgweregi84i8vnr',
-      selected: false,
-      visible: false,
-    ),
-  ].asObservable();
+  ObservableList<PasswordStore> passwords = <PasswordStore>[].asObservable();
 
   @observable
   String passwordLogin;
