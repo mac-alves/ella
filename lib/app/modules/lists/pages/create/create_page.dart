@@ -25,7 +25,14 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
   @override
   void initState() {
     super.initState();
-    controller.setNewMyList(new MyListStore(id: null, name: null, concluded: false));
+    controller.setNewMyList(
+      new MyListStore(
+        id: null, 
+        name: null, 
+        concluded: false,
+        selected: false
+      )
+    );
 
     if (widget.id != null) {
       controller.setNewMyList(controller.lists.getList(widget.id));

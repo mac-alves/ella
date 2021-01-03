@@ -1,15 +1,21 @@
+import 'package:ella/app/modules/password/models/password_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/input_text.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:ella/app/shared/widgets/secure_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'create_controller.dart';
 
 class CreatePage extends StatefulWidget {
-  final String title;
-  const CreatePage({Key key, this.title = "Create"}) : super(key: key);
+  
+  final int id;
+
+  const CreatePage({Key key, this.id}) : super(key: key);
 
   @override
   _CreatePageState createState() => _CreatePageState();
@@ -18,8 +24,39 @@ class CreatePage extends StatefulWidget {
 class _CreatePageState extends ModularState<CreatePage, CreateController> {
   //use 'controller' variable to access controller
 
+  ReactionDisposer whenDispose;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.setNewPassword(
+      new PasswordStore(
+        id: null, title: null, password: null, selected: false
+      )
+    );
+
+    if (widget.id != null) {
+      controller.setNewPassword(controller.password.getPassword(widget.id));
+    } else {
+      whenDispose = when(
+        (r) => controller.idNewPassword != null, 
+        () => controller.newPassword.setId(controller.idNewPassword)
+      );
+    }
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+    if (whenDispose != null) {
+      whenDispose();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -46,6 +83,19 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                     color: themeColors.passwordColor,
                   ), 
                   onPressed: () {
+                    if (controller.validateNewPassword()) {
+                      String message = 'Senha criada com sucesso.';
+
+                      if (widget.id == null) {
+                        controller.createPassword(controller.newPassword);
+                      } else {
+                        controller.updatePassword(controller.newPassword);
+                        message = 'Senha atualizada com sucesso.';
+                      }
+
+                      SnackMesage(context).show('$message');
+                      Navigator.of(context).pop();
+                    }
                   },
                 )
               ],
@@ -64,19 +114,21 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                             label: 'Nome',
                             placeholder: 'Nome do gasto',
                             change: (value){
-                              // controller.newSpent.setTitle(value);
+                              controller.newPassword.setTitle(value);
                             },
-                            msgError: 'controller.msgErroName',
-                            value: '',
-                            error: false,
+                            msgError: controller.msgErroTitle,
+                            value: controller.newPassword.title,
+                            error: controller.erroTitle,
                           ),
                           SecureInput(
-                            placeholder: 'Digite a senha',
                             label: 'Senha',
-                            change: (value){},
-                            msgError: 'controller.msgErroPassword',
-                            value: '',
-                            error: false,
+                            placeholder: 'Digite a senha',
+                            change: (value){
+                              controller.newPassword.setPassword(value);
+                            },
+                            msgError: controller.msgErroPassword,
+                            value: controller.newPassword.password,
+                            error: controller.erroPassword,
                           ),
                         ],
                       );

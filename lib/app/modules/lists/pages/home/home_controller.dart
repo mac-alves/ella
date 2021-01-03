@@ -14,6 +14,9 @@ abstract class _HomeControllerBase with Store {
   final ILocalStorage _storage = Modular.get();
   final ListsController lists;
 
+  @observable
+  ObservableList<int> listListsToDelete = <int>[].asObservable();
+
   _HomeControllerBase(this.lists) {
     _init();
   }
@@ -28,8 +31,41 @@ abstract class _HomeControllerBase with Store {
     }
   }
 
-  Future deleteAllLists() async {
-    lists.myLists.clear();
-    await _storage.deleteAll(); 
+  @observable
+  bool isDelete = false;
+
+  @action
+  void setIsDelete(bool value) => isDelete = value;
+
+  @action
+  void selectToDelete(int idPass) {
+    if (!listListsToDelete.contains(idPass)) {
+      listListsToDelete.add(idPass);
+      setIsDelete(true);
+    }
+  }
+
+  @action
+  void removeToDelete(int idPass) {
+    listListsToDelete.remove(idPass);
+
+    if (listListsToDelete.length == 0) {
+      setIsDelete(false);
+    }
+  }
+
+  /// 
+  /// Deleta os gastos
+  /// 
+  @action
+  Future deleteListsSelecteds() async {    
+    lists.myLists = lists.myLists.where((pass) {
+      return !listListsToDelete.contains(pass.id);
+    }).toList().asObservable();
+
+    await _storage.delete(listListsToDelete.join(','));
+
+    listListsToDelete = <int>[].asObservable();
+    setIsDelete(false);
   }
 }

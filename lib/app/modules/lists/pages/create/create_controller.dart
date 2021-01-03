@@ -59,7 +59,6 @@ abstract class _CreateControllerBase with Store {
 
   @action
   Future addList(MyListStore list) async {
-    print(list.id);
     lists.myLists.insert(0, list);
     await _storage.put(list.id, list.toJson());
   }

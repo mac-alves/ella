@@ -11,6 +11,7 @@ final $MyListStore = BindInject(
       id: i<int>(),
       name: i<String>(),
       concluded: i<bool>(),
+      selected: i<bool>(),
       items: i<List<MyListItemStore>>()),
   singleton: true,
   lazy: true,
@@ -68,6 +69,21 @@ mixin _$MyListStore on _MyListStoreBase, Store {
     });
   }
 
+  final _$selectedAtom = Atom(name: '_MyListStoreBase.selected');
+
+  @override
+  bool get selected {
+    _$selectedAtom.reportRead();
+    return super.selected;
+  }
+
+  @override
+  set selected(bool value) {
+    _$selectedAtom.reportWrite(value, super.selected, () {
+      super.selected = value;
+    });
+  }
+
   final _$itemsAtom = Atom(name: '_MyListStoreBase.items');
 
   @override
@@ -120,11 +136,23 @@ mixin _$MyListStore on _MyListStoreBase, Store {
   }
 
   @override
+  dynamic setSelected(bool value) {
+    final _$actionInfo = _$_MyListStoreBaseActionController.startAction(
+        name: '_MyListStoreBase.setSelected');
+    try {
+      return super.setSelected(value);
+    } finally {
+      _$_MyListStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},
 name: ${name},
 concluded: ${concluded},
+selected: ${selected},
 items: ${items}
     ''';
   }

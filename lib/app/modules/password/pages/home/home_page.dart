@@ -1,4 +1,6 @@
+import 'package:ella/app/modules/password/models/password_store.dart';
 import 'package:ella/app/modules/password/pages/home/widget/flex_app_bar.dart';
+import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
@@ -28,43 +30,58 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       backgroundColor: themeColors.primary,
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            leading: Container(),
-            backgroundColor: themeColors.primary,
-            expandedHeight: getPropScreenWidth(220),
-            flexibleSpace: LayoutBuilder(
-              builder: (context, bc) {
-                // double size = min(bc.constrainHeight(), 120);
-                return FlexibleSpaceBar(
-                  background: FlexAppbar(),
-                );
-              },
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.logout,
-                  color: themeColors.passwordColor,
-                  size: 25,
+          Observer(
+            builder: (_){
+              return SliverAppBar(
+                leading: Container(),
+                backgroundColor: themeColors.primary,
+                expandedHeight: getPropScreenWidth(220),
+                flexibleSpace: LayoutBuilder(
+                  builder: (context, bc) {
+                    // double size = min(bc.constrainHeight(), 120);
+                    return FlexibleSpaceBar(
+                      background: FlexAppbar(),
+                    );
+                  },
                 ),
-                tooltip: 'Sair',
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                  // AlertDialogConfirm(
-                  //   context: context,
-                  //   title: 'Atenção!',
-                  //   description: 'Deseja deletar todas as listas ?',
-                  //   onPressNot: () {
-                  //     Navigator.of(context, rootNavigator: true).pop();
-                  //   },
-                  //   onPressYes: () {
-                  //     controller.deleteAllLists();
-                  //     Navigator.of(context, rootNavigator: true).pop();
-                  //   } 
-                  // ).show();
-                }
-              )
-            ]
+                actions: <Widget>[
+                  Visibility(
+                    visible: controller.isDelete,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: themeColors.passwordColor,
+                      ), 
+                      onPressed: () {
+                        AlertDialogConfirm(
+                          context: context,
+                          title: 'Atenção!',
+                          description: 'Deseja deletar as senhas selecionadas ?',
+                          onPressNot: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          onPressYes: () {
+                            controller.deletePasswordsSelecteds();
+                            Navigator.of(context, rootNavigator: true).pop();
+                          } 
+                        ).show();
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.logout,
+                      color: themeColors.passwordColor,
+                      size: 25,
+                    ),
+                    tooltip: 'Sair',
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    }
+                  )
+                ]
+              );
+            }
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -81,10 +98,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
+                    PasswordStore pass = controller.password.passwords[index];
 
-                    return PasswordItem();
+                    return PasswordItem(
+                      password: pass,
+                    );
                   },
-                  childCount: 3
+                  childCount: controller.password.passwords.length
                 ),
               );
             }

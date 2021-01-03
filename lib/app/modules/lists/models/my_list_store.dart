@@ -12,8 +12,15 @@ class MyListStore extends _MyListStoreBase with _$MyListStore {
     int id,
     String name,
     bool concluded,
+    bool selected,
     List<MyListItemStore> items: const []}
-  ) : super(id: id, name: name, concluded: concluded, items: items);
+  ) : super(
+    id: id, 
+    name: name, 
+    concluded: concluded, 
+    items: items,
+    selected: selected
+  );
 
   MyListStore fromJson(Map<String, dynamic> json) {
     ObservableList<MyListItemStore> items = <MyListItemStore>[].asObservable();
@@ -28,6 +35,7 @@ class MyListStore extends _MyListStoreBase with _$MyListStore {
       id: json['id'],
       name: json['name'],
       concluded: json['concluded'],
+      selected: json['selected'],
       items: items
     );
   }
@@ -37,9 +45,12 @@ class MyListStore extends _MyListStoreBase with _$MyListStore {
     data['id'] = this.id;
     data['name'] = this.name;
     data['concluded'] = this.concluded;
+    data['selected'] = this.selected;
+    
     if (this.items != null) {
       data['items'] = this.items.map((v) => v.toJson()).toList();
     }
+
     return data;
   }
 }
@@ -56,12 +67,16 @@ abstract class _MyListStoreBase with Store {
   bool concluded;
 
   @observable
+  bool selected;
+
+  @observable
   ObservableList<MyListItemStore> items = <MyListItemStore>[].asObservable();
 
   _MyListStoreBase({
     this.id,
     this.name,
     this.concluded = false,
+    this.selected = false,
     List<MyListItemStore> items
   }) {
     this.items = items.asObservable() ?? <MyListItemStore>[].asObservable();
@@ -77,4 +92,7 @@ abstract class _MyListStoreBase with Store {
   setConcluded() {
     concluded = items.every((element) => element.checked);
   }
+
+  @action
+  setSelected(bool value) => selected = value;
 }

@@ -27,6 +27,6 @@ abstract class _ReadControllerBase with Store {
   @action
   Future removeList(MyListStore item) async {
     lists.myLists.removeWhere((element) => element.id == item.id);
-    await storage.delete(item.id);
+    await storage.delete(item.id.toString());
   }
 }

@@ -17,6 +17,9 @@ abstract class _ListsControllerBase with Store {
 
   @action
   MyListStore getList(int id){
-    return myLists.firstWhere((element) => element.id == id);
+    return myLists.firstWhere(
+      (element) => element.id == id,
+      orElse: () => null
+    );
   }
 }

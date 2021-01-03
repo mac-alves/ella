@@ -1,11 +1,22 @@
+import 'package:ella/app/modules/password/models/password_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../../password_routes.dart';
+import '../home_controller.dart';
 
 class PasswordItem extends StatefulWidget {
 
+  final PasswordStore password;
+
   const PasswordItem({
     Key key,
+    @required this.password,
   }) : super(key: key);
 
   @override
@@ -14,16 +25,7 @@ class PasswordItem extends StatefulWidget {
 
 class _PasswordItemState extends State<PasswordItem> {
 
-  TextEditingController textController;
-
-  bool secure = true;
-
-  @override
-  void initState() {
-    super.initState();
-    textController = TextEditingController();
-    textController.text = 'qweweqwewqsdsa';
-  }
+  HomeController controller = Modular.get<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,92 +55,135 @@ class _PasswordItemState extends State<PasswordItem> {
               Container(
                 width: getPropScreenWidth(65),
                 height: 76,
-                child: FlatButton(
-                  onPressed: (){
-                    setState((){
-                      secure = !secure;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Icon(
-                    !secure ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.white,
-                    size: 33,
-                  ),
+                child: Observer(
+                  builder: (_){
+                    return FlatButton(
+                      onPressed: (){
+                        widget.password.setVisible(
+                          !widget.password.visible
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Icon(
+                        !widget.password.visible ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.white,
+                        size: 33,
+                      ),
+                    );
+                  }
                 ),
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: themeColors.tertiary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    right: 10
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Netflix',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: themeColors.textPrimary
-                            )
-                          ),
-                          SizedBox(height: 5,),
-                          Container(
-                            height: 20,
-                            child: TextField(
-                              enabled: false,
-                              controller: textController,
-                              obscureText: secure,
-                              onChanged: (value) {},
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: themeColors.textSecondary,
-                              ),
-                            ),
-                          ),
-                        ],
+                child: Observer(
+                  builder: (_){
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: themeColors.tertiary,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: widget.password.selected 
+                            ? themeColors.passwordColor
+                            : themeColors.tertiary
+                        ),
                       ),
-                      Positioned(
-                        right: -15,
-                        child: PopupMenuButton<String>(
-                          captureInheritedThemes: true,
-                          color: themeColors.secondary,
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: themeColors.passwordColor,
-                          ),
-                          onSelected: (String item) {},
-                          itemBuilder: (BuildContext context) {
-                            return ['Editar', 'Copiar'].map((String choice){
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(
-                                  choice,
+                      child: FlatButton(
+                        padding: EdgeInsets.only(
+                          left: 15,
+                          right: 15
+                        ),
+                        onPressed: (){
+                          controller.removeToDelete(widget.password.id);
+                          widget.password.setSelected(false);
+                        },
+                        onLongPress: (){
+                          controller.selectToDelete(widget.password.id);
+                          widget.password.setSelected(true);
+                        },
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.password.title,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
+                                    fontSize: 20,
                                     color: themeColors.textPrimary
                                   )
                                 ),
-                              );
-                            }).toList();
-                          }
+                                SizedBox(height: 5,),
+                                Observer(
+                                  builder: (_){
+                                    return Container(
+                                      height: 25,
+                                      width: double.infinity,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          !widget.password.visible 
+                                            ? widget.password.password
+                                            : '**********',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: themeColors.textSecondary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                ),
+                              ],
+                            ),
+                            Positioned(
+                              right: -15,
+                              child: PopupMenuButton<String>(
+                                captureInheritedThemes: true,
+                                color: themeColors.secondary,
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: themeColors.passwordColor,
+                                ),
+                                onSelected: (String item) {
+                                  if (item == 'Editar') {
+                                    Navigator.of(context).pushNamed(
+                                      '$PASSWORD_CREATE/${widget.password.id}'
+                                    );
+                                  }
+
+                                  if (item == 'Copiar') {
+                                    Clipboard.setData(
+                                      new ClipboardData(
+                                        text: widget.password.password
+                                      )
+                                    );
+                                    
+                                    SnackMesage(context).show('Senha copiada.');
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) {
+                                  return ['Editar', 'Copiar'].map((String choice){
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(
+                                        choice,
+                                        style: TextStyle(
+                                          color: themeColors.textPrimary
+                                        )
+                                      ),
+                                    );
+                                  }).toList();
+                                }
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    );
+                  }
                 ),
               ),
             ],

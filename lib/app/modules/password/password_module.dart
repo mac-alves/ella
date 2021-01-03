@@ -1,3 +1,4 @@
+import 'models/password_store.dart';
 import 'package:ella/app/modules/password/password_routes.dart';
 
 import 'pages/home/home_controller.dart';
@@ -9,9 +10,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 class PasswordModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        $HomeController,
+        $PasswordStore,
         $LoginController,
-        $CreateController,
+        Bind((i) => HomeController(i.get())),
+        Bind((i) => CreateController(i.get())),
         $PasswordController,
       ];
 

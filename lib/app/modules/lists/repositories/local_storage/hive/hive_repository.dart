@@ -78,16 +78,20 @@ class HiveRepository extends Disposable {
     putLastKey(key);
   }
 
-  Future deleteAll() async {
-    var box = await _boxLists.future;
-    var boxIds = await _boxIds.future;
-    box.clear();
-    boxIds.clear();
-  }
+  Future delete(String keys) async {
 
-  Future delete(int key) async {
+    List<int> arrKeys = keys.split(',').map((key) => int.parse(key)).toList();
+
+    if (arrKeys.length == 0) {
+      return null;
+    }
+
     var box = await _boxLists.future;
-    box.delete('list_$key');
+
+    for (var i = 0; i <= arrKeys.length - 1; i++) {
+      int key = arrKeys[i];
+      box.delete('list_$key');
+    }
   }
 
   Future<int> getLastKey() async {

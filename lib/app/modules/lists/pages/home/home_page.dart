@@ -45,26 +45,32 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               },
             ),
             actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  color: themeColors.listsColor,
-                  size: 25,
-                ),
-                tooltip: 'Delete All Lists',
-                onPressed: () {
-                  AlertDialogConfirm(
-                    context: context,
-                    title: 'Atenção!',
-                    description: 'Deseja deletar todas as listas ?',
-                    onPressNot: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                    onPressYes: () {
-                      controller.deleteAllLists();
-                      Navigator.of(context, rootNavigator: true).pop();
-                    } 
-                  ).show();
+              Observer(
+                builder: (_){
+                  return Visibility(
+                    visible: controller.isDelete,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: themeColors.listsColor,
+                      ), 
+                      tooltip: 'Delete Listas selecionadas',
+                      onPressed: () {
+                        AlertDialogConfirm(
+                          context: context,
+                          title: 'Atenção!',
+                          description: 'Deseja deletar as listas selecionadas ?',
+                          onPressNot: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          onPressYes: () {
+                            controller.deleteListsSelecteds();
+                            Navigator.of(context, rootNavigator: true).pop();
+                          } 
+                        ).show();
+                      },
+                    ),
+                  );
                 }
               )
             ]

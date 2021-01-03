@@ -23,5 +23,7 @@ $ flutter install
 - verifiar se cria um modulo novo ou se incrementa em algum a opção de:
     - criar modulo compras
         (orçamento de compra: collocar o nome, valor e quantidade e mostrar o resutado de quanto ta dando)
+
 # app listas
-    - fazer opção de itens opcionais
+    - fazer lista enumeradas
+

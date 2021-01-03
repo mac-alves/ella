@@ -1,11 +1,13 @@
 import 'package:ella/app/modules/lists/lists_routes.dart';
 import 'package:ella/app/modules/lists/models/my_list_store.dart';
+import 'package:ella/app/modules/lists/pages/home/home_controller.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-class ItemList extends StatelessWidget {
+class ItemList extends StatefulWidget {
 
   final MyListStore list;
 
@@ -13,6 +15,14 @@ class ItemList extends StatelessWidget {
     Key key,
     @required this.list,
   }) : super(key: key);
+
+  @override
+  _ItemListState createState() => _ItemListState();
+}
+
+class _ItemListState extends State<ItemList> {
+
+  HomeController controller = Modular.get<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +39,12 @@ class ItemList extends StatelessWidget {
               width: double.infinity,
               height: 56,
               decoration: BoxDecoration(
-                color: list.concluded ? themeColors.tertiary : Colors.transparent,
+                color: widget.list.concluded ? themeColors.tertiary : Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: themeColors.tertiary
+                  color: !widget.list.selected 
+                    ? themeColors.tertiary
+                    : themeColors.listsColor
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -43,8 +55,17 @@ class ItemList extends StatelessWidget {
                 ],
               ),
               child: FlatButton(
+                onLongPress: (){
+                  controller.selectToDelete(widget.list.id);
+                  widget.list.setSelected(true);
+                },
                 onPressed: () {
-                  Navigator.of(context).pushNamed('$LISTS_READ/${list.id}');
+                  if (!widget.list.selected){
+                    Navigator.of(context).pushNamed('$LISTS_READ/${widget.list.id}');
+                  } else {
+                    controller.removeToDelete(widget.list.id);
+                    widget.list.setSelected(false);
+                  }
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
@@ -52,7 +73,7 @@ class ItemList extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      list.concluded ? Icons.check_circle : Icons.data_usage,
+                      widget.list.concluded ? Icons.check_circle : Icons.data_usage,
                       color: themeColors.listsColor,
                       size: 30,
                     ),
@@ -63,7 +84,7 @@ class ItemList extends StatelessWidget {
                           right: 10
                         ),
                         child: Text(
-                          list.name,
+                          widget.list.name,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,

@@ -4,7 +4,6 @@ abstract class ILocalStorage {
   Future<List<MyListStore>> getAll();
   Future<MyListStore> get(int idList);
   Future put(int key, Map<String, dynamic> value);
-  Future deleteAll();
-  Future delete(int key);
+  Future delete(String keys);
   Future<int> getNextKey();
 }

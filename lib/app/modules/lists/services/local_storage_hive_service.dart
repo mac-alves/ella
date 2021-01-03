@@ -33,13 +33,8 @@ class LocalStorageHiveService extends Disposable implements ILocalStorage {
   }
 
   @override
-  Future deleteAll() async {
-    await hiveRepo.deleteAll();
-  }
-
-  @override
-  Future delete(int key) async {
-    await hiveRepo.delete(key);
+  Future delete(String keys) async {
+    await hiveRepo.delete(keys);
   }
 
   @override

@@ -83,8 +83,9 @@ class _SecureInputState extends State<SecureInput> {
               )
             ),
             child: TextField(
+              controller: controller,
               obscureText: secure,
-              onChanged: (value) {},
+              onChanged: widget.change,
               decoration: InputDecoration(
                 prefixIcon: widget.prefixIcon ? Icon(
                   Icons.lock_outline,
@@ -109,12 +110,25 @@ class _SecureInputState extends State<SecureInput> {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 18
+                  vertical: 16
                 )
               ),
               style: TextStyle(
                 fontSize: 14,
                 color: themeColors.textSecondary,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              left: 5,
+            ),
+            alignment: Alignment.centerLeft,
+            child: !widget.error ? null : Text(
+              widget.msgError,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red[600]
               ),
             ),
           ),
