@@ -30,6 +30,11 @@ double getPropScreenWidth(double inputWidth) {
   return (inputWidth / 440.0) * screenWidth;
 }
 
+// android 
+double getHeightStatusAppBar(BuildContext context) {
+  return AppBar().preferredSize.height + MediaQuery.of(context).padding.top;
+}
+
 // For add free space vertically
 class VerticalSpacing extends StatelessWidget {
   const VerticalSpacing({

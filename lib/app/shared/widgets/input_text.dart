@@ -14,7 +14,7 @@ class InputText extends StatefulWidget {
 
   const InputText({
     Key key, 
-    @required this.label, 
+    this.label, 
     @required this.change, 
     @required this.placeholder,
     @required this.msgError,
@@ -62,13 +62,13 @@ class _InputTextState extends State<InputText> {
               bottom: 3
             ),
             alignment: Alignment.centerLeft,
-            child: Text(
+            child: widget.label != null ? Text(
               widget.label,
               style: TextStyle(
                 fontSize: 14,
-                color: themeColors.textSecondary,
+                color: themeColors.textSecondary
               ),
-            ),
+            ) : null,
           ),
           Container(
             height: 56,

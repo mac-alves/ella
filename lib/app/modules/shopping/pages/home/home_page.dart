@@ -1,6 +1,4 @@
-import 'package:ella/app/modules/lists/lists_routes.dart';
-import 'package:ella/app/modules/lists/pages/home/widgets/flex_app_bar.dart';
-import 'package:ella/app/modules/lists/pages/home/widgets/item_list.dart';
+import 'package:ella/app/modules/shopping/pages/home/widget/flex_app_bar.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
@@ -8,7 +6,9 @@ import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import '../../shopping_routes.dart';
 import 'home_controller.dart';
+import 'widget/shopping_item.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -21,10 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends ModularState<HomePage, HomeController> {
   //use 'controller' variable to access controller
 
-  // altera a barra de navegação do systema, mas não pegou no meu
-  // SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.light
-  //   .copyWith(systemNavigationBarColor: themeColors.secondary);
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -33,53 +29,53 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       backgroundColor: themeColors.primary,
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: themeColors.primary,
-            expandedHeight: getPropScreenWidth(250),
-            flexibleSpace: LayoutBuilder(
-              builder: (context, bc) {
-                // double size = min(bc.constrainHeight(), 120);
-                return FlexibleSpaceBar(
-                  background: FlexAppbar(),
-                );
-              },
-            ),
-            actions: <Widget>[
-              Observer(
-                builder: (_){
-                  return Visibility(
+          Observer(
+            builder: (_){
+              return SliverAppBar(
+                leading: Container(),
+                backgroundColor: themeColors.primary,
+                expandedHeight: getPropScreenWidth(225),
+                flexibleSpace: LayoutBuilder(
+                  builder: (context, bc) {
+                    // double size = min(bc.constrainHeight(), 120);
+                    return FlexibleSpaceBar(
+                      background: FlexAppbar(),
+                    );
+                  },
+                ),
+                actions: <Widget>[
+                  Visibility(
                     visible: controller.isDelete,
                     child: IconButton(
                       icon: Icon(
                         Icons.delete,
-                        color: themeColors.listsColor,
+                        color: themeColors.passwordColor,
                       ), 
-                      tooltip: 'Delete Listas selecionadas',
                       onPressed: () {
                         AlertDialogConfirm(
                           context: context,
                           title: 'Atenção!',
-                          description: 'Deseja deletar as listas selecionadas ?',
+                          description: 'Deseja deletar as compras selecionadas ?',
                           onPressNot: () {
                             Navigator.of(context, rootNavigator: true).pop();
                           },
                           onPressYes: () {
-                            controller.deleteListsSelecteds();
+                            controller.deletePasswordsSelecteds();
                             Navigator.of(context, rootNavigator: true).pop();
                           } 
                         ).show();
                       },
                     ),
-                  );
-                }
-              )
-            ]
+                  ),
+                ]
+              );
+            }
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return SectionTitle(
-                  title: 'Suas Listas',
+                  title: 'Suas Compras',
                 );
               },
               childCount: 1,
@@ -90,34 +86,31 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    var list = controller.lists.myLists[index];
 
-                    return ItemList(
-                      list: list,
-                    );
+                    return ShoppingItem();
                   },
-                  childCount: controller.lists.myLists.length
+                  childCount: 1
                 ),
               );
             }
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(
-              vertical: 40.0
+              vertical: 47.0
             ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, LISTS_CREATE);
+          Navigator.pushNamed(context, SHOPPING_CREATE);
         },
         child: Icon(
           Icons.add,
           size: 28,
           color: themeColors.primary,
         ),
-        backgroundColor: themeColors.listsColor,
+        backgroundColor: themeColors.shoppingColor,
       ),
     );
   }

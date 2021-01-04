@@ -9,6 +9,7 @@ class ThemeColors {
   final listsColor = Color(0xFFFF9B42);
   final moneyColor = Color(0xFF07889B);
   final passwordColor = Color(0xFF3BB44B);
+  final shoppingColor = Color(0xFF9B5DE5);
 }
 
 ThemeColors themeColors = new ThemeColors(); 

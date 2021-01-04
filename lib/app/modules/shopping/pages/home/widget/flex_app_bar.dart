@@ -11,23 +11,24 @@ class FlexAppbar extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: getHeightStatusAppBar(context)
+            top: AppBar().preferredSize.height + 5
           ),
           child: Image.asset(
-            "assets/images/logo-lists.png",
+            "assets/images/logo-shopping.png",
             height: getPropScreenWidth(140),
             fit: BoxFit.cover
           ),
         ),
         Positioned(
-          bottom: 10,
+          bottom: 3,
           child: Text(
-            "Seu sistema de controle\ne armazenamento de listas rapidas",
-            textAlign: TextAlign.center,
+            'Shopping',
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: getPropScreenWidth(12),
-              color: themeColors.textSecondary,
-            ),
+              fontSize: 27,
+              color: themeColors.shoppingColor,
+              fontWeight: FontWeight.bold,
+            )
           ),
         ),
       ],

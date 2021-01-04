@@ -1,6 +1,7 @@
 import 'package:ella/app/modules/lists/lists_module.dart';
 import 'package:ella/app/modules/money/money_module.dart';
 import 'package:ella/app/modules/password/password_module.dart';
+import 'package:ella/app/modules/shopping/shopping_module.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class _StartPageState extends ModularState<StartPage, StartController> {
           ),
           RouterOutlet(
             module: PasswordModule(),
+          ),
+          RouterOutlet(
+            module: ShoppingModule(),
           ),
         ],
       ),
@@ -71,7 +75,12 @@ class _StartPageState extends ModularState<StartPage, StartController> {
                   backgroundColor: Colors.black
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.lock),
+                  icon: Icon(Icons.lock_outlined),
+                  label: '',
+                  backgroundColor: Colors.black
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart_outlined),
                   label: '',
                   backgroundColor: Colors.black
                 ),

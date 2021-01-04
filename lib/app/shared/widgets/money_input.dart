@@ -38,7 +38,8 @@ class _MoneyInputState extends State<MoneyInput> {
     controller = new MoneyMaskedTextController(
       decimalSeparator: '.',
       thousandSeparator: ',',
-      precision: 2
+      precision: 2,
+      // leftSymbol: 'R\$ ',
     );
 
     controller.text = widget.value;

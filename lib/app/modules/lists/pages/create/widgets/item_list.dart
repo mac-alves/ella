@@ -87,6 +87,6 @@ class _ItemListState extends State<ItemList> {
           ],
         ),
       ),
-);
+    );
   }
 }
