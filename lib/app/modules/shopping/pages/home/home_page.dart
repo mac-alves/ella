@@ -35,7 +35,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverAppBar(
                 leading: Container(),
                 backgroundColor: themeColors.primary,
-                expandedHeight: getPropScreenWidth(225),
+                expandedHeight: getPropScreenWidth(230),
                 flexibleSpace: LayoutBuilder(
                   builder: (context, bc) {
                     // double size = min(bc.constrainHeight(), 120);

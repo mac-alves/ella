@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ella/app/modules/shopping/interfaces/local_storage.dart';
 import 'package:ella/app/modules/shopping/models/shopping_item_store.dart';
 import 'package:ella/app/modules/shopping/models/shopping_store.dart';
 import 'package:mobx/mobx.dart';
@@ -14,10 +15,18 @@ class CreateController = _CreateControllerBase with _$CreateController;
 
 abstract class _CreateControllerBase with Store {
   
+  final ILocalStorage _storage = Modular.get();
   final ShoppingController shopping;
   Random random = new Random();
 
-  _CreateControllerBase(this.shopping);
+  _CreateControllerBase(this.shopping){
+    _init();
+  }
+
+  _init() async {
+    int id = await _storage.getNextKey();
+    setIdNewShopping(id);
+  }
 
   @observable
   ShoppingStore newShopping;
@@ -100,7 +109,7 @@ abstract class _CreateControllerBase with Store {
     ShoppingStore newShopp = prepareShoppingCreateOrUpdate(shopp);
 
     shopping.shoppings.insert(0, newShopp);
-    // await _storage.putPassword(newShopp.id, newShopp.toJson());
+    await _storage.putShopping(newShopp.id, newShopp.toJson());
   }
 
   @action
@@ -113,8 +122,8 @@ abstract class _CreateControllerBase with Store {
       }
     }
 
-    // adiciona no banco
-    // _storage.putPassword(newShopp.id, newShopp.toJson());
+    // atualiza no banco
+    _storage.putShopping(newShopp.id, newShopp.toJson());
   }
 
   ///

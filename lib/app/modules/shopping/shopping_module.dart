@@ -1,3 +1,5 @@
+import 'services/local_storage_hive_service.dart';
+import 'repositories/local_storage/hive/hive_repository.dart';
 import 'models/shopping_item_store.dart';
 import 'models/shopping_store.dart';
 import 'pages/create/create_controller.dart';
@@ -14,6 +16,8 @@ class ShoppingModule extends ChildModule {
         $ShoppingStore,
         Bind((i) => CreateController(i.get())),
         Bind((i) => HomeController(i.get())),
+        Bind((i) => HiveRepository()),
+        Bind((i) => LocalStorageHiveService(i.get())),
         $ShoppingController,
       ];
 

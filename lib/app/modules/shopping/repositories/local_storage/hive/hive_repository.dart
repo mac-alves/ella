@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ella/app/modules/password/models/password_store.dart';
+import 'package:ella/app/modules/shopping/models/shopping_store.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,11 +10,11 @@ part 'hive_repository.g.dart';
 
 @Injectable()
 class HiveRepository extends Disposable {
-
-  Completer<Box> _boxPasswords = Completer<Box>();
+  
+  Completer<Box> _boxShoppings = Completer<Box>();
   Completer<Box> _boxIds = Completer<Box>();
 
-  HiveRepository(){
+  HiveRepository() {
     _init();
   }
 
@@ -22,20 +22,20 @@ class HiveRepository extends Disposable {
     var dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
         
-    var openBoxPasswords = await Hive.openBox('db_passwords');
-    var openBoxIds = await Hive.openBox('passwords_next_id');
+    var openBoxShoppings = await Hive.openBox('db_shoppings');
+    var openBoxIds = await Hive.openBox('shoppings_next_id');
 
-    _boxPasswords.complete(openBoxPasswords);
+    _boxShoppings.complete(openBoxShoppings);
     _boxIds.complete(openBoxIds);
   }
-  
+
   @override
   void dispose() {
     Hive.close();
   }
 
-  Future<List<PasswordStore>> getAllPasswords() async {
-    var box = await _boxPasswords.future;
+  Future<List<ShoppingStore>> getAllShoppings() async {
+    var box = await _boxShoppings.future;
     
     if (box.values.isEmpty) {
       return null;
@@ -43,7 +43,7 @@ class HiveRepository extends Disposable {
 
     try {
       var lists = List.generate(box.values.toList().length, (i) {
-        return new PasswordStore().fromJson(jsonDecode(box.values.toList()[i]));
+        return new ShoppingStore().fromJson(jsonDecode(box.values.toList()[i]));
       });
 
       return List.from(lists.reversed);
@@ -54,16 +54,16 @@ class HiveRepository extends Disposable {
     return [];
   }
 
-  Future<PasswordStore> getPassword(int key) async {
-    var box = await _boxPasswords.future;
+  Future<ShoppingStore> getShopping(int key) async {
+    var box = await _boxShoppings.future;
 
-    if (box.get('pass_$key') == null) {
+    if (box.get('shopp_$key') == null) {
       return null;
     }
 
     try {
-      return PasswordStore().fromJson(
-        jsonDecode(box.get('pass_$key'))
+      return ShoppingStore().fromJson(
+        jsonDecode(box.get('shopp_$key'))
       );      
     } catch (e) {
       print(e);
@@ -72,9 +72,9 @@ class HiveRepository extends Disposable {
     return null;
   }
 
-  Future put(int key, Map<String, dynamic> value) async {
-    var box = await _boxPasswords.future;
-    box.put('pass_$key', jsonEncode(value));
+  Future putShopping(int key, Map<String, dynamic> value) async {
+    var box = await _boxShoppings.future;
+    box.put('shopp_$key', jsonEncode(value));
     putLastKey(key);
   }
 
@@ -86,11 +86,11 @@ class HiveRepository extends Disposable {
       return null;
     }
 
-    var box = await _boxPasswords.future;
+    var box = await _boxShoppings.future;
 
     for (var i = 0; i <= arrKeys.length - 1; i++) {
       int key = arrKeys[i];
-      box.delete('pass_$key');
+      box.delete('shopp_$key');
     }
   }
 
@@ -107,15 +107,5 @@ class HiveRepository extends Disposable {
   Future putLastKey(int key) async {
     var boxIds = await _boxIds.future;
     boxIds.put('last_key', key);
-  }
-
-  Future<String> getAllPasswordsToJson() async {
-    List<PasswordStore> passwords = await getAllPasswords();
-
-    Map<String, List<String>> json = {
-      'passwords': passwords.map((est) => jsonEncode(est.toJson())).toList()
-    };
-
-    return jsonEncode(json);
   }
 }

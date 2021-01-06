@@ -82,7 +82,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              right: SizeConfig.defaultPadding
+              right: SizeConfig.defaultPadding / 2
             ),
             child: Container(
               width: getPropScreenWidth(70) - SizeConfig.defaultPadding,
@@ -140,7 +140,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(
-                right: SizeConfig.defaultPadding
+                right: SizeConfig.defaultPadding / 2
               ),
               child: Observer(
                 builder: (_){

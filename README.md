@@ -11,9 +11,6 @@ $ flutter install
 
 
 # falta
-- app shopping
-    - fazer a logica de atualização do amount, atItems em tempo real
-
 - app password
     - criar sistema de autenticação com a api do gerenciador do app money na vercel
         pagina login ja criada, criar a register
@@ -24,11 +21,7 @@ $ flutter install
 - fazer uma mensagem caso selecione um mes que ja existe para orçamento de mesmo ano
 - tentar fazer a setagem de mes no date pick conforme seleciona o mes do orçamento
 
-
-# modulos
-- verifiar se cria um modulo novo ou se incrementa em algum a opção de:
-    - criar modulo compras
-        (orçamento de compra: collocar o nome, valor e quantidade e mostrar o resutado de quanto ta dando)
+- verifica a implementação da logica de apagar coisas do wpp nos apps
 
 # app listas
     - fazer lista enumeradas

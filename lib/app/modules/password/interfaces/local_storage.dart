@@ -6,4 +6,7 @@ abstract class ILocalStorage {
   Future putPassword(int key, Map<String, dynamic> value);
   Future delete(String keys);
   Future<int> getNextKey();
+
+  /// Data to local file
+  Future<String> getDataToLocalFile();
 }

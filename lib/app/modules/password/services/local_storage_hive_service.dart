@@ -41,4 +41,13 @@ class LocalStorageHiveService extends Disposable implements ILocalStorage{
     int id = await hiveRepo.getLastKey();
     return id + 2;
   }
+
+  ///
+  /// Save in local file -------------------
+  ///
+  
+  @override
+  Future<String> getDataToLocalFile() async {
+    return await hiveRepo.getAllPasswordsToJson();
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:ella/app/modules/shopping/interfaces/local_storage.dart';
+import 'package:ella/app/modules/shopping/models/shopping_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -10,9 +12,22 @@ class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   
+  final ILocalStorage _storage = Modular.get();
   final ShoppingController shopping;
 
-  _HomeControllerBase(this.shopping);
+  _HomeControllerBase(this.shopping){
+     _init();
+  }
+
+  _init() async {
+    var localShoppings = await _storage.getAllShoppings();
+
+    if (localShoppings == null) {
+      shopping.shoppings = <ShoppingStore>[].asObservable();
+    } else {
+      shopping.shoppings = localShoppings.asObservable();
+    }
+  }
 
   @observable
   ObservableList<int> listShoppingToDelete = <int>[].asObservable();
@@ -49,7 +64,7 @@ abstract class _HomeControllerBase with Store {
       return !listShoppingToDelete.contains(pass.id);
     }).toList().asObservable();
 
-    // await _storage.delete(listPasswordToDelete.join(','));
+    await _storage.delete(listShoppingToDelete.join(','));
 
     listShoppingToDelete = <int>[].asObservable();
     setIsDelete(false);

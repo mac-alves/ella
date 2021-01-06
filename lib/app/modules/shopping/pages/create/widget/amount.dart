@@ -30,7 +30,7 @@ class _AmountState extends State<Amount> {
             Padding(
               padding: EdgeInsets.only(
                 top: 30,
-                bottom: 30
+                bottom: 17
               ),
               child: Column(
                 children: [

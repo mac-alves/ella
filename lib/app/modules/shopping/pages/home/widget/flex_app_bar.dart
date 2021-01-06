@@ -20,7 +20,7 @@ class FlexAppbar extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 3,
+          bottom: 0,
           child: Text(
             'Shopping',
             overflow: TextOverflow.ellipsis,
