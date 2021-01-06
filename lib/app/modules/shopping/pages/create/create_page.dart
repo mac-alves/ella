@@ -86,7 +86,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                   ), 
                   onPressed: () {
                     if (controller.shoppingIsValid()) {
-                      String message = 'Compra criada com sucesso.';
+                      String message = 'Compra salva com sucesso.';
 
                       if (widget.id == null) {
                         controller.createShopping(controller.newShopping);

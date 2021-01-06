@@ -140,20 +140,6 @@ class _AmountState extends State<Amount> {
                   )
                 ),
               ),
-              // Spacer(),
-              // Observer(
-              //   builder: (_){
-              //     return Container(
-              //       child: !controller.erroItems ? null : Text(
-              //         controller.msgErroItems,
-              //         style: TextStyle(
-              //           fontSize: 12,
-              //           color: Colors.red[600]
-              //         ),
-              //       ),
-              //     );
-              //   }
-              // ),
             ],
           ),
         ),

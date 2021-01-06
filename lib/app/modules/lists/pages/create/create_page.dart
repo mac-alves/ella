@@ -1,10 +1,13 @@
+import 'package:ella/app/modules/lists/models/my_list_item_store.dart';
 import 'package:ella/app/modules/lists/models/my_list_store.dart';
-import 'package:ella/app/modules/lists/pages/create/widgets/body.dart';
+import 'package:ella/app/modules/lists/pages/create/widgets/header.dart';
+import 'package:ella/app/modules/lists/pages/create/widgets/item_list.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'create_controller.dart';
@@ -56,7 +59,11 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
         backgroundColor: themeColors.primary,
         body: CustomScrollView(
           slivers: <Widget>[
@@ -108,8 +115,38 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => Body(),
+                (context, index) => Header(),
                 childCount: 1,
+              ),
+            ),
+            Observer(
+              builder: (_){
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      MyListItemStore item = controller.newMyList.items[index];
+
+                      return Dismissible(
+                        key: Key(item.id.toString()),
+                        onDismissed: (direction) {
+                          controller.removeListItem(controller.newMyList, item);
+                        },
+                        child: ItemList(
+                          value: item.name,
+                          change: item.setName,
+                          press: () => 
+                            controller.removeListItem(controller.newMyList, item),
+                        ),
+                      );
+                    },
+                    childCount: controller.newMyList.items.length,
+                  ),
+                );
+              }
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                vertical: 40.0
               ),
             ),
           ]
@@ -125,6 +162,7 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
           ),
           backgroundColor: themeColors.listsColor,
         ),
-      );
+      ),
+    );
   }
 }
