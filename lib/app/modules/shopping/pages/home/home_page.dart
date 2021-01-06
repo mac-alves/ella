@@ -1,3 +1,4 @@
+import 'package:ella/app/modules/shopping/models/shopping_store.dart';
 import 'package:ella/app/modules/shopping/pages/home/widget/flex_app_bar.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
@@ -49,7 +50,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                     child: IconButton(
                       icon: Icon(
                         Icons.delete,
-                        color: themeColors.passwordColor,
+                        color: themeColors.shoppingColor,
                       ), 
                       onPressed: () {
                         AlertDialogConfirm(
@@ -86,10 +87,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-
-                    return ShoppingItem();
+                    ShoppingStore item = controller.shopping.shoppings[index];
+                    
+                    return ShoppingItem(
+                      shopping: item
+                    );
                   },
-                  childCount: 1
+                  childCount: controller.shopping.shoppings.length
                 ),
               );
             }

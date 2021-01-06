@@ -19,14 +19,14 @@ var routes = [
   ModularRouter(SHOPPING_CREATE, child: (_, args) => CreatePage()),
 
   /// 
-  /// Alteração de senha
+  /// Alteração de compra
   /// 
   /// :id -> id da senha
   /// 
-  // ModularRouter(
-  //   "$SHOPPING_CREATE/:id",
-  //   child: (_, args) => CreatePage(
-  //     id: int.parse(args.params['id'])
-  //   )
-  // ),
+  ModularRouter(
+    "$SHOPPING_CREATE/:id",
+    child: (_, args) => CreatePage(
+      id: int.parse(args.params['id'])
+    )
+  ),
 ];

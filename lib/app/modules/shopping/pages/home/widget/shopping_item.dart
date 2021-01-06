@@ -1,12 +1,29 @@
+import 'package:ella/app/modules/shopping/models/shopping_store.dart';
+import 'package:ella/app/modules/shopping/pages/home/home_controller.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-class ShoppingItem extends StatelessWidget {
+import '../../../shopping_routes.dart';
+
+class ShoppingItem extends StatefulWidget {
+
+  final ShoppingStore shopping;
+
   const ShoppingItem({
     Key key,
+    @required this.shopping
   }) : super(key: key);
+
+  @override
+  _ShoppingItemState createState() => _ShoppingItemState();
+}
+
+class _ShoppingItemState extends State<ShoppingItem> {
+
+  HomeController controller = Modular.get<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +43,9 @@ class ShoppingItem extends StatelessWidget {
                 color: themeColors.tertiary,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: themeColors.tertiary
+                  color: !widget.shopping.selected 
+                    ? themeColors.tertiary
+                    : themeColors.shoppingColor
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -37,7 +56,18 @@ class ShoppingItem extends StatelessWidget {
                 ],
               ),
               child: FlatButton(
-                onPressed: (){},
+                onLongPress: (){
+                  controller.selectToDelete(widget.shopping.id);
+                  widget.shopping.setSelected(true);
+                },
+                onPressed: (){
+                  if (!widget.shopping.selected){
+                    Navigator.of(context).pushNamed('$SHOPPING_CREATE/${widget.shopping.id}');
+                  } else {
+                    controller.removeToDelete(widget.shopping.id);
+                    widget.shopping.setSelected(false);
+                  }
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
                 ),
@@ -55,17 +85,17 @@ class ShoppingItem extends StatelessWidget {
                           right: 10
                         ),
                         child: Text(
-                          'Fixos',
+                          widget.shopping.title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: themeColors.textPrimary
                           )
                         ),
                       ),
                     ),
                     Text(
-                      'R\$ 810,33',
+                      'R\$ ${widget.shopping.amount}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 18,

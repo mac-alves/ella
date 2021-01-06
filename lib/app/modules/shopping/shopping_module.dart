@@ -1,3 +1,5 @@
+import 'models/shopping_item_store.dart';
+import 'models/shopping_store.dart';
 import 'pages/create/create_controller.dart';
 import 'pages/home/home_controller.dart';
 import 'shopping_controller.dart';
@@ -8,8 +10,10 @@ import 'shopping_routes.dart';
 class ShoppingModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        $CreateController,
-        $HomeController,
+        $ShoppingItemStore,
+        $ShoppingStore,
+        Bind((i) => CreateController(i.get())),
+        Bind((i) => HomeController(i.get())),
         $ShoppingController,
       ];
 

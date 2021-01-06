@@ -1,6 +1,8 @@
 import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../shopping_controller.dart';
+
 part 'home_controller.g.dart';
 
 @Injectable()
@@ -8,6 +10,10 @@ class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   
+  final ShoppingController shopping;
+
+  _HomeControllerBase(this.shopping);
+
   @observable
   ObservableList<int> listShoppingToDelete = <int>[].asObservable();
 
@@ -39,9 +45,9 @@ abstract class _HomeControllerBase with Store {
   /// 
   @action
   Future deletePasswordsSelecteds() async {    
-    // password.passwords = password.passwords.where((pass) {
-    //   return !listPasswordToDelete.contains(pass.id);
-    // }).toList().asObservable();
+    shopping.shoppings = shopping.shoppings.where((pass) {
+      return !listShoppingToDelete.contains(pass.id);
+    }).toList().asObservable();
 
     // await _storage.delete(listPasswordToDelete.join(','));
 

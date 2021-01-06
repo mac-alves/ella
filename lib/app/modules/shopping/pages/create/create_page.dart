@@ -1,8 +1,12 @@
+import 'package:ella/app/modules/shopping/models/shopping_item_store.dart';
+import 'package:ella/app/modules/shopping/models/shopping_store.dart';
 import 'package:ella/app/shared/utils/constants.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
+import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'create_controller.dart';
 import 'widget/amount.dart';
 import 'widget/shopping_item.dart';
@@ -18,6 +22,39 @@ class CreatePage extends StatefulWidget {
 class _CreatePageState extends ModularState<CreatePage, CreateController> {
   //use 'controller' variable to access controller
 
+  ReactionDisposer whenDispose;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.setNewShopping(
+      new ShoppingStore(
+        id: 20, 
+        title: null,
+        amount: 0.0,
+        qtItems: 0,
+        selected: false
+      )
+    );
+
+    if (widget.id != null) {
+      controller.prepareShoppingToEdit(controller.shopping.getShopping(widget.id));
+    } else {
+      whenDispose = when(
+        (r) => controller.idNewShopping != null, 
+        () => controller.newShopping.setId(controller.idNewShopping)
+      );
+    }
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+    if (whenDispose != null) {
+      whenDispose();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -31,9 +68,6 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              floating: false,
-              pinned: true,
-              snap: false,
               backgroundColor:  themeColors.secondary,
               leading: IconButton(
                 icon: Icon(
@@ -51,19 +85,19 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                     color: themeColors.shoppingColor,
                   ), 
                   onPressed: () {
-                    // if (controller.validateNewPassword()) {
-                    //   String message = 'Senha criada com sucesso.';
+                    if (controller.shoppingIsValid()) {
+                      String message = 'Compra criada com sucesso.';
 
-                    //   if (widget.id == null) {
-                    //     controller.createPassword(controller.newPassword);
-                    //   } else {
-                    //     controller.updatePassword(controller.newPassword);
-                    //     message = 'Senha atualizada com sucesso.';
-                    //   }
+                      if (widget.id == null) {
+                        controller.createShopping(controller.newShopping);
+                      } else {
+                        controller.updateShopping(controller.newShopping);
+                        message = 'Compra atualizada com sucesso.';
+                      }
 
-                    //   SnackMesage(context).show('$message');
-                    //   Navigator.of(context).pop();
-                    // }
+                      SnackMesage(context).show('$message');
+                      Navigator.of(context).pop();
+                    }
                   },
                 )
               ],
@@ -82,17 +116,20 @@ class _CreatePageState extends ModularState<CreatePage, CreateController> {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final item = controller.shoppingItems[index];
+                      ShoppingItemStore item = controller.newShopping.items[index];
 
                       return Dismissible(
-                        key: Key(item),
+                        key: Key(item.id.toString()),
                         onDismissed: (direction) {
-                          controller.shoppingItems.remove(item);
+                          controller.newShopping.items.remove(item);
+                          controller.setAmount();
                         },
-                        child: ShoppingItem(),
+                        child: ShoppingItem(
+                          item: item,
+                        ),
                       );
                     },
-                    childCount: controller.shoppingItems.length,
+                    childCount: controller.newShopping.items.length,
                   ),
                 );
               }

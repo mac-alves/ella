@@ -11,9 +11,10 @@ $ flutter install
 
 
 # falta
-- app password
-    - ajeitar o espaçamento do botão de visualização, do
+- app shopping
+    - fazer a logica de atualização do amount, atItems em tempo real
 
+- app password
     - criar sistema de autenticação com a api do gerenciador do app money na vercel
         pagina login ja criada, criar a register
     - verificar a viabilidade de adicionar o campo de username para as senhas
