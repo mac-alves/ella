@@ -75,6 +75,8 @@ abstract class _CreateControllerBase with Store {
         error: ''
       )
     );
+
+    setQtItems();
   }
 
   @action
@@ -85,6 +87,11 @@ abstract class _CreateControllerBase with Store {
       ).toString()
     );
 
+    setQtItems();
+  }
+
+  @action
+  void setQtItems() {
     qtItems = newShopping.items.fold(0,
       (prev, item) => prev + int.parse(item.qt)
     );

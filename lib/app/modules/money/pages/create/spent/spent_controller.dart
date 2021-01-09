@@ -210,9 +210,7 @@ abstract class _SpentControllerBase with Store {
             expense.spents.insert(0, spent);
 
             expense.setLastValue(double.parse(spent.value));
-            expense.setValue(
-              expense.spents.fold(0, (prev, item) => prev + double.parse(item.value))
-            );
+            expense.setValue(getValueExpense(expense.spents));
           }
 
           return expense;
@@ -233,6 +231,15 @@ abstract class _SpentControllerBase with Store {
       insertSpent: true,
       keySpent: int.parse(spent.id)
     );
+  }
+
+  /// 
+  /// Obtem o valor do tipo de gasto total com duas casas decimais
+  ///
+  double getValueExpense(List<SpentStore> selecteds){
+    return double.parse(getTwoPrecision(
+      selecteds.fold(0, (prev, item) => prev + double.parse(item.value)).toString()
+    ));
   }
 
   /// 
@@ -305,9 +312,7 @@ abstract class _SpentControllerBase with Store {
             }).toList().asObservable();
 
             expense.setLastValue(double.parse(spent.value));
-            expense.setValue(
-              expense.spents.fold(0, (prev, item) => prev + double.parse(item.value))
-            );
+            expense.setValue(getValueExpense(expense.spents));
           }
 
           return expense;

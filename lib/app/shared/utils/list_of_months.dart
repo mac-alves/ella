@@ -12,7 +12,7 @@ List<ItemSelect> months = [
   new ItemSelect(id: '9', name: 'Setembro'),
   new ItemSelect(id: '10', name: 'Outubro'),
   new ItemSelect(id: '11', name: 'Novembro'),
-  new ItemSelect(id: '12', name: 'Desembro'),
+  new ItemSelect(id: '12', name: 'Dezembro'),
 ];
 
 String getMonthById(String id){
