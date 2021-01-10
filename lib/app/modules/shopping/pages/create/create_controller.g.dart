@@ -221,6 +221,17 @@ mixin _$CreateController on _CreateControllerBase, Store {
   }
 
   @override
+  void setQtItems() {
+    final _$actionInfo = _$_CreateControllerBaseActionController.startAction(
+        name: '_CreateControllerBase.setQtItems');
+    try {
+      return super.setQtItems();
+    } finally {
+      _$_CreateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 newShopping: ${newShopping},

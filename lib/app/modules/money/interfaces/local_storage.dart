@@ -38,5 +38,5 @@ abstract class ILocalStorage {
   Future<int> getNextIdExpense();
   
   /// Data to local file
-  Future<String> getDataToLocalFile();
+  Future<Map<String, dynamic>> getDataToLocalFile();
 }

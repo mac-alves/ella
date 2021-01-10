@@ -7,6 +7,7 @@ import 'package:ella/app/modules/money/pages/home/widgets/filter_dialog.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/loading_dialog.dart';
 import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
@@ -56,6 +57,31 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               }
             ),
             actions: [
+              Observer(
+                builder: (_) {
+                  return Visibility(
+                    visible: !controller.isNotEstimate,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.upload_sharp,
+                        color: themeColors.moneyColor,
+                      ), 
+                      onPressed: () async {
+                        LoadingDialog(context).show(themeColors.moneyColor);
+                        bool sucess = await controller.uploadData();
+                        Navigator.of(context, rootNavigator: true).pop();
+                        String msg = 'Orçamentos enviados para o gerenciador.';
+
+                        if (!sucess){
+                          msg = 'Erro ao enviar orçamentos!';
+                        }
+
+                        SnackMesage(context).show('$msg');
+                      },
+                    ),
+                  );
+                }
+              ),
               Observer(
                 builder: (_) {
                   return Visibility(

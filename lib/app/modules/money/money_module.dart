@@ -1,3 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:dio/native_imp.dart';
+import 'package:ella/app/shared/custom_dio/custom_dio.dart';
+
+import 'repositories/api/ella_web/ella_web_repository.dart';
 import 'repositories/local_storage/hive/hive_repository.dart';
 import 'services/local_storage_hive_service.dart';
 import 'pages/create/spent/spent_controller.dart';
@@ -23,7 +28,10 @@ class MoneyModule extends ChildModule {
         Bind((i) => HomeController(i.get())),
         Bind((i) => ReadController(i.get())),
         Bind((i) => HiveRepository()),
+        Bind((i) => EllaWebRepository(i.get())),
         Bind((i) => LocalStorageHiveService(i.get())),
+        Bind((i) => CustomDio(i.get())),
+        Bind((i) => DioForNative()),
         $MoneyController,
       ];
 

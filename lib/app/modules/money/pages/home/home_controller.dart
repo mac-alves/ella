@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_controller.dart';
@@ -8,6 +9,7 @@ import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/spent_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_controller.dart';
+import 'package:ella/app/modules/money/repositories/api/ella_web/ella_web_repository.dart';
 import 'package:ella/app/shared/utils/item_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +24,7 @@ class HomeController = _HomeControllerBase with _$HomeController;
 abstract class _HomeControllerBase with Store {
   
   final ILocalStorage _storage = Modular.get();
+  final EllaWebRepository _api = Modular.get();
   
   final CarouselController carouselController = CarouselController();
 
@@ -239,10 +242,20 @@ abstract class _HomeControllerBase with Store {
       String dir = await _localDownloadPath;
       File file = new File('$dir/orcamentos.json');
 
-      String data = await _storage.getDataToLocalFile();
-      await file.writeAsString(data);
-
+      Map<String, dynamic> data = await _storage.getDataToLocalFile();
+      await file.writeAsString(jsonEncode(data['file']));
       return true;
+    } catch (e) {
+      print({'error': e});
+      return false;
+    }
+  }
+
+  Future<bool> uploadData() async {
+    try {
+      Map<String, dynamic> data = await _storage.getDataToLocalFile();
+      int status = await _api.postEstimates(data['api']);
+      return status == 200 || status == 201;
     } catch (e) {
       print({'error': e});
       return false;

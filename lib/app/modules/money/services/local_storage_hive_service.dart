@@ -162,7 +162,7 @@ class LocalStorageHiveService extends Disposable implements ILocalStorage {
   ///
   
   @override
-  Future<String> getDataToLocalFile() async {
-    return await hiveRepo.getAllEstimatesToJson();
+  Future<Map<String, dynamic>> getDataToLocalFile() async {
+    return await hiveRepo.getAllEstimatesToExport();
   }
 }
