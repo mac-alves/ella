@@ -69,6 +69,22 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
     });
   }
 
+  final _$variedExpensesAtom =
+      Atom(name: '_EstimateControllerBase.variedExpenses');
+
+  @override
+  ObservableList<SpentStore> get variedExpenses {
+    _$variedExpensesAtom.reportRead();
+    return super.variedExpenses;
+  }
+
+  @override
+  set variedExpenses(ObservableList<SpentStore> value) {
+    _$variedExpensesAtom.reportWrite(value, super.variedExpenses, () {
+      super.variedExpenses = value;
+    });
+  }
+
   final _$currentStateExpenseAtom =
       Atom(name: '_EstimateControllerBase.currentStateExpense');
 
@@ -311,6 +327,7 @@ mixin _$EstimateController on _EstimateControllerBase, Store {
 fixedExpensesOfEstimate: ${fixedExpensesOfEstimate},
 fixedGeneralExpenses: ${fixedGeneralExpenses},
 expectedExpenses: ${expectedExpenses},
+variedExpenses: ${variedExpenses},
 currentStateExpense: ${currentStateExpense},
 newEstimate: ${newEstimate},
 idNewEstimate: ${idNewEstimate},

@@ -35,6 +35,9 @@ abstract class _EstimateControllerBase with Store {
   @observable
   ObservableList<SpentStore> expectedExpenses = <SpentStore>[].asObservable();
 
+  @observable
+  ObservableList<SpentStore> variedExpenses = <SpentStore>[].asObservable();
+
   _EstimateControllerBase(this.money) {
     _init();
   }
@@ -221,6 +224,7 @@ abstract class _EstimateControllerBase with Store {
   List<ExpenseStore> getExpenses(){
     bool hasFixeds = false;
     bool hasExpecteds = false;
+    bool hasVarieds = false;
 
     List<SpentStore> selectedFixeds = fixedGeneralExpenses
       .where((element) => element.selected)
@@ -266,11 +270,15 @@ abstract class _EstimateControllerBase with Store {
       hasExpecteds = true;
     }
 
+    if (variedExpenses.length > 0) {
+      hasVarieds = true;
+    }
+
     return [
       new ExpenseStore(
         type: TypeExpense.FIXED,
         lastValue: hasFixeds 
-          ? double.parse(selectedFixeds[selectedFixeds.length - 1].value)
+          ? double.parse(selectedFixeds[0].value)
           : 0.0,
         value: hasFixeds 
           ? getValueExpense(selectedFixeds)
@@ -280,7 +288,7 @@ abstract class _EstimateControllerBase with Store {
       new ExpenseStore(
         type: TypeExpense.EXPECTED,
         lastValue: hasExpecteds 
-          ? double.parse(selectedExpecteds[selectedExpecteds.length - 1].value) 
+          ? double.parse(selectedExpecteds[0].value) 
           : 0.0,
         value: hasExpecteds 
           ? getValueExpense(selectedExpecteds)
@@ -289,9 +297,13 @@ abstract class _EstimateControllerBase with Store {
       ),
       new ExpenseStore(
         type: TypeExpense.VARIED,
-        lastValue: 0.0,
-        value: 0.0,
-        spents: []
+        lastValue: hasVarieds 
+          ? double.parse(variedExpenses[0].value) 
+          : 0.0,
+        value: hasVarieds 
+          ? getValueExpense(variedExpenses)
+          : 0.0,
+        spents: hasVarieds ? variedExpenses : []
       ),
     ];
   }
@@ -340,7 +352,8 @@ abstract class _EstimateControllerBase with Store {
   Future setSpentsOfEstimate(EstimateStore editEstimate) async {
     await setExpenses();
     setFixedsSpentOfEstimate(editEstimate);
-    setExpectedOfEstimate(editEstimate); 
+    setExpectedOfEstimate(editEstimate);
+    setVariedOfEstimate(editEstimate);
   }
 
   /// 
@@ -406,6 +419,18 @@ abstract class _EstimateControllerBase with Store {
       }).toList();
 
       expectedExpenses.addAll(spents);
+    }
+  }
+
+  /// 
+  /// Seleciona os gastos fixo de um orçamento para edição
+  /// 
+  void setVariedOfEstimate(EstimateStore estimate){
+    List<SpentStore> varieds = estimate.expenses
+      .firstWhere((item) => item.type == TypeExpense.VARIED).spents;
+
+    if (varieds.length > 0) {
+      variedExpenses.addAll(varieds);
     }
   }
 

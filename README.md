@@ -11,9 +11,7 @@ $ flutter install
 
 
 # falta
-- app money:
-    integrar a exportação de orçamentos com o gerenciador web
-
+- criar uma tela de changelog
 - app password
     - criar sistema de autenticação com a api do gerenciador do app money na vercel
         pagina login ja criada, criar a register
