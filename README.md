@@ -9,9 +9,17 @@ $ flutter build apk --split-per-abi
 $ flutter install
 ```
 
+# bugs
 
 # falta
 - criar uma tela de changelog
+- app money: 
+    - criar tipo de gasto "reservado" para valores que devem ser separados pra gastos futuros, salvos na poupança.
+    - ex: cabelo mozao. 
+            separar 150 (desse mes) para juntar com outro valor no proximo
+    - regra:
+        criado como gasto geral nomal
+
 - app password
     - criar sistema de autenticação com a api do gerenciador do app money na vercel
         pagina login ja criada, criar a register

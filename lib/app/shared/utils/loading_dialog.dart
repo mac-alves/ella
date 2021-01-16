@@ -12,8 +12,6 @@ class LoadingDialog {
     Dialog dialog = Dialog(
       child: Container(
         padding: EdgeInsets.all(SizeConfig.defaultPadding),
-        // alignment: Alignment.center,
-        // width: getPropScreenWidth(100),
         height: getPropScreenHeight(150),
         decoration: BoxDecoration(
           color: themeColors.tertiary,
@@ -39,7 +37,7 @@ class LoadingDialog {
 
     showDialog(
       context: context,
-      // barrierDismissible: false,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return dialog;
       },

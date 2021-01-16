@@ -45,7 +45,7 @@ class _ShoppingItemState extends State<ShoppingItem> {
       precision: 2,
       leftSymbol: 'R\$ ',
     );
-    
+
     controllerQt.text = widget.item.qt;
     controllerName.text = widget.item.name;
     controllerValue.text = widget.item.value;
@@ -197,7 +197,10 @@ class _ShoppingItemState extends State<ShoppingItem> {
             child: TextField(
               controller: controllerValue,
               onChanged: (value){
-                widget.item.setValue(controllerValue.numberValue.toString());
+                String newValue = controller.getTwoPrecision(
+                  controllerValue.numberValue.toString()
+                );
+                widget.item.setValue(newValue);
                 controller.setAmount();
               },
               textAlign: TextAlign.right,
