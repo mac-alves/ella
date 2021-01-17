@@ -448,7 +448,7 @@ abstract class _SpentControllerBase with Store {
         orElse: () => null
       );
 
-      if (exist != null) {
+      if (exist != null && !isEdit) {
         setMsgErroName('Ja existe um gasto fixo com esse nome');
         setErroName(true);
         return false;
@@ -461,7 +461,7 @@ abstract class _SpentControllerBase with Store {
         orElse: () => null
       );
 
-      if (exist != null) {
+      if (exist != null && !isEdit) {
         setMsgErroName('Ja existe um gasto previsto com esse nome');
         setErroName(true);
         return false;
