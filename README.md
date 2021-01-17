@@ -1,8 +1,8 @@
 <h1 align="center" style="display: flex;">
-  <img wi alt="ChatNode" height="300" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842427/projetos/ella/app_lists-ella_kq4jcd.gif" />
-  <img wi alt="ChatNode" height="300" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842426/projetos/ella/app_money-ella_gc0wq9.gif" />
-  <img wi alt="ChatNode" height="300" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842426/projetos/ella/app_password-ella_az6key.gif" />
-  <img wi alt="ChatNode" height="300" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842434/projetos/ella/app_shooping-ella_dwyjvj.gif" />
+  <img wi alt="ChatNode" height="400" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842427/projetos/ella/app_lists-ella_kq4jcd.gif" />
+  <img wi alt="ChatNode" height="400" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842426/projetos/ella/app_money-ella_gc0wq9.gif" />
+  <img wi alt="ChatNode" height="400" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842426/projetos/ella/app_password-ella_az6key.gif" />
+  <img wi alt="ChatNode" height="400" src="https://res.cloudinary.com/dpf7e7tpc/image/upload/v1610842434/projetos/ella/app_shooping-ella_dwyjvj.gif" />
 </h1>
 
 <h1 align="center">
