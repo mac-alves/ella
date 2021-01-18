@@ -3,7 +3,7 @@ import 'package:ella/app/modules/money/models/estimate_store.dart';
 import 'package:ella/app/modules/money/models/expense_store.dart';
 import 'package:ella/app/modules/money/models/type_expense.dart';
 import 'package:ella/app/modules/money/money_routes.dart';
-import 'package:ella/app/modules/money/pages/home/widgets/filter_dialog.dart';
+import 'package:ella/app/modules/money/pages/home/widgets/pop_up_dialog.dart';
 import 'package:ella/app/modules/money/pages/home/widgets/spent.dart';
 import 'package:ella/app/shared/utils/alert_dialog_confirm.dart';
 import 'package:ella/app/shared/utils/constants.dart';
@@ -12,6 +12,7 @@ import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:ella/app/shared/utils/snack_bar.dart';
 import 'package:ella/app/shared/widgets/drop_down_select.dart';
 import 'package:ella/app/shared/widgets/section_title.dart';
+import 'package:ella/app/shared/widgets/secure_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -67,16 +68,46 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                         color: themeColors.moneyColor,
                       ), 
                       onPressed: () async {
-                        LoadingDialog(context).show(themeColors.moneyColor);
-                        bool sucess = await controller.uploadData();
-                        Navigator.of(context, rootNavigator: true).pop();
-                        String msg = 'Orçamentos enviados para o gerenciador.';
+                        PopUpDialog(
+                          context: context,
+                          textConfirm: 'Enviar',
+                          titleDialog: 'Enviar Orçamentos',
+                          height: 110,
+                          content: [
+                            Observer(
+                              builder: (_) {
+                                return SecureInput(
+                                  label: 'Senha',
+                                  placeholder: 'Digite a senha',
+                                  change: controller.setSecretPassword,
+                                  msgError: 'Senha inválida',
+                                  value: controller.secretPassword,
+                                  error: controller.erroSecretPassword,
+                                );
+                              }
+                            ),
+                          ],
+                          onPressCancel: () {
+                            controller.setErroSecretPassword(false);
+                            controller.setSecretPassword(null);
+                            Navigator.of(context, rootNavigator: true).pop();
+                          },
+                          onPressConfirm: () async {
+                            if (controller.validSecretPassword()) {
+                              LoadingDialog(context).show(themeColors.moneyColor);
+                              bool sucess = await controller.uploadData();
+                              Navigator.of(context, rootNavigator: true).pop();
+                              String msg = 'Orçamentos enviados para o gerenciador.';
 
-                        if (!sucess){
-                          msg = 'Erro ao enviar orçamentos!';
-                        }
+                              if (!sucess){
+                                msg = 'Erro ao enviar orçamentos!';
+                              }
 
-                        SnackMesage(context).show('$msg');
+                              SnackMesage(context).show('$msg');
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }
+                          } 
+                        ).show();
                       },
                     ),
                   );
@@ -120,8 +151,11 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 ),
                 onSelected: (String item){
                   if (menuItemsToEnum[item] == MenuPopup.FILTRO) {
-                    FilterDialog(
+                    PopUpDialog(
                       context: context,
+                      textConfirm: 'Filtrar',
+                      titleDialog: 'Filtrar Orçamentos',
+                      height: 90,
                       content: [
                         Observer(
                           builder: (_) {
@@ -139,7 +173,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       onPressCancel: () {
                         Navigator.of(context, rootNavigator: true).pop();
                       },
-                      onPressFilter: () {
+                      onPressConfirm: () {
                         controller.setFilter();
                         Navigator.of(context, rootNavigator: true).pop();
                       } 

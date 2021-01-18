@@ -10,8 +10,10 @@ class EllaWebRepository extends Disposable {
 
   EllaWebRepository(this.dio);
 
-  Future postEstimates(Map<String, dynamic> data) async {
+  Future postEstimates(Map<String, dynamic> data, String secretPassword) async {
     try {
+      dio.client.options.headers = {'Authorization': secretPassword};
+      
       var resp = await dio.client.post('/api/estimates', data: data);
       return resp.statusCode;
     } on DioError catch (e) {

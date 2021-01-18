@@ -143,6 +143,12 @@ abstract class _HomeControllerBase with Store {
   @observable
   bool isNotEstimate = true;
 
+  @observable
+  String secretPassword;
+
+  @observable
+  bool erroSecretPassword = false;
+
   @action
   void setEstimates(ObservableList value) => estimates = value;
 
@@ -166,6 +172,12 @@ abstract class _HomeControllerBase with Store {
 
   @action
   void setIsNotEstimate(bool value) => isNotEstimate = value;
+
+  @action
+  void setSecretPassword(String value) => secretPassword = value;
+
+  @action
+  void setErroSecretPassword(bool value) => erroSecretPassword = value;
 
   void goScreen(BuildContext context, String route) async {
     var result = await Navigator.of(context).pushNamed(route);
@@ -222,6 +234,23 @@ abstract class _HomeControllerBase with Store {
     await _setLocalIdsEstimates();
   }
 
+  @action
+  bool validSecretPassword(){
+    setSecretPassword(
+      (secretPassword != null && secretPassword.trim().length > 0)
+        ? secretPassword.trim() 
+        : null
+    );
+
+    if (secretPassword == null) {
+      setErroSecretPassword(true);
+      return false;
+    }
+
+    setErroSecretPassword(false);
+    return true;
+  }
+
   ///
   /// Obtem o diretorio de Downloads do sistema
   ///
@@ -254,7 +283,7 @@ abstract class _HomeControllerBase with Store {
   Future<bool> uploadData() async {
     try {
       Map<String, dynamic> data = await _storage.getDataToLocalFile();
-      int status = await _api.postEstimates(data['api']);
+      int status = await _api.postEstimates(data['api'], secretPassword);
       return status == 200 || status == 201;
     } catch (e) {
       print({'error': e});

@@ -126,6 +126,37 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  final _$secretPasswordAtom = Atom(name: '_HomeControllerBase.secretPassword');
+
+  @override
+  String get secretPassword {
+    _$secretPasswordAtom.reportRead();
+    return super.secretPassword;
+  }
+
+  @override
+  set secretPassword(String value) {
+    _$secretPasswordAtom.reportWrite(value, super.secretPassword, () {
+      super.secretPassword = value;
+    });
+  }
+
+  final _$erroSecretPasswordAtom =
+      Atom(name: '_HomeControllerBase.erroSecretPassword');
+
+  @override
+  bool get erroSecretPassword {
+    _$erroSecretPasswordAtom.reportRead();
+    return super.erroSecretPassword;
+  }
+
+  @override
+  set erroSecretPassword(bool value) {
+    _$erroSecretPasswordAtom.reportWrite(value, super.erroSecretPassword, () {
+      super.erroSecretPassword = value;
+    });
+  }
+
   final _$deleteCurrentEstimateAsyncAction =
       AsyncAction('_HomeControllerBase.deleteCurrentEstimate');
 
@@ -225,6 +256,28 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  void setSecretPassword(String value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setSecretPassword');
+    try {
+      return super.setSecretPassword(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setErroSecretPassword(bool value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setErroSecretPassword');
+    try {
+      return super.setErroSecretPassword(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setFilter() {
     final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
         name: '_HomeControllerBase.setFilter');
@@ -247,6 +300,17 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  bool validSecretPassword() {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.validSecretPassword');
+    try {
+      return super.validSecretPassword();
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 estimates: ${estimates},
@@ -255,7 +319,9 @@ index: ${index},
 initialPage: ${initialPage},
 selectedMothFilter: ${selectedMothFilter},
 isFilter: ${isFilter},
-isNotEstimate: ${isNotEstimate}
+isNotEstimate: ${isNotEstimate},
+secretPassword: ${secretPassword},
+erroSecretPassword: ${erroSecretPassword}
     ''';
   }
 }

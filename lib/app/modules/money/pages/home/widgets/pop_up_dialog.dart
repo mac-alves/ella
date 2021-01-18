@@ -1,18 +1,25 @@
 import 'package:ella/app/shared/utils/constants.dart';
+import 'package:ella/app/shared/utils/sizes.dart';
 import 'package:flutter/material.dart';
 
-class FilterDialog {
+class PopUpDialog {
   
   BuildContext context;
   List<Widget> content;
   Function onPressCancel;
-  Function onPressFilter;
+  Function onPressConfirm;
+  String textConfirm;
+  String titleDialog;
+  double height;
 
-  FilterDialog({
+  PopUpDialog({
     @required this.context,
     @required this.onPressCancel,
-    @required this.onPressFilter,
+    @required this.onPressConfirm,
     @required this.content,
+    @required this.textConfirm,
+    @required this.titleDialog,
+    @required this.height,
   });
 
   show() {
@@ -23,14 +30,14 @@ class FilterDialog {
     );
 
     Widget yesButton = RaisedButton(
-      child: Text("Filtrar"),
+      child: Text("$textConfirm"),
       color: themeColors.secondary,
-      onPressed: onPressFilter,
+      onPressed: onPressConfirm,
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Filtrar orçamentos"),
+      title: Text("$titleDialog"),
       contentPadding: EdgeInsets.symmetric(
         horizontal: 0
       ),
@@ -39,7 +46,8 @@ class FilterDialog {
         horizontal: 9
       ),
       content: Container(
-        height: 90,
+        height: height,
+        width: getPropScreenWidth(350),
         child: Stack(
           children: content,
         ),
